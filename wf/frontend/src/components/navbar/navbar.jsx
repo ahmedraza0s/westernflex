@@ -1,46 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './navbar.css';
 
 const Navbar = () => {
-    // Event handling functions can be defined here if needed
+    const [priceRangeVisible, setPriceRangeVisible] = useState(false);
+    const [subMenuVisible, setSubMenuVisible] = useState(false);
+    const [price, setPrice] = useState({ min: 499, max: 999 });
+
     const togglePriceRange = (event) => {
         event.preventDefault();
-        const priceRange = document.getElementById('price-range');
-        priceRange.style.display = priceRange.style.display === 'block' ? 'none' : 'block';
+        setPriceRangeVisible(!priceRangeVisible);
     };
 
     const toggleSubMenu = (event) => {
         event.preventDefault();
-        const submenu = event.target.nextElementSibling;
-        submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+        setSubMenuVisible(!subMenuVisible);
     };
 
-    const updatePriceRange = () => {
-        const priceSlider = document.getElementById('price-slider');
-        const minPrice = document.getElementById('min-price');
-        const maxPrice = document.getElementById('max-price');
-
-        minPrice.value = priceSlider.value;
-        maxPrice.value = priceSlider.value;
+    const updatePriceRange = (event) => {
+        const value = event.target.value;
+        setPrice({ ...price, min: value, max: value });
     };
 
-    const updatePriceFromInput = () => {
-        const minPrice = document.getElementById('min-price');
-        const maxPrice = document.getElementById('max-price');
-        const priceSlider = document.getElementById('price-slider');
-
-        let minPriceValue = parseInt(minPrice.value);
-        let maxPriceValue = parseInt(maxPrice.value);
-
-        if (minPriceValue > maxPriceValue) {
-            const temp = minPriceValue;
-            minPriceValue = maxPriceValue;
-            maxPriceValue = temp;
-        }
-
-        priceSlider.value = minPriceValue;
-        minPrice.value = minPriceValue;
-        maxPrice.value = maxPriceValue;
+    const updatePriceFromInput = (event) => {
+        const { id, value } = event.target;
+        setPrice({
+            ...price,
+            [id === 'min-price' ? 'min' : 'max']: parseInt(value),
+        });
     };
 
     return (
@@ -59,17 +45,17 @@ const Navbar = () => {
                     <div className="dropdown-content">
                         <div className="has-sub">
                             <a href="#" onClick={togglePriceRange}>Filter by</a>
-                            <div id="price-range" className="price-range">
-                                <input type="range" min="499" max="999" step="1" value="499" id="price-slider" onInput={updatePriceRange} />
+                            <div id="price-range" className="price-range" style={{ display: priceRangeVisible ? 'block' : 'none' }}>
+                                <input type="range" min="499" max="999" step="1" value={price.min} id="price-slider" onInput={updatePriceRange} />
                                 <div className="range-values">
-                                    <input type="number" id="min-price" value="499" min="499" max="999" step="1" onInput={updatePriceFromInput} />
-                                    <input type="number" id="max-price" value="999" min="499" max="999" step="1" onInput={updatePriceFromInput} />
+                                    <input type="number" id="min-price" value={price.min} min="499" max="999" step="1" onInput={updatePriceFromInput} />
+                                    <input type="number" id="max-price" value={price.max} min="499" max="999" step="1" onInput={updatePriceFromInput} />
                                 </div>
                             </div>
                         </div>
                         <div className="has-sub">
                             <a href="#" onClick={toggleSubMenu}>Discount Percentage <i className="fas fa-caret-right"></i></a>
-                            <div className="sub-menu">
+                            <div className="sub-menu" style={{ display: subMenuVisible ? 'block' : 'none' }}>
                                 <a href="#">10% off or more</a>
                                 <a href="#">20% off or more</a>
                                 <a href="#">30% off or more</a>
