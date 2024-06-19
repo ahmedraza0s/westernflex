@@ -29,6 +29,7 @@ const Navbar = () => {
             [id === 'min-price' ? 'min' : 'max']: parseInt(value),
         });
     };
+    
 
     return (
         <nav className="navbar">
