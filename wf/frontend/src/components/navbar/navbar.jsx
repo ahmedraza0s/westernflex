@@ -36,7 +36,7 @@ const Navbar = () => {
         <nav className="navbar">
             <div className="navbar-brand">
                 <a href="/"><img src="logo.jpg" alt="Logo" /></a>
-            </div>
+            </div>,
             <div className="search-bar">
                 <input type="text" placeholder="Search" />
                 <i className="fas fa-search"></i>
