@@ -1,14 +1,21 @@
 import React from 'react';
 import Navbar from './components/navbar/Navbar'; // Ensure the path is correct and case-sensitive
 import './components/navbar/navbar.css';        // Ensure the path is correct and case-sensitive
+import { BrowserRouter,Routes,Route } from 'react-router-dom';
 
 const App = () => {
   return (
-    <div className="App">
+    <div>
+      <BrowserRouter>
       <Navbar />
-      {/* Other components and content */}
+     
+
+      </BrowserRouter>
+  
+   
     </div>
   );
 };
 
 export default App;
+
