@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './navbar.css';
+import cartIcon from '../assets/cart.png'; // Import the cart image
 
 const Navbar = () => {
     const [priceRangeVisible, setPriceRangeVisible] = useState(false);
@@ -79,7 +80,7 @@ const Navbar = () => {
                     </div>
                 </li>
                 <li className="cart-icon">
-                    <a href="#"><img src="cart.png" alt="Cart" /></a>
+                    <a href="#"><img src={cartIcon} alt="Cart" /></a>
                 </li>
             </ul>
         </nav>
