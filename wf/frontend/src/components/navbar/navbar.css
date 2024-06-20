@@ -7,7 +7,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #232f3e;
+    background-color: rgb(97 59 96);
     padding: 10px 20px;
     flex-wrap: wrap;
     color: white;

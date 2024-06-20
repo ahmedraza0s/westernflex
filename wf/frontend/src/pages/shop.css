@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.filter-navbar {
+    display: flex;
+    justify-content: space-around;
+    background-color:rgb(97 59 96);
+    padding: 10px 0;
+    color: white;
+    flex-wrap: wrap;
+}
+
+.filter-navbar .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.filter-navbar .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.filter-navbar .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.filter-navbar .dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.filter-navbar .dropdown:hover .dropdown-content,
+.filter-navbar .dropdown:focus-within .dropdown-content {
+    display: block;
+    opacity: 1;
+}
+
+.filter-navbar .dropbtn {
+    color: black;
+    text-decoration: none;
+    padding: 5px 10px;
+    transition: box-shadow 0.3s ease;
+    font-size: 0.9rem;
+    background-color: white;
+    border-radius: 4px;
+}
+
+.filter-navbar .dropbtn:hover {
+    box-shadow: 0 0 10px 2px #fff;
+    border-radius: 4px;
+}
