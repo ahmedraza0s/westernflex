@@ -22,23 +22,23 @@ const RegisterPage = () => {
               <form method="post" className="register-form" id="register-form">
                 <div className="form-group">
                   <Link to="#"><img src={nameIcon} alt="no image" className="img" /></Link>
-                  <input type="text" name="name" id="name" placeholder="Enter Your Name" />
+                  <input type="text" name="name" id="name" placeholder="Enter Your Name" className="input1" />
                 </div>
                 <div className="form-group">
                   <Link to="#"><img src={loginIcon} alt="no image" className="img" /></Link>
-                  <input type="text" name="username" id="username" placeholder="Enter your Username" />
+                  <input type="text" name="username" id="username" placeholder="Enter your Username"  className="input1" />
                 </div>
                 <div className="form-group">
                   <Link to="#"><img src={passIcon} alt="no image" className="img" /></Link>
-                  <input type="password" name="pass" id="pass" placeholder="Enter your Password" />
+                  <input type="password" name="pass" id="pass" placeholder="Enter your Password" className="input1" />
                 </div>
                 <div className="form-group">
                 <Link to="#"><img src={repassIcon} alt="no image" className="img" /></Link>
-                <input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password" />
+                <input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password" className="input1" />
                 </div>
                 <div className="form-group">
                 <Link to="#"><img src={emailIcon} alt="no image" className="img" /></Link>
-                <input type="email" name="email" id="email" placeholder="Enter your Email" />
+                <input type="email" name="email" id="email" placeholder="Enter your Email"  className="input1"/>
                 </div>
                 <div className="form-group form-button">
                   <input type="submit" name="signup" id="signup" className="form-submit" value="Register" />

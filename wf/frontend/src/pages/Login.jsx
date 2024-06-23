@@ -31,11 +31,11 @@ const Login = () => {
               <form method="post" action="" className="register-form" id="login-form">
                 <div className="form-group">
                   <Link to="#"><img src={loginIcon} alt="user" className="img" /></Link>
-                  <input type="text" name="username" id="username" placeholder="Enter your username" />
+                  <input type="text" name="username" id="username" placeholder="Enter your username" className="input2"/>
                 </div>
                 <div className="form-group">
                   <Link to="#"><img src={passwordIcon} alt="password" className="img" /></Link>
-                  <input type="password" name="password" id="password" placeholder="Enter your password" />
+                  <input type="password" name="password" id="password" placeholder="Enter your password" className="input2" />
                 </div>
                 <div className="forget">
                   <Link to="#"><h>Forget Password</h></Link>
