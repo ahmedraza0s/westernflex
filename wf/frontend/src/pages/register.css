@@ -128,7 +128,7 @@ display-flex, .display-flex, .display-flex-center, .signup-content{
     .form-group:last-child {
       margin-bottom: 0px; }
   
-  input {
+  .input1 {
     width: 100%;
     display: block;
     border: none;
