@@ -9,6 +9,8 @@ import Login from './pages/Login';              // Ensure the path is correct an
 import Register from './pages/Register';
 
 
+
+
 const App = () => {
   return (
     <BrowserRouter>
