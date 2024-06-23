@@ -15,7 +15,7 @@ const RegisterPage = () => {
   return (
     <div className="main">
       <section className="signup">
-        <div className="container">
+        <div className="register-container">
           <div className="signup-content">
             <div className="signup-form">
               <h2 className="form-title">Sign up</h2>

@@ -16,7 +16,7 @@ const Login = () => {
   return (
     <div className="main">
       <section className="sign-in">
-        <div className="container">
+        <div className="login-container">
           <div className="signin-content">
             <div className="signin-image">
               <figure>

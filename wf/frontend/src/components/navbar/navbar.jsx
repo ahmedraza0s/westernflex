@@ -22,7 +22,7 @@ const Navbar = () => {
           <Link to="/login" className="dropbtn">Hello, Sign in <i className="fas fa-caret-down"></i></Link>
           <div className="dropdown-content">
             <Link to="#">Your Account</Link>
-            <Link to="#">Your Orders</Link>
+            <Link to="/Checkout">Your Orders</Link>
             <Link to="#">Sign Out</Link>
           </div>
         </li>
