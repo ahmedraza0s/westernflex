@@ -7,7 +7,7 @@ import Home from './pages/Home';                // Ensure the path is correct an
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';              // Ensure the path is correct and case-sensitive
 import Register from './pages/Register';
-
+import ProductDetails from './pages/ProductDetails';
 
 
 
@@ -22,6 +22,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />  {/* Login route */}
         <Route path="/register" element={<Register />} /> {/* Register route */}
         <Route path="/Checkout" element={<Checkout />} />
+        <Route path="/product/:title" element={<ProductDetails />} />
         {/* Add other routes here */}
       </Routes>
     </BrowserRouter>
