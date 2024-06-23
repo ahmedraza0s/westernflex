@@ -34,7 +34,7 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-brand">
-                <Link to="/"><img src="logo.jpg" alt="Logo" /></Link>
+                <Link to="/"><img src="westernflex\wf\frontend\src\logo.jpg" alt="Logo" /></Link>
             </div>
             <div className="search-bar">
                 <input type="text" placeholder="Search" />
@@ -44,31 +44,7 @@ const Navbar = () => {
                 <li><Link to="/">Home</Link></li>
                 <li className="dropdown">
                     <Link to="/shop" className="dropbtn">Shop <i className="fas fa-caret-down"></i></Link>
-                    <div className="dropdown-content">
-                        <div className="has-sub">
-                            <a href="#" onClick={togglePriceRange}>Filter by</a>
-                            <div id="price-range" className={`price-range ${priceRangeVisible ? 'visible' : ''}`}>
-                                <input type="range" min="499" max="999" step="1" value={price.min} id="price-slider" onInput={updatePriceRange} />
-                                <div className="range-values">
-                                    <input type="number" id="min-price" value={price.min} min="499" max="999" step="1" onInput={updatePriceFromInput} />
-                                    <input type="number" id="max-price" value={price.max} min="499" max="999" step="1" onInput={updatePriceFromInput} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="has-sub">
-                            <a href="#" onClick={toggleSubMenu}>Discount Percentage <i className="fas fa-caret-right"></i></a>
-                            <div className={`sub-menu ${subMenuVisible ? 'visible' : ''}`}>
-                                <a href="#">10% off or more</a>
-                                <a href="#">20% off or more</a>
-                                <a href="#">30% off or more</a>
-                                <a href="#">50% off or more</a>
-                            </div>
-                        </div>
-                        <Link to="#">Pay on Delivery</Link>
-                        <Link to="#">New Arrivals</Link>
-                        <Link to="#">Your Wishlist</Link>
-                        <Link to="#">Best Sellers</Link>
-                    </div>
+                    
                 </li>
                 <li><Link to="#">About Us</Link></li>
                 <li><Link to="#">Contact Us</Link></li>
