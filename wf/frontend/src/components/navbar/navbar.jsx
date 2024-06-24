@@ -19,9 +19,9 @@ const Navbar = () => {
         <li><Link to="#">About Us</Link></li>
         <li><Link to="#">Contact Us</Link></li>
         <li className="dropdown">
-          <Link to="/login" className="dropbtn">Hello, Sign in <i className="fas fa-caret-down"></i></Link>
+          <Link to="" className="dropbtn">Hello, Sign in <i className="fas fa-caret-down"></i></Link>
           <div className="dropdown-content">
-            <Link to="#">Your Account</Link>
+            <Link to="/login">Your Account</Link>
             <Link to="/Checkout">Your Orders</Link>
             <Link to="#">Sign Out</Link>
           </div>
