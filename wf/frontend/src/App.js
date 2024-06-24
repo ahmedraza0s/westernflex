@@ -9,6 +9,7 @@ import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProductDetails from './pages/ProductDetails';
+import AdminLogin from './pages/admin/AdminLogin'; // Import the AdminLogin component
 import { UserProvider } from './contexts/UserContext'; // Import UserProvider from UserContext
 
 const App = () => {
@@ -23,7 +24,9 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/checkout" element={<Checkout />} />
+          
           <Route path="/product/:title" element={<ProductDetails />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
           {/* Add other routes here */}
         </Routes>
       </Router>
