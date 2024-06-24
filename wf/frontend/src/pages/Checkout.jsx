@@ -5,7 +5,7 @@ const Checkout = () => {
   return (
     <div>
       <header className="checkout-header">
-        <div className="c-container">
+        <div className="container">
           <h1>Checkout</h1>
         </div>
       </header>
@@ -24,7 +24,6 @@ const Checkout = () => {
               </thead>
               <tbody>
                 <tr>
-                  
                   <td>Product 1</td>
                   <td>1</td>
                   <td>$10.00</td>
@@ -52,39 +51,29 @@ const Checkout = () => {
         <div className="checkout-content">
           <div className="delivery-address">
             <h2>1. Delivery address</h2>
-            <label>
-              Enter your address:
-              <input type="text" className="address" placeholder="Enter your address" required />
-            </label>
-            <label>
-              Enter your State:
-              <input type="text" className="address" placeholder="Enter your state" required />
-            </label>
-            <label>
-              Enter your city:
-              <input type="text" className="address" placeholder="Enter your city" required />
-            </label>
-            <label>
-              Enter the pincode:
-              <input type="number" className="address" placeholder="Enter the pincode" required />
-            </label>
+            <h>Enter your address:</h>
+            <input type="text" className="address" placeholder="Enter your address" required /><br /><br />
+            <h>Enter your State:</h>
+            <input type="text" className="address" placeholder="Enter your state" required /><br /><br />
+            <h>Enter your city:</h>
+            <input type="text" className="address" placeholder="Enter your city" required /><br /><br />
+            <h>Enter the pincode:</h>
+            <input type="number" className="address" placeholder="Enter the pincode" required /><br /><br />
           </div>
 
-          <div className="payment-method">
-            <h2>2. Select a payment method</h2>
-            <div className="other-payment-methods">
-              <label>
-                <input type="checkbox" name="payment-method" value="cod" required />
-                Cash on Delivery
-              </label>
-            </div>
+            <div className="payment-method">
+
+            <h2>2. Select a payment method</h2><br></br>
+           
+               <h>Cash on Delivery</h><br></br>
+        
             <button className="order">Place Order</button>
           </div>
         </div>
       </div>
+  
     </div>
   );
-  
 };
 
 export default Checkout;
