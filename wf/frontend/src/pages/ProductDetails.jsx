@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './productDetails.css';
+import { useCart } from '../contexts/CartContext';
 
 const ProductDetails = () => {
     const location = useLocation();
     const { image, title, description, price, details, about, images } = location.state;
     const [mainImage, setMainImage] = useState(image);
+    const { addToCart } = useCart();
+
+    const handleAddToCart = () => {
+        const product = { image, title, price };
+        addToCart(product);
+    };
 
     return (
         <div className="product-details-container">
@@ -36,7 +43,7 @@ const ProductDetails = () => {
                     <p>{about}</p>
                 </div>
                 <div className="purchase-buttons">
-                    <button className="add-to-cart-btn">Add to Cart</button>
+                    <button className="add-to-cart-btn" onClick={handleAddToCart}>Add to Cart</button>
                     <button className="buy-now-btn">Buy Now</button>
                 </div>
             </div>

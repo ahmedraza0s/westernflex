@@ -2,10 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './navbar.css';
 import cartIcon from '../assets/cart.png';
+import { useCart } from '../../contexts/CartContext';
+import Modal from '../Modal'; // Import the Modal component
+import Cart from '../../pages/Cart'; // Import the Cart component
 
 const Navbar = () => {
   const [username, setUsername] = useState(null);
+  const [showCartModal, setShowCartModal] = useState(false);
   const navigate = useNavigate();
+  const { cartCount } = useCart();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -65,9 +70,14 @@ const Navbar = () => {
           <li><Link to="/login">Hello, Sign in</Link></li>
         )}
         <li className="cart-icon">
-          <Link to="#"><img src={cartIcon} alt="Cart" /></Link>
+          <button onClick={() => setShowCartModal(true)}>
+            <img src={cartIcon} alt="Cart" /><span>{cartCount}</span>
+          </button>
         </li>
       </ul>
+      <Modal show={showCartModal} onClose={() => setShowCartModal(false)}>
+        <Cart />
+      </Modal>
     </nav>
   );
 };
