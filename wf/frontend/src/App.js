@@ -8,10 +8,15 @@ import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProductDetails from './pages/ProductDetails';
+<<<<<<< HEAD
+import AdminLogin from './admin/AdminLogin'; // Import the AdminLogin component
+import { UserProvider } from './contexts/UserContext'; // Import UserProvider from UserContext
+=======
 import AdminLogin from './pages/admin/AdminLogin';
 import Cart from './pages/Cart'; // Import the Cart component
 import { UserProvider } from './contexts/UserContext';
 import { CartProvider } from './contexts/CartContext'; 
+>>>>>>> a12677f097cf23aecd85d7a7874465713c078534
 
 const App = () => {
   return (

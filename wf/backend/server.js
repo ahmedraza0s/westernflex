@@ -23,7 +23,13 @@ const userSchema = new mongoose.Schema({
   email: String
 });
 
+const adminSchema = new mongoose.Schema({
+  username: String,
+  password: String
+});
+
 const User = mongoose.model('User', userSchema);
+const Admin = mongoose.model('Admin', adminSchema); // Admin model for admin collection
 
 app.post('/api/register', async (req, res) => {
   const { name, username, password, email } = req.body;
@@ -40,12 +46,20 @@ app.post('/api/register', async (req, res) => {
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
   try {
+    // Check if the user exists in the regular users collection
     const user = await User.findOne({ username });
     if (user && await bcrypt.compare(password, user.password)) {
       const token = jwt.sign({ id: user._id, username: user.username }, secretKey, { expiresIn: '1h' });
       res.status(200).json({ token });
     } else {
-      res.status(400).send({ message: 'Invalid credentials' });
+      // If not found in users collection, check in admins collection
+      const admin = await Admin.findOne({ username });
+      if (admin && await bcrypt.compare(password, admin.password)) {
+        const token = jwt.sign({ id: admin._id, username: admin.username, isAdmin: true }, secretKey, { expiresIn: '1h' });
+        res.status(200).json({ token });
+      } else {
+        res.status(400).send({ message: 'Invalid credentials' });
+      }
     }
   } catch (error) {
     res.status(500).send({ message: 'Error logging in', error });
