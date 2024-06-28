@@ -9,7 +9,7 @@ import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProductDetails from './pages/ProductDetails';
-import AdminLogin from './pages/admin/AdminLogin'; // Import the AdminLogin component
+import AdminLogin from './admin/AdminLogin'; // Import the AdminLogin component
 import { UserProvider } from './contexts/UserContext'; // Import UserProvider from UserContext
 
 const App = () => {
