@@ -1,30 +1,28 @@
-// src/Shop.js
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './shop.css';
 
-const Product = ({ image, title, description, price, details, about, images }) => {
-    const navigate = useNavigate();
-
-    const handleProductClick = () => {
-        navigate(`/product/${title.replace(/\s+/g, '-').toLowerCase()}`, { state: { image, title, description, price, details, about, images } });
-    };
-
+const Product = ({ image, title, description, price, details, about, images, addToCart }) => {
     return (
-        <div className="product" onClick={handleProductClick}>
+        <div className="product">
             <Link to={`/product/${title.replace(/\s+/g, '-').toLowerCase()}`} state={{ image, title, description, price, details, about, images }}>
                 <img src={image} alt={title} className="product-image" />
             </Link>
             <h3 className="product-title">{title}</h3>
             <p className="product-description">{description}</p>
-            <button className="add-to-cart-btn">Add to Cart</button>
+            <button className="add-to-cart-btn" onClick={() => addToCart({ image, title, description, price, details, about, images })}>Add to Cart</button>
         </div>
     );
 };
 
 const Shop = () => {
+    const [cart, setCart] = useState([]);
     const [visibleDropdown, setVisibleDropdown] = useState(null);
     const dropdownRef = useRef();
+
+    const addToCart = (product) => {
+        setCart([...cart, product]);
+    };
 
     const toggleDropdown = (dropdown) => {
         setVisibleDropdown(visibleDropdown === dropdown ? null : dropdown);
@@ -101,6 +99,7 @@ const Shop = () => {
                         "https://m.media-amazon.com/images/I/71Gzx5sJJQL._AC_SX569_.jpg",
                         "https://m.media-amazon.com/images/I/610qYpAOiNL._AC_SX569_.jpg"
                     ]}
+                    addToCart={addToCart}
                 />
                 {/* Other Product Components */}
                 <Product 
@@ -116,6 +115,7 @@ const Shop = () => {
                         "https://via.placeholder.com/150/FFFF00",
                         "https://via.placeholder.com/150/FF0000"
                     ]}
+                    addToCart={addToCart}
                 />
                 <Product 
                     image="https://via.placeholder.com/150"
@@ -130,6 +130,7 @@ const Shop = () => {
                         "https://via.placeholder.com/150/FFFF00",
                         "https://via.placeholder.com/150/FF0000"
                     ]}
+                    addToCart={addToCart}
                 />
                 <Product 
                     image="https://via.placeholder.com/150"
@@ -144,6 +145,7 @@ const Shop = () => {
                         "https://via.placeholder.com/150/00FFFF",
                         "https://via.placeholder.com/150/FF00FF"
                     ]}
+                    addToCart={addToCart}
                 />
                 <Product 
                     image="https://via.placeholder.com/150"
@@ -158,6 +160,7 @@ const Shop = () => {
                         "https://via.placeholder.com/150/FFFF00",
                         "https://via.placeholder.com/150/FF0000"
                     ]}
+                    addToCart={addToCart}
                 />
                 <Product 
                     image="https://via.placeholder.com/150"
@@ -172,6 +175,7 @@ const Shop = () => {
                         "https://via.placeholder.com/150/FFFF00",
                         "https://via.placeholder.com/150/FF0000"
                     ]}
+                    addToCart={addToCart}
                 />
                 <Product 
                     image="https://via.placeholder.com/150"
@@ -186,6 +190,7 @@ const Shop = () => {
                         "https://via.placeholder.com/150/00FFFF",
                         "https://via.placeholder.com/150/FF00FF"
                     ]}
+                    addToCart={addToCart}
                 />
             </div>
         </div>
