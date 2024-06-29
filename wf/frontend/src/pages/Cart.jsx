@@ -1,9 +1,17 @@
 import React from 'react';
 import { useCart } from '../contexts/CartContext';
-import './cart.css'; // Ensure this CSS file doesn't have global styles that interfere
+import './cart.css';
 
 const Cart = () => {
-  const { cart } = useCart();
+  const { cart, updateQuantity, totalAmount } = useCart();
+
+  const incrementQuantity = (title) => {
+    updateQuantity(title, 1);
+  };
+
+  const decrementQuantity = (title) => {
+    updateQuantity(title, -1);
+  };
 
   return (
     <div className="cart-container">
@@ -17,11 +25,21 @@ const Cart = () => {
               <img src={item.image} alt={item.title} />
               <div>
                 <h2>{item.title}</h2>
-                <p>{item.price}</p>
+                <p>{item.totalPrice}</p>
+                <div className="cart-item-quantity">
+                  <button onClick={() => decrementQuantity(item.title)}>-</button>
+                  <span>{item.quantity}</span>
+                  <button onClick={() => incrementQuantity(item.title)}>+</button>
+                </div>
               </div>
             </li>
           ))}
         </ul>
+      )}
+      {cart.length > 0 && (
+        <div className="cart-total">
+          <h2>Total: INR {totalAmount.toFixed(2)}</h2>
+        </div>
       )}
     </div>
   );
