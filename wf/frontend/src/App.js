@@ -13,6 +13,7 @@ import Cart from './pages/Cart'; // Import the Cart component
 import { UserProvider } from './contexts/UserContext';
 import { CartProvider } from './contexts/CartContext'; 
 
+
 const App = () => {
   return (
     <UserProvider>
