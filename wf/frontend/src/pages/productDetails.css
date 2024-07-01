@@ -71,3 +71,6 @@
 .buy-now-btn:hover {
     background-color: #783b7d;
 }
+.buy-now-btn:active {
+    transform: scale(0.75); /* Scale down slightly when clicked */
+}

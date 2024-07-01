@@ -121,8 +121,18 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Add transition */
 }
 
 .add-to-cart-btn:hover {
-    background-color: #783b7d;
+    background-color: #783b7d; /* New background color on hover */
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1); /* Adjusted box-shadow on hover */
 }
+.add-to-cart-btn:active {
+    transform: scale(0.75); /* Scale down slightly when clicked */
+}
+.bay-now-btn:active {
+    transform: scale(0.75); /* Scale down slightly when clicked */
+}
+
+
