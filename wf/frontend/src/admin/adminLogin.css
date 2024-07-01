@@ -1,4 +1,4 @@
-.loginContainer {
+/*.loginContainer {
     max-width: 400px;
     margin: auto;
     padding: 20px;
@@ -31,9 +31,9 @@
     margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
-  }
-  
+    box-sizing: border-box; /*Ensures padding and border are included in the element's total width and height 
+  }/*
+
   input[type="submit"] {
     background-color: #4CAF50;
     color: white;
@@ -52,5 +52,5 @@
   .westernFlex {
     margin-top: 20px;
     
-  }
+  }*/
   

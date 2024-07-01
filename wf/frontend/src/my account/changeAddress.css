@@ -3,9 +3,11 @@ body {
     padding: 0;
     font-size: 1.5rem;
     background-color: #ede5e5;
-    color: white;
-}
 
+}
+.one{
+    font-size: 1.4rem;
+}
 #changeAdd {
     max-width: 60%; /* Adjusted to fit vertical layout */
     margin: auto;
@@ -22,6 +24,10 @@ body {
 
 .delivery-address-change h2 {
     text-align: center;
+    font-size: 3rem;
+    margin-left: -10px;
+    margin-bottom: 10px;
+    
 }
 
 .delivery-address-change .label {
@@ -29,8 +35,9 @@ body {
     font-family: Poppins;
 }
 
-input {
-    width: 100%;
+.inputChangeAdd
+{
+    width: 80%;
     display: block;
     border: none;
     border-bottom: 1px solid #999;
@@ -46,12 +53,17 @@ input {
     padding: 10px;
     font-size: 1rem;
     width: 100%;
-    background-color: #000;
+    background-color: #3f1c44;
     color: #fff;
     border: none;
     cursor: pointer;
     margin: 20px auto 0; /* Center the button */
     display: block; /* Center the button */
+    border-radius: 4px;
+}
+
+.btn2:hover{
+    background-color:  #73626f;
 }
 
 @media (min-width: 600px) {
