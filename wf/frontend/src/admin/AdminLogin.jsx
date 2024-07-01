@@ -42,7 +42,7 @@ const AdminLogin = () => {
     <div className="loginContainer">
       <h1>Admin Login</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username:</label>
+        <label className='inputLable' htmlFor="username">Username:</label>
         <input
           type="text"
           id="username"
@@ -52,7 +52,7 @@ const AdminLogin = () => {
           onChange={handleUsernameChange}
           required
         />
-        <label htmlFor="password">Password:</label>
+        <label  className='inputLable' htmlFor="password">Password:</label>
         <input
           type="password"
           id="password"
@@ -63,10 +63,10 @@ const AdminLogin = () => {
           required
         />
         {loginError && <div className="error">{loginError}</div>}
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Submit" className='AdminSubmit'/>
       </form>
       <div className="westernFlex">
-        <h2>Western Flex</h2>
+        <h>Western Flex</h>
       </div>
     </div>
   );
