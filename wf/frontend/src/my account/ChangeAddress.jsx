@@ -25,70 +25,75 @@ const ChangeAddress = () => {
       <form onSubmit={handleSubmit} className="delivery-address-change">
         <h2>Change Delivery address</h2>
         
-        <label>
+        <label className='one'>
           Enter your address:
           <input 
             type="text" 
             name="addressLine1" 
+            className='inputChangeAdd' 
             placeholder="Enter your address Line 1" 
             value={formData.addressLine1}
             onChange={handleChange}
             required 
           />
         </label>
-        <br /><br />
+        <br />
         
-        <label>
+        <label className='one'>
           Enter your address:
           <input 
             type="text" 
             name="addressLine2" 
+            className='inputChangeAdd' 
             placeholder="Enter your address Line 2" 
             value={formData.addressLine2}
             onChange={handleChange}
             required 
           />
         </label>
-        <br /><br />
+        <br/>
         
-        <label>
+        <label className='one'>
           Enter your State:
           <input 
             type="text" 
             name="state" 
+            className='inputChangeAdd' 
             placeholder="Enter your state" 
             value={formData.state}
             onChange={handleChange}
             required 
           />
         </label>
-        <br /><br />
+        <br/>
         
-        <label>
+        <label className='one'>
           Enter your city:
           <input 
             type="text" 
             name="city" 
+            className='inputChangeAdd' 
             placeholder="Enter your city" 
             value={formData.city}
             onChange={handleChange}
             required 
           />
         </label>
-        <br /><br />
+        <br />
         
-        <label>
+        <label className='one'>
           Enter the pincode:
           <input 
             type="number" 
             name="pincode" 
-            placeholder="Enter the pincode" 
+            placeholder="Enter the pincode"
+            className='inputChangeAdd' 
             value={formData.pincode}
             onChange={handleChange}
             required 
           />
         </label>
-        <br /><br />
+        <br />
         
         <button type="submit" className="btn2">Change Address</button>
       </form>

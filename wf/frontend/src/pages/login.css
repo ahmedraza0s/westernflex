@@ -57,13 +57,12 @@ body {
   width: 900px;
   background:#ede5e5;
   margin: 0 auto;
-  box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+  box-shadow: -1px 2px 8px 10px #544;
   border-radius: 20px;
   display: flex;
   align-items: center;
   margin-top: 40px;
 }
-
 
 .signin-form, .signin-image {
   width: 50%;
@@ -87,10 +86,10 @@ figure {
   margin-bottom: 50px;
   text-align: center; 
 }
-
+/*
 .form-submit {
   display: inline-block;
-  background: #4e78a0;
+  background-color: #3f1c44;
   color: #fff;
   border-bottom: none;
   width: auto;
@@ -103,9 +102,9 @@ figure {
   margin-left: 80px;
 }
   .form-submit:hover {
-    background: #1d3245; 
-}
-
+   background-color:  #73626f;
+  }
+*/
 #signin {
   margin-top: 16px; 
 }
@@ -237,4 +236,6 @@ figure {
       margin-left: 80px;
       color: #222;
     }
+
+  
     
