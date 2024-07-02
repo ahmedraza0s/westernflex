@@ -16,19 +16,19 @@ const ProductDetails = () => {
 
     return (
         <div className="product-details-container">
+            <div className="thumbnails">
+                {images.map((img, index) => (
+                    <img
+                        key={index}
+                        src={img}
+                        alt={`${title} ${index + 1}`}
+                        className="thumbnail"
+                        onMouseOver={() => setMainImage(img)}
+                    />
+                ))}
+            </div>
             <div className="product-images">
                 <img src={mainImage} alt={title} className="main-image" />
-                <div className="thumbnail-container">
-                    {images.map((img, index) => (
-                        <img 
-                            key={index}
-                            src={img}
-                            alt={`${title} ${index + 1}`}
-                            className="thumbnail"
-                            onMouseOver={() => setMainImage(img)}
-                        />
-                    ))}
-                </div>
             </div>
             <div className="product-info">
                 <h1>{title}</h1>
