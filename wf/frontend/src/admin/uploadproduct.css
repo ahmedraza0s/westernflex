@@ -1,0 +1,62 @@
+/* UploadProduct.css */
+
+form {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  textarea {
+    height: 100px;
+  }
+  
+  input[type="file"] {
+    margin-top: 5px;
+  }
+  
+  button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  div {
+    margin-bottom: 10px;
+  }
+  
+  div > input[type="text"],
+  div > input[type="number"] {
+    width: calc(50% - 10px);
+    margin-right: 10px;
+  }
+  
+  div > input[type="file"] {
+    width: calc(50% - 10px);
+  }
+  
+  div > button {
+    margin-top: 5px;
+  }
+  

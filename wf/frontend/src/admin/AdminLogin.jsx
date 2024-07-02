@@ -1,73 +1,34 @@
 import React, { useState } from 'react';
-import './adminLogin.css';
-import axios from 'axios'; // Import axios for making HTTP requests
-
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const AdminLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [loginError, setLoginError] = useState('');
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:5000/api/login', {
-        username,
-        password
-      });
-      const { token } = response.data;
-      // Store the token in localStorage or sessionStorage for subsequent requests
-      localStorage.setItem('adminToken', token); // Example of storing token in localStorage
-      console.log('Login successful');
-      // Redirect to admin dashboard or perform other actions upon successful login
-    } catch (error) {
-      if (error.response) {
-        setLoginError(error.response.data.message);
-      } else {
-        setLoginError('Failed to login');
-      }
-      console.error('Login error:', error);
-    }
+    // For simplicity, we'll assume a successful login with any input
+    login();
+    navigate('/admin');
   };
 
   return (
-    <div className="loginContainer">
-      <h1>Admin Login</h1>
+    <div>
+      <h2>Admin Login</h2>
       <form onSubmit={handleSubmit}>
-        <label className='inputLable' htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          className="uname"
-          placeholder="Enter your username"
-          value={username}
-          onChange={handleUsernameChange}
-          required
-        />
-        <label  className='inputLable' htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          className="adminPass"
-          placeholder="Enter your password"
-          value={password}
-          onChange={handlePasswordChange}
-          required
-        />
-        {loginError && <div className="error">{loginError}</div>}
-        <input type="submit" value="Submit" className='AdminSubmit'/>
+        <div>
+          <label>Username:</label>
+          <input type="text" value={username} onChange={e => setUsername(e.target.value)} />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+        </div>
+        <button type="submit">Login</button>
       </form>
-      <div className="westernFlex">
-        <h>Western Flex</h>
-      </div>
     </div>
   );
 };
