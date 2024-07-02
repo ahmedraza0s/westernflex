@@ -6,11 +6,11 @@ import { useCart } from '../contexts/CartContext';
 const ProductDetails = () => {
     const location = useLocation();
     const { image, title, description, price, details, about, images } = location.state;
-    const [mainImage, setMainImage] = useState(image);
+    const [mainImage, setMainImage] = useState(`http://localhost:5000/${image}`);
     const { addToCart } = useCart();
 
     const handleAddToCart = () => {
-        const product = { image, title, price };
+        const product = { image: mainImage, title, price };
         addToCart(product);
     };
 
@@ -20,10 +20,10 @@ const ProductDetails = () => {
                 {images.map((img, index) => (
                     <img
                         key={index}
-                        src={img}
+                        src={`http://localhost:5000/${img}`}
                         alt={`${title} ${index + 1}`}
                         className="thumbnail"
-                        onMouseOver={() => setMainImage(img)}
+                        onMouseOver={() => setMainImage(`http://localhost:5000/${img}`)}
                     />
                 ))}
             </div>
