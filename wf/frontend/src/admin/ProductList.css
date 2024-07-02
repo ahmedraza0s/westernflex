@@ -1,0 +1,25 @@
+/* ProductList.css */
+
+.image-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .small-images {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .small-images li {
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .small-images li img {
+    max-width: 100px; /* Adjust max-width as per your design */
+    height: auto;
+    border: 1px solid #ddd; /* Optional: Add a border for image clarity */
+  }
+  
