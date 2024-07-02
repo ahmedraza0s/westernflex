@@ -1,45 +1,86 @@
-.cart-container {
-  padding: 20px;
+/* cart.css */
+
+/* Modal overlay for the cart */
+.cart-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+/* Main cart container */
+.cart-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
+  position: relative; /* Add this */
+}
+
+/* Close button for cart modal */
+.close-cart-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Cart heading */
 .cart-container h1 {
   margin-bottom: 20px;
 }
 
+/* Cart items list */
 .cart-container ul {
   list-style-type: none;
   padding: 0;
 }
 
+/* Cart item */
 .cart-container li {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
 }
 
+/* Cart item image */
 .cart-container img {
   width: 100px;
   height: 100px;
   margin-right: 20px;
 }
 
+/* Cart item details */
 .cart-container div {
   flex: 1;
 }
 
+/* Cart item title */
 .cart-container h2 {
   margin: 0 0 10px 0;
 }
 
+/* Cart item price */
 .cart-container p {
   margin: 0;
 }
 
+/* Cart item quantity controls */
 .cart-item-quantity {
   display: flex;
   align-items: center;
 }
 
+/* Quantity control buttons */
 .cart-item-quantity button {
   background-color: #007bff;
   color: white;
@@ -52,8 +93,19 @@
   background-color: #0056b3;
 }
 
+/* Quantity display */
 .cart-item-quantity span {
   margin: 0 10px;
   font-size: 16px;
-  color: black; /* Set the color of the quantity number to black */
+  color: black;
+}
+
+/* Cart total section */
+.cart-total {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.cart-total h2 {
+  margin: 0;
 }

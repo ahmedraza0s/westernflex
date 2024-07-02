@@ -1,10 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import Cart from './Cart'; // Import the Cart component
 import './shop.css';
 
 const Product = ({ image, title, description, price, details, about, images }) => {
   const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart({ image, title, description, price, details, about, images });
+  };
 
   return (
     <div className="product">
@@ -13,7 +18,7 @@ const Product = ({ image, title, description, price, details, about, images }) =
       </Link>
       <h3 className="product-title">{title}</h3>
       <p className="product-description">{description}</p>
-      <button className="add-to-cart-btn" onClick={() => addToCart({ image, title, description, price, details, about, images })}>Add to Cart</button>
+      <button className="add-to-cart-btn" onClick={handleAddToCart}>Add to Cart</button>
     </div>
   );
 };
@@ -21,10 +26,40 @@ const Product = ({ image, title, description, price, details, about, images }) =
 const Shop = () => {
   const [visibleDropdown, setVisibleDropdown] = useState(null);
   const dropdownRef = useRef(null);
+  const [isCartVisible, setIsCartVisible] = useState(false);
+  const cartRef = useRef(null);
+  const { addToCart: originalAddToCart } = useCart();
 
   const toggleDropdown = (dropdown) => {
     setVisibleDropdown((prevDropdown) => (prevDropdown === dropdown ? null : dropdown));
   };
+
+  const handleAddToCartClick = () => {
+    setIsCartVisible(true);
+  };
+
+  const addToCart = (item) => {
+    originalAddToCart(item);
+    handleAddToCartClick();
+  };
+
+  const handleClickOutside = (event) => {
+    if (cartRef.current && !cartRef.current.contains(event.target)) {
+      setIsCartVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isCartVisible) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isCartVisible]);
 
   return (
     <div>
@@ -86,6 +121,14 @@ const Shop = () => {
         />
         {/* Other Product Components */}
       </div>
+      {isCartVisible && (
+        <div className="cart-modal">
+          <div className="cart-container" ref={cartRef}>
+            <button className="close-cart-btn" onClick={() => setIsCartVisible(false)}>X</button>
+            <Cart />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
