@@ -92,8 +92,7 @@ display-flex, .display-flex, .display-flex-center, .signup-content{
   
   .form-submit {
     display: inline-block;
-    background: #4e78a0;
-    color: #fff;
+    background-color:#3f1c44;
     border-bottom: none;
     width: auto;
     padding: 15px 39px;
@@ -103,9 +102,11 @@ display-flex, .display-flex, .display-flex-center, .signup-content{
     font-size: 1.2rem;
     font-family: Georgia, 'Times New Roman', Times, serif;
     margin-left: 80px;
+    color: #fff;
+    font-family: 'Poppins';
   }
     .form-submit:hover {
-      background: #1d3245; }
+      background:  #73626f; }
   
   .signin-image-link {
     font-size: 1.2rem;
@@ -140,14 +141,14 @@ display-flex, .display-flex, .display-flex-center, .signup-content{
     background-color: #ede5e5;
     margin-left: -350px;
   }
-   
+   /*
   label {
     position: absolute;
     left: 0;
     top: 50%;
     transform: translateY(-50%);
     color: #222; }
-  
+  */
   @media screen and (max-width: 1200px) {
     .container {
       width: calc( 100% - 30px);

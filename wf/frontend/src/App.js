@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ChangeAddress from './my account/ChangeAddress';
 import ProductDetails from './pages/ProductDetails';
 import AdminLogin from './admin/AdminLogin';
 import Cart from './pages/Cart'; // Import the Cart component
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/change-address" element={<ChangeAddress />} />
             <Route path="/product/:title" element={<ProductDetails />} />
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/cart" element={<Cart />} /> {/* Add the Cart route */}

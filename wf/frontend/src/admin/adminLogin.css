@@ -1,10 +1,13 @@
 .loginContainer {
     max-width: 400px;
     margin: auto;
-    padding: 20px;
+    padding: 30px;
     background-color: #f9f9f9;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: -1px 2px 8px 10px #544;
     text-align: center;
+    border-radius: 4px;
+    margin-top: 40px;
+    margin-bottom: 40px;
   }
   
   form {
@@ -13,12 +16,13 @@
     align-items: center;
   }
   
-  label {
+  .inputLable {
     display: block;
     text-align: left;
     margin-top: 10px;
     margin-bottom: 5px;
-    font-size: 14px;
+    font-size: 1.4rem;
+    font-family: 'Poppins';
     color: #333;
     width: 100%;
   }
@@ -33,9 +37,9 @@
     border-radius: 4px;
     box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
   }
-  
-  input[type="submit"] {
-    background-color: #4CAF50;
+
+   .AdminSubmit{
+    background-color:#3f1c44;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -45,12 +49,17 @@
     margin-top: 10px;
   }
   
-  input[type="submit"]:hover {
-    background-color: #45a049;
+  .AdminSubmit:hover:hover {
+    background-color:  #73626f;
   }
   
   .westernFlex {
     margin-top: 20px;
     
+  }
+  .westernFlex h{
+    
+    font-weight: bold;
+    font-family: 'Poppins';
   }
   

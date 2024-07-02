@@ -1,5 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import './admin/home.css'; // Assuming pg1.css contains your custom styles
+import './home.css'; // Assuming pg1.css contains your custom styles
+import { Link } from 'react-router-dom';
+import { useCart } from '../contexts/CartContext';
+import './shop.css';
+
+const Product = ({ image, title, description, price, details, about, images }) => {
+  const { addToCart } = useCart();
+
+  return (
+    <div className="product">
+      <Link to={`/product/${title.replace(/\s+/g, '-').toLowerCase()}`} state={{ image, title, description, price, details, about, images }}>
+        <img src={image} alt={title} className="product-image" />
+      </Link>
+      <h3 className="product-title">{title}</h3>
+      <p className="product-description">{description}</p>
+      <button className="add-to-cart-btn" onClick={() => addToCart({ image, title, description, price, details, about, images })}>Add to Cart</button>
+    </div>
+  );
+};
 
 const Shop = () => {
   const [currentSlide, setCurrentSlide] = useState(0); // State to track current slide index
@@ -16,7 +34,7 @@ const Shop = () => {
 
   // Function to handle next slide
   const nextSlide = () => {
-    setCurrentSlide((currentSlide + 2) % slides.length);
+    setCurrentSlide((currentSlide + 1) % slides.length);
   };
 
   // Function to navigate to specific slide
@@ -30,9 +48,10 @@ const Shop = () => {
     setSlideInterval(interval); // Save interval ID to state
 
     return () => {
-      clearInterval(slideInterval); // Cleanup: Clear interval on component unmount
+      clearInterval(interval); // Cleanup: Clear interval on component unmount
     };
   }, []); // Empty dependency array ensures effect runs only on mount and unmount
+  
   return (
     <div>
       <section>
@@ -59,69 +78,83 @@ const Shop = () => {
           ))}
         </div>
       </section>
-
+      
       <div>
-        <h1>BEST SELLER PRODUCT</h1>
+        <h1>BEST SELLER PRODUCTS</h1>
         <div className="product-container">
-          <div className="product">
-            <a href="/product/hand-bag" state="...">
-              <img
-                src="https://m.media-amazon.com/images/I/71WNjY5bRRL._AC_SX679_.jpg"
-                alt="Hand bag"
-                className="product-image"
-              />
-            </a>
-            <h3 className="product-title">Hand bag</h3>
-            <p className="product-description">
-              BeeGreen Personalized Tote Bags for Women Initial Monogrammed Carnation Embroidered Canvas Jute Birthday Gift Bags
-            </p>
-            <button className="add-to-cart-btn">Add to Cart</button>
-          </div>
-          <div className="product">
-            <a href="/product/hand-bag" state="...">
-              <img
-                src="https://m.media-amazon.com/images/I/71WNjY5bRRL._AC_SX679_.jpg"
-                alt="Hand bag"
-                className="product-image"
-              />
-            </a>
-            <h3 className="product-title">Hand bag</h3>
-            <p className="product-description">
-              BeeGreen Personalized Tote Bags for Women Initial Monogrammed Carnation Embroidered Canvas Jute Birthday Gift Bags
-            </p>
-            <button className="add-to-cart-btn">Add to Cart</button>
-          </div>
-          <div className="product">
-            <a href="/product/hand-bag" state="...">
-              <img
-                src="https://m.media-amazon.com/images/I/71WNjY5bRRL._AC_SX679_.jpg"
-                alt="Hand bag"
-                className="product-image"
-              />
-            </a>
-            <h3 className="product-title">Hand bag</h3>
-            <p className="product-description">
-              BeeGreen Personalized Tote Bags for Women Initial Monogrammed Carnation Embroidered Canvas Jute Birthday Gift Bags
-            </p>
-            <button className="add-to-cart-btn">Add to Cart</button>
-          </div>
-          <div className="product">
-            <a href="/product/hand-bag" state="...">
-              <img
-                src="https://m.media-amazon.com/images/I/71WNjY5bRRL._AC_SX679_.jpg"
-                alt="Hand bag"
-                className="product-image"
-              />
-            </a>
-            <h3 className="product-title">Hand bag</h3>
-            <p className="product-description">
-              BeeGreen Personalized Tote Bags for Women Initial Monogrammed Carnation Embroidered Canvas Jute Birthday Gift Bags
-            </p>
-            <button className="add-to-cart-btn">Add to Cart</button>
-          </div>
+          <Product
+            image="https://m.media-amazon.com/images/I/71WNjY5bRRL._AC_SX679_.jpg"
+            title="Hand bag"
+            description="BeeGreen Personalized Tote Bags for Women Initial Monogrammed Carnation Embroidered Canvas Jute Birthday Gift Bags"
+            price="599"
+            details="Size: 12'x14', Color: Red, Material: Canvas"
+            about="【VERSATILE & DURABLE WOMEN'S TOTE BAG】: This personalized tote bag is designed with convenience in mind, featuring 1 side pockets for essentials like a water bottle, inner zipper pockets for your phone, and a zipper closure to secure your items. Suitable for various occasions including the beach, weddings, work, or travel, this canvas tote is a thoughtful and practical gift option for women of all ages."
+            images={[
+              "https://m.media-amazon.com/images/I/81aXfD4KdVL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/71RnFQDRxwL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/71Gzx5sJJQL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/610qYpAOiNL._AC_SX569_.jpg"
+            ]}
+          />
+          <Product
+            image="https://m.media-amazon.com/images/I/71WNjY5bRRL._AC_SX679_.jpg"
+            title="Hand bag"
+            description="BeeGreen Personalized Tote Bags for Women Initial Monogrammed Carnation Embroidered Canvas Jute Birthday Gift Bags"
+            price="599"
+            details="Size: 12'x14', Color: Red, Material: Canvas"
+            about="【VERSATILE & DURABLE WOMEN'S TOTE BAG】: This personalized tote bag is designed with convenience in mind, featuring 1 side pockets for essentials like a water bottle, inner zipper pockets for your phone, and a zipper closure to secure your items. Suitable for various occasions including the beach, weddings, work, or travel, this canvas tote is a thoughtful and practical gift option for women of all ages."
+            images={[
+              "https://m.media-amazon.com/images/I/81aXfD4KdVL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/71RnFQDRxwL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/71Gzx5sJJQL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/610qYpAOiNL._AC_SX569_.jpg"
+            ]}
+          />
+          <Product
+            image="https://m.media-amazon.com/images/I/71WNjY5bRRL._AC_SX679_.jpg"
+            title="Hand bag"
+            description="BeeGreen Personalized Tote Bags for Women Initial Monogrammed Carnation Embroidered Canvas Jute Birthday Gift Bags"
+            price="599"
+            details="Size: 12'x14', Color: Red, Material: Canvas"
+            about="【VERSATILE & DURABLE WOMEN'S TOTE BAG】: This personalized tote bag is designed with convenience in mind, featuring 1 side pockets for essentials like a water bottle, inner zipper pockets for your phone, and a zipper closure to secure your items. Suitable for various occasions including the beach, weddings, work, or travel, this canvas tote is a thoughtful and practical gift option for women of all ages."
+            images={[
+              "https://m.media-amazon.com/images/I/81aXfD4KdVL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/71RnFQDRxwL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/71Gzx5sJJQL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/610qYpAOiNL._AC_SX569_.jpg"
+            ]}
+          />
+          <Product
+            image="https://m.media-amazon.com/images/I/71WNjY5bRRL._AC_SX679_.jpg"
+            title="Hand bag"
+            description="BeeGreen Personalized Tote Bags for Women Initial Monogrammed Carnation Embroidered Canvas Jute Birthday Gift Bags"
+            price="599"
+            details="Size: 12'x14', Color: Red, Material: Canvas"
+            about="【VERSATILE & DURABLE WOMEN'S TOTE BAG】: This personalized tote bag is designed with convenience in mind, featuring 1 side pockets for essentials like a water bottle, inner zipper pockets for your phone, and a zipper closure to secure your items. Suitable for various occasions including the beach, weddings, work, or travel, this canvas tote is a thoughtful and practical gift option for women of all ages."
+            images={[
+              "https://m.media-amazon.com/images/I/81aXfD4KdVL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/71RnFQDRxwL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/71Gzx5sJJQL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/610qYpAOiNL._AC_SX569_.jpg"
+            ]}
+          />
+          <Product
+            image="https://m.media-amazon.com/images/I/71WNjY5bRRL._AC_SX679_.jpg"
+            title="Hand bag"
+            description="BeeGreen Personalized Tote Bags for Women Initial Monogrammed Carnation Embroidered Canvas Jute Birthday Gift Bags"
+            price="599"
+            details="Size: 12'x14', Color: Red, Material: Canvas"
+            about="【VERSATILE & DURABLE WOMEN'S TOTE BAG】: This personalized tote bag is designed with convenience in mind, featuring 1 side pockets for essentials like a water bottle, inner zipper pockets for your phone, and a zipper closure to secure your items. Suitable for various occasions including the beach, weddings, work, or travel, this canvas tote is a thoughtful and practical gift option for women of all ages."
+            images={[
+              "https://m.media-amazon.com/images/I/81aXfD4KdVL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/71RnFQDRxwL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/71Gzx5sJJQL._AC_SX569_.jpg",
+              "https://m.media-amazon.com/images/I/610qYpAOiNL._AC_SX569_.jpg"
+            ]}
+          />
           {/* Repeat for other products */}
         </div>
-      </div>
+         </div>
     </div>
   );
 };

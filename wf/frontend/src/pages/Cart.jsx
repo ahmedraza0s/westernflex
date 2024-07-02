@@ -39,6 +39,10 @@ const Cart = () => {
       {cart.length > 0 && (
         <div className="cart-total">
           <h2>Total: INR {totalAmount.toFixed(2)}</h2>
+          {/* Corrected link to Checkout.jsx */}
+          <a href="Checkout">
+            <button className="add-to-cart-btn">CHECK OUT</button>
+          </a>
         </div>
       )}
     </div>
