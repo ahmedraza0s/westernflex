@@ -329,6 +329,32 @@ app.delete('/products/:productId', async (req, res) => {
   }
 });
 
+
+//for shop by loading using priority
+// Endpoint to fetch products with priority 1, 2, and 3
+app.get('/products', async (req, res) => {
+  try {
+    const products = await Product.find({
+      'colors.priority': { $in: [1, 2, 3] }
+    });
+
+    // Filter colors to include only those with priority 1, 2, or 3
+    const filteredProducts = products.map(product => {
+      const filteredColors = product.colors.filter(color => [1, 2, 3].includes(color.priority));
+      return { ...product._doc, colors: filteredColors };
+    });
+
+    res.json(filteredProducts);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+// Serve static files from the "upload" directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
