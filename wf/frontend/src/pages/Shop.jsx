@@ -89,11 +89,11 @@ const ShopList = () => {
                 </Link>
                 <h3 className="product-title">{product.name}</h3>
                 <p className="product-description">{product.shortDescription}</p>
-                <p className="product-price">Listing Price: ${product.listingPrice}</p>
-                <p className="product-selling-price">Selling Price: ${product.sellingPrice}</p>
+                <p className="product-price">Listing Price: {product.listingPrice}</p>
+                <p className="product-selling-price">Selling Price: {product.sellingPrice}</p>
                 <p className="product-color">Color: {color.color}</p>
                 <button className="add-to-cart-btn" onClick={() => addToCart({ 
-                  image: color.images[0], 
+                  image: `http://localhost:5000/${color.images[0]}`, // Ensure image URL is included
                   title: product.name, 
                   description: product.shortDescription, 
                   listingPrice: product.listingPrice, 

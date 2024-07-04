@@ -39,7 +39,17 @@ const ProductDetails = () => {
   }, [productId]);
 
   const handleAddToCart = () => {
-    const product = { image: mainImage, title, price: sellingPrice };
+    const product = { 
+      image: mainImage, 
+      title, 
+      description, 
+      listingPrice, 
+      sellingPrice, 
+      details, 
+      about, 
+      color, 
+      productId 
+    };
     addToCart(product);
   };
 
