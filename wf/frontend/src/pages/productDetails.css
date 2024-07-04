@@ -30,7 +30,6 @@
 
 /* Container for the main product images */
 .product-images {
-    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -88,4 +87,42 @@
 }
 .buy-now-btn:active {
     transform: scale(0.75); /* Scale down slightly when clicked */
+}
+
+/* Container for other color images */
+.other-colors {
+    margin-top: 20px;
+}
+
+/* Container for individual color items */
+.colors-container {
+    display: flex;
+    gap: 10px;
+}
+
+/* Styles for individual color items */
+.color-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Styles for color name */
+.color-item p {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Styles for color image thumbnails */
+.color-thumbnail {
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+/* Thumbnail hover effect */
+.color-thumbnail:hover {
+    border: 2px solid rgb(97 59 96);
 }

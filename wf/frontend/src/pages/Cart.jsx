@@ -1,16 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import './cart.css';
 
 const Cart = () => {
   const { cart, updateQuantity, totalAmount } = useCart();
 
-  const incrementQuantity = (title) => {
-    updateQuantity(title, 1);
+  const incrementQuantity = (title, color) => {
+    updateQuantity(title, color, 1);
   };
 
-  const decrementQuantity = (title) => {
-    updateQuantity(title, -1);
+  const decrementQuantity = (title, color) => {
+    updateQuantity(title, color, -1);
   };
 
   return (
@@ -25,11 +26,11 @@ const Cart = () => {
               <img src={item.image} alt={item.title} />
               <div>
                 <h2>{item.title}</h2>
-                <p>{item.totalPrice}</p>
+                <p>{item.totalPrice.toFixed(2)}</p>
                 <div className="cart-item-quantity">
-                  <button onClick={() => decrementQuantity(item.title)}>-</button>
+                  <button onClick={() => decrementQuantity(item.title, item.color)}>-</button>
                   <span>{item.quantity}</span>
-                  <button onClick={() => incrementQuantity(item.title)}>+</button>
+                  <button onClick={() => incrementQuantity(item.title, item.color)}>+</button>
                 </div>
               </div>
             </li>
@@ -39,10 +40,9 @@ const Cart = () => {
       {cart.length > 0 && (
         <div className="cart-total">
           <h2>Total: INR {totalAmount.toFixed(2)}</h2>
-          {/* Corrected link to Checkout.jsx */}
-          <a href="Checkout">
+          <Link to="/checkout">
             <button className="add-to-cart-btn">CHECK OUT</button>
-          </a>
+          </Link>
         </div>
       )}
     </div>

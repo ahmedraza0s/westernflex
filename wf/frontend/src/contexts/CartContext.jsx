@@ -9,30 +9,37 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (product) => {
     setCart((prevCart) => {
-      const existingProductIndex = prevCart.findIndex((item) => item.title === product.title);
+      const existingProductIndex = prevCart.findIndex(
+        (item) => item.title === product.title && item.color === product.color
+      );
 
       if (existingProductIndex !== -1) {
         const updatedCart = [...prevCart];
         updatedCart[existingProductIndex].quantity += 1;
-        updatedCart[existingProductIndex].totalPrice += parseFloat(product.price);
+        updatedCart[existingProductIndex].totalPrice += parseFloat(product.sellingPrice);
         return updatedCart;
       }
 
-      return [...prevCart, { ...product, quantity: 1, totalPrice: parseFloat(product.price) }];
+      return [
+        ...prevCart,
+        { ...product, quantity: 1, totalPrice: parseFloat(product.sellingPrice) },
+      ];
     });
   };
 
-  const updateQuantity = (title, amount) => {
-    setCart((prevCart) => {
-      return prevCart.map((item) => {
-        if (item.title === title) {
-          const newQuantity = item.quantity + amount;
-          const newTotalPrice = newQuantity * parseFloat(item.price);
-          return { ...item, quantity: newQuantity, totalPrice: newTotalPrice };
-        }
-        return item;
-      }).filter(item => item.quantity > 0); // Remove items with 0 quantity
-    });
+  const updateQuantity = (title, color, amount) => {
+    setCart((prevCart) =>
+      prevCart
+        .map((item) => {
+          if (item.title === title && item.color === color) {
+            const newQuantity = item.quantity + amount;
+            const newTotalPrice = newQuantity * parseFloat(item.sellingPrice);
+            return { ...item, quantity: newQuantity, totalPrice: newTotalPrice };
+          }
+          return item;
+        })
+        .filter((item) => item.quantity > 0)
+    );
   };
 
   const cartCount = cart.length;

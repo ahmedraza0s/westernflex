@@ -1,7 +1,10 @@
 import React from 'react';
 import './checkout.css';
+import { useCart } from '../contexts/CartContext';
 
 const Checkout = () => {
+  const { cart, totalAmount } = useCart();
+
   return (
     <div>
       <header className="checkout-header">
@@ -18,30 +21,24 @@ const Checkout = () => {
               <thead>
                 <tr>
                   <th>Item</th>
+                  <th>Image</th>
                   <th>Quantity</th>
                   <th>Price</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Product 1</td>
-                  <td>1</td>
-                  <td>$10.00</td>
-                </tr>
-                <tr>
-                  <td>Product 2</td>
-                  <td>2</td>
-                  <td>$20.00</td>
-                </tr>
-                <tr>
-                  <td>Product 3</td>
-                  <td>1</td>
-                  <td>$30.00</td>
-                </tr>
+                {cart.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.title}</td>
+                    <td><img src={item.image} alt={item.title} className="checkout-image" /></td>
+                    <td>{item.quantity}</td>
+                    <td>{item.totalPrice.toFixed(2)}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
             <div className="total">
-              Total: <span>$60.00</span>
+              Total: <span>INR {totalAmount.toFixed(2)}</span>
             </div>
           </div>
         </section>
@@ -51,27 +48,23 @@ const Checkout = () => {
         <div className="checkout-content">
           <div className="delivery-address">
             <h2>1. Delivery address</h2>
-            <h>Enter your address:</h>
+            <label>Enter your address:</label>
             <input type="text" className="address" placeholder="Enter your address" required /><br /><br />
-            <h>Enter your State:</h>
+            <label>Enter your State:</label>
             <input type="text" className="address" placeholder="Enter your state" required /><br /><br />
-            <h>Enter your city:</h>
+            <label>Enter your city:</label>
             <input type="text" className="address" placeholder="Enter your city" required /><br /><br />
-            <h>Enter the pincode:</h>
+            <label>Enter the pincode:</label>
             <input type="number" className="address" placeholder="Enter the pincode" required /><br /><br />
           </div>
 
-            <div className="payment-method">
-
-            <h2>2. Select a payment method</h2><br></br>
-           
-               <h>Cash on Delivery</h><br></br>
-        
+          <div className="payment-method">
+            <h2>2. Select a payment method</h2><br />
+            <label>Cash on Delivery</label><br />
             <button className="order">Place Order</button>
           </div>
         </div>
       </div>
-  
     </div>
   );
 };
