@@ -24,6 +24,7 @@ import { UserProvider } from './contexts/UserContext';
 import { CartProvider } from './contexts/CartContext';
 import { AuthProvider } from './contexts/AuthContext'; // Import AuthProvider
 import ProtectedRoute from './routes/ProtectedRoute'; // Import ProtectedRoute
+import LoadProductById from './pages/LoadProductById';
 
 const App = () => {
   return (
@@ -43,7 +44,8 @@ const App = () => {
               <Route path="/product/:title" element={<ProductDetails />} />
               <Route path="/admin-login" element={<AdminLogin />} />
               <Route path="/cart" element={<Cart />} />
-              
+              <Route path="/byid" element={<LoadProductById />} />
+
               {/* Admin Routes */}
               <Route path="/admin" element={<ProtectedRoute element={<AdminPage />} />}>
                 <Route path="dashboard" element={<Dashboard />} />

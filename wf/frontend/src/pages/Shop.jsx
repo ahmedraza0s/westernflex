@@ -4,25 +4,11 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import './shop.css';
 
-const Product = ({ image, title, description, price, details, about, images }) => {
-  const { addToCart } = useCart();
-
-  return (
-    <div className="product">
-      <Link to={`/product/${title.replace(/\s+/g, '-').toLowerCase()}`} state={{ image, title, description, price, details, about, images }}>
-        <img src={`http://localhost:5000/${image}`} alt={title} className="product-image" />
-      </Link>
-      <h3 className="product-title">{title}</h3>
-      <p className="product-description">{description}</p>
-      <button className="add-to-cart-btn" onClick={() => addToCart({ image, title, description, price, details, about, images })}>Add to Cart</button>
-    </div>
-  );
-};
-
 const ShopList = () => {
   const [products, setProducts] = useState([]);
   const [visibleDropdown, setVisibleDropdown] = useState(null);
   const dropdownRef = useRef(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -86,16 +72,39 @@ const ShopList = () => {
         {products.map((product, index) => (
           product.colors.map((color) => (
             [1, 2, 3].includes(color.priority) && color.images.length > 0 ? (
-              <Product
-                key={`${product._id}-${color.color}`}
-                image={color.images[0]}
-                title={product.name}
-                description={product.shortDescription}
-                price={product.listingPrice}
-                details={product.longDescription}
-                about={product.about}
-                images={color.images}
-              />
+              <div className="product" key={`${product._id}-${color.color}`}>
+                <Link to={`/product/${product.name.replace(/\s+/g, '-').toLowerCase()}`} state={{ 
+                  image: color.images[0], 
+                  title: product.name, 
+                  description: product.shortDescription, 
+                  listingPrice: product.listingPrice, 
+                  sellingPrice: product.sellingPrice, 
+                  details: product.longDescription, 
+                  about: product.about, 
+                  images: color.images, 
+                  color: color.color,
+                  productId: product.productId // Use productId instead of _id
+                }}>
+                  <img src={`http://localhost:5000/${color.images[0]}`} alt={product.name} className="product-image" />
+                </Link>
+                <h3 className="product-title">{product.name}</h3>
+                <p className="product-description">{product.shortDescription}</p>
+                <p className="product-price">Listing Price: ${product.listingPrice}</p>
+                <p className="product-selling-price">Selling Price: ${product.sellingPrice}</p>
+                <p className="product-color">Color: {color.color}</p>
+                <button className="add-to-cart-btn" onClick={() => addToCart({ 
+                  image: color.images[0], 
+                  title: product.name, 
+                  description: product.shortDescription, 
+                  listingPrice: product.listingPrice, 
+                  sellingPrice: product.sellingPrice, 
+                  details: product.longDescription, 
+                  about: product.about, 
+                  images: color.images, 
+                  color: color.color,
+                  productId: product.productId // Use productId instead of _id
+                })}>Add to Cart</button>
+              </div>
             ) : null
           ))
         ))}

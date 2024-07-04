@@ -355,6 +355,36 @@ app.get('/products', async (req, res) => {
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
+// Endpoint to fetch products by productId
+app.get('/api/products/:productId', async (req, res) => {
+  const { productId } = req.params;
+
+  try {
+    const products = await Product.find({ productId }).exec();
+
+    if (!products || products.length === 0) {
+      return res.status(404).json({ error: 'No products found for the given ID' });
+    }
+
+    res.json(products);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Fetch products route (existing route, consider renaming to differentiate)
+app.get('/api/products', async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
