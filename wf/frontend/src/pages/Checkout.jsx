@@ -3,7 +3,11 @@ import './checkout.css';
 import { useCart } from '../contexts/CartContext';
 
 const Checkout = () => {
-  const { cart, totalAmount } = useCart();
+  const { cart, totalAmount, updateQuantity } = useCart();
+
+  const handleDelete = (item) => {
+    updateQuantity(item.title, item.color, -1);
+  };
 
   return (
     <div>
@@ -24,6 +28,7 @@ const Checkout = () => {
                   <th>Image</th>
                   <th>Quantity</th>
                   <th>Price</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -33,6 +38,14 @@ const Checkout = () => {
                     <td><img src={item.image} alt={item.title} className="checkout-image" /></td>
                     <td>{item.quantity}</td>
                     <td>{item.totalPrice.toFixed(2)}</td>
+                    <td>
+                      <button 
+                        className="delete-button" 
+                        onClick={() => handleDelete(item)}
+                      >
+                        Delete
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -68,6 +81,5 @@ const Checkout = () => {
     </div>
   );
 };
-
 
 export default Checkout;

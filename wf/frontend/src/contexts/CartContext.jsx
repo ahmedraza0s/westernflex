@@ -27,7 +27,6 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  
   const updateQuantity = (title, color, amount) => {
     setCart((prevCart) =>
       prevCart
@@ -35,11 +34,11 @@ export const CartProvider = ({ children }) => {
           if (item.title === title && item.color === color) {
             const newQuantity = item.quantity + amount;
             const newTotalPrice = newQuantity * parseFloat(item.sellingPrice);
-            return { ...item, quantity: newQuantity, totalPrice: newTotalPrice };
+            return newQuantity > 0 ? { ...item, quantity: newQuantity, totalPrice: newTotalPrice } : null;
           }
           return item;
         })
-        .filter((item) => item.quantity > 0)
+        .filter((item) => item !== null)
     );
   };
 
