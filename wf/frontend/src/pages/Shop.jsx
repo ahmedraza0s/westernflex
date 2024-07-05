@@ -32,10 +32,7 @@ const ShopList = () => {
       <nav className="filter-navbar" ref={dropdownRef}>
         <span className="filter-label">Filter By</span>
         <div className="dropdown">
-          <button
-            className="dropbtn slide-in"
-            onClick={() => toggleDropdown('price')}
-          >
+          <button className="dropbtn slide-in" onClick={() => toggleDropdown('price')}>
             Price <i className="fas fa-caret-down"></i>
           </button>
           {visibleDropdown === 'price' && (
@@ -50,10 +47,7 @@ const ShopList = () => {
           )}
         </div>
         <div className="dropdown">
-          <button
-            className="dropbtn slide-in"
-            onClick={() => toggleDropdown('categories')}
-          >
+          <button className="dropbtn slide-in" onClick={() => toggleDropdown('categories')}>
             Categories <i className="fas fa-caret-down"></i>
           </button>
           {visibleDropdown === 'categories' && (
@@ -83,6 +77,7 @@ const ShopList = () => {
                   about: product.about, 
                   images: color.images, 
                   color: color.color,
+                  allColors: product.colors,  // Pass all colors
                   productId: product.productId // Use productId instead of _id
                 }}>
                   <img src={`http://localhost:5000/${color.images[0]}`} alt={product.name} className="product-image" />
@@ -112,5 +107,6 @@ const ShopList = () => {
     </div>
   );
 };
+
 
 export default ShopList;

@@ -27,6 +27,7 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  
   const updateQuantity = (title, color, amount) => {
     setCart((prevCart) =>
       prevCart
