@@ -6,37 +6,11 @@ import { useCart } from '../contexts/CartContext';
 
 const ProductDetails = () => {
   const location = useLocation();
-  const { image, title, description, listingPrice, sellingPrice, details, about, images, color, productId } = location.state;
+  const { image, title, description, listingPrice, sellingPrice, details, about, images, color, allColors, productId } = location.state;
   const [mainImage, setMainImage] = useState(`http://localhost:5000/${image}`);
-  const [product, setProduct] = useState(null);
   const { addToCart } = useCart();
-  const [products, setProducts] = useState([]);
-
-  const handleSearch = async () => {
-    try {
-      const response = await axios.get(`/api/products/${productId}`);
-      setProducts(response.data);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
-  };
-
-  useEffect(() => {
-    handleSearch(); // Fetch products for the given productId
-  }, [productId]); // Update when productId changes
-
-  useEffect(() => {
-    const fetchProductDetails = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/products/${productId}`);
-        setProduct(response.data);
-      } catch (error) {
-        console.error('Error fetching product details:', error);
-      }
-    };
-
-    fetchProductDetails();
-  }, [productId]);
+  const [selectedColorImages, setSelectedColorImages] = useState(images);
+  const [selectedColor, setSelectedColor] = useState(color);
 
   const handleAddToCart = () => {
     const product = { 
@@ -47,16 +21,23 @@ const ProductDetails = () => {
       sellingPrice, 
       details, 
       about, 
-      color, 
+      color: selectedColor, 
+      images: selectedColorImages,
       productId 
     };
     addToCart(product);
   };
 
+  const handleColorChange = (colorImages, newColor) => {
+    setSelectedColorImages(colorImages);
+    setSelectedColor(newColor);
+    setMainImage(`http://localhost:5000/${colorImages[0]}`);
+  };
+
   return (
     <div className="product-details-container">
       <div className="thumbnails">
-        {images.map((img, index) => (
+        {selectedColorImages.map((img, index) => (
           <img
             key={index}
             src={`http://localhost:5000/${img}`}
@@ -74,7 +55,7 @@ const ProductDetails = () => {
         <p className="product-description">{description}</p>
         <p className="product-price"><strong>Listing Price: </strong>${listingPrice}</p>
         <p className="product-selling-price"><strong>Selling Price: </strong>${sellingPrice}</p>
-        <p className="product-color"><strong>Color: </strong>{color}</p>
+        <p className="product-color"><strong>Color: </strong>{selectedColor}</p>
         <p className="product-id"><strong>Product ID: </strong>{productId}</p>
         <div className="product-details">
           <h3>Details</h3>
@@ -91,18 +72,15 @@ const ProductDetails = () => {
         <div className="other-colors">
           <h2>Other Colors Available</h2>
           <div className="colors-container">
-            {products.length > 0 && products.map((product) => (
-              product.colors.map((c, index) => (
-                <div key={index} className="color-item">
-                  <p>{c.color}</p>
-                  <img
-                    src={`http://localhost:5000/${c.images[0]}`}
-                    alt={`${title} ${c.color}`}
-                    className="color-thumbnail"
-                    onMouseOver={() => setMainImage(`http://localhost:5000/${c.images[0]}`)}
-                  />
-                </div>
-              ))
+            {allColors.map((colorItem, index) => (
+              <div key={index} className="color-item" onClick={() => handleColorChange(colorItem.images, colorItem.color)}>
+                <p>{colorItem.color}</p>
+                <img
+                  src={`http://localhost:5000/${colorItem.images[0]}`}
+                  alt={`${title} ${colorItem.color}`}
+                  className="color-thumbnail"
+                />
+              </div>
             ))}
           </div>
         </div>
@@ -110,5 +88,6 @@ const ProductDetails = () => {
     </div>
   );
 };
+
 
 export default ProductDetails;
