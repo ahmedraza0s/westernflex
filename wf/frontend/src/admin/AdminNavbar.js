@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const AdminNavbar = () => {
+  const { isAdmin, logout } = useAuth();
+
   return (
     <nav>
       <ul>
@@ -13,6 +16,7 @@ const AdminNavbar = () => {
         <li><Link to="/admin/add-image">Add Image</Link></li>
         <li><Link to="/admin/product-list">Product List</Link></li>
         <li><Link to="/admin/admin-register">Register</Link></li>
+        {isAdmin && <button onClick={logout}>Logout</button>}
       </ul>
     </nav>
   );
