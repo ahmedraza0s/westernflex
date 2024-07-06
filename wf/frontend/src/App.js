@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/navbar/Navbar';
+import AdminNavbar from './admin/AdminNavbar';
 import './components/navbar/navbar.css';
 import Shop from './pages/Shop';
 import Home from './pages/Home';
@@ -10,20 +11,20 @@ import Register from './pages/Register';
 import ChangeAddress from './my account/ChangeAddress';
 import ProductDetails from './pages/ProductDetails';
 import AdminLogin from './admin/AdminLogin';
-import AdminPage from './admin/AdminPage'; // Import the AdminPage component
+import AdminPage from './admin/AdminPage';
 import AddImageToProduct from './admin/AddImageToProduct';
-import AdminRegister from './admin/AdminRegister'
+import AdminRegister from './admin/AdminRegister';
 import ProductList from './admin/ProductList';
-import Cart from './pages/Cart'; // Import the Cart component
+import Cart from './pages/Cart';
 import UploadProduct from './admin/UploadProduct';
-import Dashboard from './admin/Dashboard'; // Import the Dashboard component
-import Products from './admin/Products'; // Import the Products component
-import Orders from './admin/Orders'; // Import the Orders component
-import Users from './admin/Users'; // Import the Users component
+import Dashboard from './admin/Dashboard';
+import Products from './admin/Products';
+import Orders from './admin/Orders';
+import Users from './admin/Users';
 import { UserProvider } from './contexts/UserContext';
 import { CartProvider } from './contexts/CartContext';
-import { AuthProvider } from './contexts/AuthContext'; // Import AuthProvider
-import ProtectedRoute from './routes/ProtectedRoute'; // Import ProtectedRoute
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './routes/ProtectedRoute';
 import LoadProductById from './pages/LoadProductById';
 
 const App = () => {
@@ -47,15 +48,15 @@ const App = () => {
               <Route path="/byid" element={<LoadProductById />} />
 
               {/* Admin Routes */}
-              <Route path="/admin" element={<ProtectedRoute element={<AdminPage />} />}>
+              <Route path="/admin" element={<ProtectedRoute element={<AdminNavbar />} />}>
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="products" element={<Products />} />
                 <Route path="orders" element={<Orders />} />
                 <Route path="users" element={<Users />} />
-                <Route path="Add-Image" element={<AddImageToProduct />} />
+                <Route path="upload-product" element={<UploadProduct />} />
+                <Route path="add-image" element={<AddImageToProduct />} />
                 <Route path="product-list" element={<ProductList />} />
                 <Route path="admin-register" element={<AdminRegister />} />
-                <Route path="upload-product" element={<UploadProduct />} />
               </Route>
             </Routes>
           </Router>
