@@ -179,4 +179,5 @@ const UploadProduct = () => {
   );
 };
 
+
 export default UploadProduct;
