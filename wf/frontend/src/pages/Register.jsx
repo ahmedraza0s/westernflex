@@ -7,6 +7,7 @@ import passIcon from '../components/assets/password.png';
 import repassIcon from '../components/assets/password.png';
 import emailIcon from '../components/assets/email.png';
 import registerIcon from '../components/assets/registeruser.png';
+import phoneIcon from '../components/assets/phoneCall.png';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -119,6 +120,19 @@ const RegisterPage = () => {
                     onChange={handleChange}
                   />
                 </div>
+                <div className="form-group">
+                  <Link to="#"><img src={phoneIcon} alt="no image" className="img" /></Link>
+                  <input
+                    type="text"
+                    name="phno"
+                    id="phno"
+                    placeholder="Enter your Phone no."
+                    className="input1"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </div>
+                
                 <div className="form-group form-button">
                   <input type="submit" name="signup" id="signup" className="form-submit" value="Register" />
                 </div>

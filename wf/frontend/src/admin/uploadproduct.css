@@ -1,6 +1,6 @@
 /* UploadProduct.css */
 
-form {
+.formUpload {
     max-width: 600px;
     margin: auto;
     padding: 20px;
@@ -10,9 +10,8 @@ form {
   }
   
   
-  input[type="text"],
-  input[type="number"],
-  textarea {
+  .inputProduct,
+  textArea {
     width: 100%;
     padding: 10px;
     margin: 5px 0;
@@ -21,43 +20,72 @@ form {
     border-radius: 4px;
   }
   
-  textarea {
+  textArea {
     height: 100px;
   }
-  
+  /*
   input[type="file"] {
     margin-top: 5px;
   }
-  
-  button {
-    background-color: #4caf50;
+  */
+  .uploadButton {
+    background-color: rgb(59, 88, 88);
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
+    font-size: 1rem;
+  }
+  .uploadButton1 {
+    background-color: rgb(59, 88, 88);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: 20px;
+    font-size: 1rem;
   }
   
-  button:hover {
-    background-color: #45a049;
+  .uploadButton1:hover{
+    background-color: #767e81;
+
   }
-  
-  div {
+  .uploadButton:hover {
+    background-color: #767e81;
+  }
+  .divColor {
     margin-bottom: 10px;
   }
   
-  div > input[type="text"],
-  div > input[type="number"] {
+  
+ .divColor div > .inputProduct {
     width: calc(50% - 10px);
     margin-right: 10px;
   }
-  
-  div > input[type="file"] {
+  /*
+  .divColor > input[type="file"] {
     width: calc(50% - 10px);
   }
-  
-  div > button {
+  */
+  .divColor > .uploadButton {
     margin-top: 5px;
   }
+
+  .colorSelect{
+
+    font-size: 1rem;
+    padding: 7px;
+    background-color: rgb(182, 194, 194);
+  }
+.remColor{
+
+  background-color: rgb(182, 194, 194);
+  font-size: 1rem;
+  padding: 4px 5px;
+  border-radius: 3px;
+}
   

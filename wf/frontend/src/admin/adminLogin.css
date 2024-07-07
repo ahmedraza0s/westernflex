@@ -1,65 +1,93 @@
 .loginContainer {
-    max-width: 400px;
-    margin: auto;
-    padding: 30px;
-    background-color: #f9f9f9;
-    box-shadow: -1px 2px 8px 10px #544;
-    text-align: center;
-    border-radius: 4px;
+  max-width: 400px;
+  margin: auto;
+  padding: 30px;
+  background-color: #f9f9f9;
+  box-shadow: -1px 2px 8px 10px #544;
+  text-align: center;
+  border-radius: 4px;
+  margin-top: 60px;
+  margin-bottom: 40px;
+  height: 100%;
+}
+
+
+.inputLabel {
+  display: block;
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-size: 1.4rem;
+  font-family: 'Poppins';
+  color: #333;
+  width: 100%;
+}
+
+.aname,
+.adminPass {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-left: 0; /* Adjusted to align with the container */
+}
+
+.AdminSubmit {
+  background-color: #3f1c44;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.AdminSubmit:hover {
+  background-color: #73626f;
+}
+
+.adminSubmit {
+  background-color: #3f1c44;
+  padding: 10px 25px;
+  font-size: 1.3rem;
+  color: #ccc;
+  font-family: 'Poppins';
+  border-radius: 4px;
+}
+
+.adminSubmit:hover{
+  background-color: #73626f;
+}
+
+.westernFlex {
+  margin-top: 20px;
+}
+
+.westernFlex h {
+  font-weight: bold;
+  font-family: 'Poppins';
+  font-size: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .loginContainer {
+    padding: 20px;
     margin-top: 40px;
-    margin-bottom: 40px;
-  }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .inputLable {
-    display: block;
-    text-align: left;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    font-size: 1.4rem;
-    font-family: 'Poppins';
-    color: #333;
-    width: 100%;
-  }
-  
-  .uname,
-  .adminPass {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
     margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
   }
 
-   .AdminSubmit{
-    background-color:#3f1c44;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
+  .loginContainer h1 {
+    font-size: 2rem;
   }
-  
-  .AdminSubmit:hover:hover {
-    background-color:  #73626f;
+
+  .inputLabel {
+    font-size: 1.2rem;
   }
-  
-  .westernFlex {
-    margin-top: 20px;
-    
+
+  .AdminSubmit {
+    font-size: 14px;
+    padding: 8px 16px;
   }
-  .westernFlex h{
-    
-    font-weight: bold;
-    font-family: 'Poppins';
-  }
-  
+}
