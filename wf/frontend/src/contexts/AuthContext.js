@@ -5,13 +5,16 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const login = async (username, password) => {
+  const login = async (username, password, isAdminLogin = false) => {
     try {
-      const response = await axios.post('/api/login', { username, password });
+      const endpoint = isAdminLogin ? '/api/admin-login' : '/api/user-login';
+      const response = await axios.post(endpoint, { username, password });
       if (response.status === 200) {
         localStorage.setItem('token', response.data.token);
-        setIsAdmin(true);
+        setIsAdmin(isAdminLogin);
+        setIsAuthenticated(true);
       } else {
         throw new Error('Invalid credentials');
       }
@@ -24,10 +27,11 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     setIsAdmin(false);
+    setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isAdmin, login, logout }}>
+    <AuthContext.Provider value={{ isAdmin, isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

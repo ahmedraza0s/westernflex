@@ -98,29 +98,56 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// User and Admin Login
-app.post('/api/login', async (req, res) => {
+// User Login
+app.post('/api/user-login', async (req, res) => {
   const { username, password } = req.body;
   try {
-    // Check if the user exists in the regular users collection
     const user = await User.findOne({ username });
     if (user && await bcrypt.compare(password, user.password)) {
       const token = jwt.sign({ id: user._id, username: user.username }, secretKey, { expiresIn: '1h' });
       res.status(200).json({ token });
     } else {
-      // If not found in users collection, check in admins collection
-      const admin = await Admin.findOne({ username });
-      if (admin && await bcrypt.compare(password, admin.password)) {
-        const token = jwt.sign({ id: admin._id, username: admin.username, isAdmin: true }, secretKey, { expiresIn: '1h' });
-        res.status(200).json({ token });
-      } else {
-        res.status(400).send({ message: 'Invalid credentials' });
-      }
+      res.status(400).send({ message: 'Invalid credentials' });
     }
   } catch (error) {
     res.status(500).send({ message: 'Error logging in', error });
   }
 });
+
+// Admin Login
+app.post('/api/admin-login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const admin = await Admin.findOne({ username });
+    if (admin && await bcrypt.compare(password, admin.password)) {
+      const token = jwt.sign({ id: admin._id, username: admin.username, isAdmin: true }, secretKey, { expiresIn: '1h' });
+      res.status(200).json({ token });
+    } else {
+      res.status(400).send({ message: 'Invalid credentials' });
+    }
+  } catch (error) {
+    res.status(500).send({ message: 'Error logging in', error });
+  }
+});
+
+// Protected Admin Route Example
+app.get('/api/admin', (req, res) => {
+  const token = req.headers['authorization'];
+  if (!token) {
+    return res.status(401).send({ message: 'No token provided' });
+  }
+  try {
+    const decoded = jwt.verify(token.split(' ')[1], secretKey);
+    if (!decoded.isAdmin) {
+      return res.status(403).send({ message: 'Not authorized' });
+    }
+    res.status(200).json(decoded);
+  } catch (error) {
+    res.status(401).send({ message: 'Failed to authenticate token' });
+  }
+});
+
+
 
 // Get User Info
 app.get('/api/user', (req, res) => {
@@ -150,24 +177,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Admin Login
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  const admin = await Admin.findOne({ username });
 
-  if (!admin) {
-    return res.status(400).send('Admin not found');
-  }
-
-  const isMatch = await bcrypt.compare(password, admin.password);
-
-  if (!isMatch) {
-    return res.status(400).send('Invalid credentials');
-  }
-
-  const token = jwt.sign({ id: admin._id }, 'your_jwt_secret', { expiresIn: '1h' });
-  res.json({ token });
-});
 
 // Save shop details route
 app.post('/save-shop', async (req, res) => {
@@ -383,6 +393,8 @@ app.get('/api/products', async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
+
 
 
 // Start the server
