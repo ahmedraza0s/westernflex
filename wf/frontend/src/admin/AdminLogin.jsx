@@ -9,11 +9,14 @@ const AdminLogin = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // For simplicity, we'll assume a successful login with any input
-    login();
-    navigate('/admin');
+    try {
+      await login(username, password);
+      navigate('/admin/dashboard');
+    } catch (error) {
+      alert('Login failed: ' + error.message);
+    }
   };
 
   return (
