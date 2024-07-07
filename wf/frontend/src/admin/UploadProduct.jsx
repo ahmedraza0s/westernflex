@@ -72,10 +72,11 @@ const UploadProduct = () => {
   ];
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className='formUpload'>
       <input
         type="text"
         name="name"
+        className='inputProduct'
         value={productDetails.name}
         onChange={handleProductDetailsChange}
         placeholder="Name"
@@ -84,6 +85,7 @@ const UploadProduct = () => {
       <input
         type="text"
         name="category"
+        className='inputProduct'
         value={productDetails.category}
         onChange={handleProductDetailsChange}
         placeholder="Category"
@@ -92,6 +94,7 @@ const UploadProduct = () => {
       <input
         type="text"
         name="subCategory"
+        className='inputProduct'
         value={productDetails.subCategory}
         onChange={handleProductDetailsChange}
         placeholder="Subcategory"
@@ -100,6 +103,7 @@ const UploadProduct = () => {
       <input
         type="text"
         name="shortDescription"
+        className='inputProduct'
         value={productDetails.shortDescription}
         onChange={handleProductDetailsChange}
         placeholder="Short Description"
@@ -110,11 +114,13 @@ const UploadProduct = () => {
         value={productDetails.longDescription}
         onChange={handleProductDetailsChange}
         placeholder="Long Description"
+        className='textArea'
         required
       />
       <input
         type="number"
         name="listingPrice"
+        className='inputProduct'
         value={productDetails.listingPrice}
         onChange={handleProductDetailsChange}
         placeholder="Listing Price"
@@ -123,6 +129,7 @@ const UploadProduct = () => {
       <input
         type="number"
         name="sellingPrice"
+        className='inputProduct'
         value={productDetails.sellingPrice}
         onChange={handleProductDetailsChange}
         placeholder="Selling Price"
@@ -131,16 +138,18 @@ const UploadProduct = () => {
       <input
         type="text"
         name="productId"
+        className='inputProduct'
         value={productDetails.productId}
         onChange={handleProductDetailsChange}
         placeholder="Product ID"
         required
       />
       {colors.map((color, index) => (
-        <div key={index}>
+        <div key={index} className='divColor'>
           <select
             name="color"
             value={color.color}
+            className='colorSelect'
             onChange={(e) => handleColorChange(index, e)}
             required
           >
@@ -153,6 +162,7 @@ const UploadProduct = () => {
           <input
             type="number"
             name="stock"
+            className='inputProduct'
             value={color.stock}
             onChange={(e) => handleColorChange(index, e)}
             placeholder="Stock"
@@ -161,20 +171,23 @@ const UploadProduct = () => {
           <input
             type="number"
             name="priority"
+            className='inputProduct'
             value={color.priority}
             onChange={(e) => handleColorChange(index, e)}
             placeholder="Priority"
             required
           />
-          <button type="button" onClick={() => handleRemoveColor(index)}>
+          <button type="button" className='remColor' onClick={() => handleRemoveColor(index)}>
             Remove Color
           </button>
         </div>
       ))}
-      <button type="button" onClick={handleAddColor}>
+
+      <button type="button" onClick={handleAddColor} className='uploadButton'>
         Add Color
       </button>
-      <button type="submit">Upload Product</button>
+    
+      <button type="submit" className='uploadButton1'>Upload Product</button>
     </form>
   );
 };
