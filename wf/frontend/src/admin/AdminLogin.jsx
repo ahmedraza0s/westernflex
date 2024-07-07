@@ -12,7 +12,7 @@ const AdminLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(username, password);
+      await login(username, password, 'admins');
       navigate('/admin/dashboard');
     } catch (error) {
       alert('Login failed: ' + error.message);
