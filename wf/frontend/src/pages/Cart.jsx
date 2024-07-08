@@ -12,6 +12,8 @@ const Cart = () => {
 
   const decrementQuantity = (title, color) => {
     updateQuantity(title, color, -1);
+    const totalAmount = cart.reduce((acc, item) => acc + item.totalPrice, 0);
+
   };
 
   return (
@@ -26,7 +28,7 @@ const Cart = () => {
               <img src={item.image} alt={item.title} />
               <div>
                 <h2>{item.title}</h2>
-                <p>{item.totalPrice.toFixed(2)}</p>
+                <p>{item.totalPrice ? item.totalPrice.toFixed(2) : "0.00"}</p>
                 <div className="cart-item-quantity">
                   <button onClick={() => decrementQuantity(item.title, item.color)}>-</button>
                   <span>{item.quantity}</span>
@@ -47,7 +49,6 @@ const Cart = () => {
 };
 
 export default Cart;
-
 
 
 
