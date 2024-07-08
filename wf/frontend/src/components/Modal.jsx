@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import './modal.css';
+import { Link } from 'react-router-dom';
 
 const Modal = ({ show, onClose, children }) => {
   const modalRef = useRef();
@@ -11,14 +12,23 @@ const Modal = ({ show, onClose, children }) => {
       }
     };
 
+    const handleKeyDown = (event) => {
+      if (event.keyCode === 27) { // Close modal on ESC key press
+        onClose();
+      }
+    };
+
     if (show) {
       document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [show, onClose]);
 
@@ -32,6 +42,10 @@ const Modal = ({ show, onClose, children }) => {
         <button className="modal-close" onClick={onClose}>X</button>
         <div className="modal-content">
           {children}
+      
+        <Link to="/checkout">
+            <button className="add-to-cart-btn" onClick={onClose} >CHECK OUT</button>
+          </Link>
         </div>
       </div>
     </div>
@@ -39,3 +53,5 @@ const Modal = ({ show, onClose, children }) => {
 };
 
 export default Modal;
+
+
