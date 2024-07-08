@@ -1,5 +1,5 @@
+// components/Cart.js
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import './cart.css';
 
@@ -40,14 +40,14 @@ const Cart = () => {
       {cart.length > 0 && (
         <div className="cart-total">
           <h2>Total: INR {totalAmount.toFixed(2)}</h2>
-          <Link to="/checkout">
-            <button className="add-to-cart-btn">CHECK OUT</button>
-          </Link>
         </div>
       )}
     </div>
   );
 };
 
-
 export default Cart;
+
+
+
+
