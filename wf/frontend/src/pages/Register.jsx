@@ -128,7 +128,7 @@ const RegisterPage = () => {
                     id="phno"
                     placeholder="Enter your Phone no."
                     className="input1"
-                    value={formData.email}
+                    value={formData.phno}
                     onChange={handleChange}
                   />
                 </div>
