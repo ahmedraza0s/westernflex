@@ -236,6 +236,10 @@ figure {
       margin-left: 80px;
       color: #222;
     }
-
-  
+    .error-message {
+      color: red;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    
     

@@ -13,6 +13,7 @@ const LoginPage = () => {
     username: '',
     password: ''
   });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -35,14 +36,14 @@ const LoginPage = () => {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('token', data.token);
-        alert("Login successful");
         navigate('/');
+        window.location.reload(); // Refresh the page
       } else {
-        alert(`Login failed: ${data.message}`);
+        setError(`Login failed: ${data.message}`);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Error logging in user');
+      setError('Error logging in user');
     }
   };
 
@@ -88,11 +89,12 @@ const LoginPage = () => {
                 <div className="forget">
                   <Link to="#"><h>Forget Password</h></Link>
                 </div>
+                {error && <div className="error-message">{error}</div>}
                 <div className="form-group form-button">
                   <input type="submit" name="signin" id="signin" className="form-submit" value="Log in" />
                 </div>
               </form>
-              
+
               <div className="social-login">
                 <span className="social-label">Or login with</span>
                 <ul className="socials">

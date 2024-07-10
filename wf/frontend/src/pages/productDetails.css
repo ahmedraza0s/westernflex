@@ -3,6 +3,7 @@
     display: flex;
     flex-wrap: wrap;
     padding: 20px;
+    justify-content: space-between;
 }
 
 /* Container for the product thumbnails */
@@ -47,6 +48,7 @@
 .product-info {
     flex: 1;
     padding: 20px;
+    min-width: 200px;
 }
 
 /* Styles for the product title */

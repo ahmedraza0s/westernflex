@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './register.css';
 import nameIcon from '../components/assets/name.png';
 import loginIcon from '../components/assets/loginuser.png';
@@ -15,9 +15,11 @@ const RegisterPage = () => {
     username: '',
     password: '',
     re_pass: '',
-    email: ''
+    email: '',
+    phno: ''
   });
-  
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -29,7 +31,11 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.re_pass) {
-      alert("Passwords do not match");
+      setError("Passwords do not match");
+      return;
+    }
+    if (!formData.username || !formData.password || !formData.email || !formData.name || !formData.phno) {
+      setError("All fields are required");
       return;
     }
     try {
@@ -42,13 +48,16 @@ const RegisterPage = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        alert("Registration successful");
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('username', formData.name);
+        navigate('/');
+        window.location.reload(); // Refresh the page
       } else {
-        alert(`Registration failed: ${data.message}`);
+        setError(`Registration failed: ${data.message}`);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Error registering user');
+      setError('Error registering user');
     }
   };
 
@@ -70,6 +79,7 @@ const RegisterPage = () => {
                     className="input1"
                     value={formData.name}
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -82,6 +92,7 @@ const RegisterPage = () => {
                     className="input1"
                     value={formData.username}
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -94,6 +105,7 @@ const RegisterPage = () => {
                     className="input1"
                     value={formData.password}
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -106,6 +118,7 @@ const RegisterPage = () => {
                     className="input1"
                     value={formData.re_pass}
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -118,6 +131,7 @@ const RegisterPage = () => {
                     className="input1"
                     value={formData.email}
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -128,11 +142,12 @@ const RegisterPage = () => {
                     id="phno"
                     placeholder="Enter your Phone no."
                     className="input1"
-                    value={formData.email}
+                    value={formData.phno}
                     onChange={handleChange}
+                    required
                   />
                 </div>
-                
+                {error && <div className="error-message">{error}</div>}
                 <div className="form-group form-button">
                   <input type="submit" name="signup" id="signup" className="form-submit" value="Register" />
                 </div>
