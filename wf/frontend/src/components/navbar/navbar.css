@@ -76,6 +76,10 @@ body {
     height: 30px;
 }
 
+.navbar-brand img{
+    height: 70px;
+}
+
 .dropdown {
     position: relative;
     display: inline-block;
