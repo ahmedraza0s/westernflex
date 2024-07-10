@@ -34,7 +34,8 @@ const userSchema = new mongoose.Schema({
   name: String,
   username: String,
   password: String,
-  email: String
+  email: String,
+  phno: String
 });
 
 // Admin Schema
@@ -87,9 +88,9 @@ const upload = multer({ storage: storage });
 
 // User Registration
 app.post('/api/register', async (req, res) => {
-  const { name, username, password, email } = req.body;
+  const { name, username, password, email, phno } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = new User({ name, username, password: hashedPassword, email });
+  const user = new User({ name, username, password: hashedPassword, email,phno });
   try {
     await user.save();
     res.status(201).send({ message: 'User registered successfully' });

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './navbar.css';
 import cartIcon from '../assets/cart.png';
+import logo from '../assets/logo.png';
 import { useCart } from '../../contexts/CartContext';
 import Modal from '../Modal'; // Import the Modal component
 import Cart from '../../pages/Cart'; // Import the Cart component
@@ -53,7 +54,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <Link to="/"><img src="logo.jpg" alt="Logo" /></Link>
+        <Link to="/"><img src={logo} alt="Logo" /></Link>
       </div>
       <div className="search-bar">
         <input type="text" placeholder="Search" />
