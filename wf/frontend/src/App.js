@@ -7,7 +7,7 @@ import Home from './pages/Home';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import ChangeAddress from './my account/ChangeAddress';
+import ChangeUserDetails from './my account/ChangeUserDetails';
 import ProductDetails from './pages/ProductDetails';
 import AdminLogin from './admin/AdminLogin';
 import AdminPage from './admin/AdminPage'; // Import the AdminPage component
@@ -40,7 +40,7 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/checkout" element={<Checkout />} />
-              <Route path="/change-address" element={<ChangeAddress />} />
+              <Route path="/change-user-details" element={<ChangeUserDetails />} />
               <Route path="/product/:title" element={<ProductDetails />} />
               <Route path="/admin-login" element={<AdminLogin />} />
               <Route path="/cart" element={<Cart />} />
