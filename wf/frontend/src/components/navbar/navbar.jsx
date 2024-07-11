@@ -8,39 +8,46 @@ import Modal from '../Modal'; // Import the Modal component
 import Cart from '../../pages/Cart'; // Import the Cart component
 
 const Navbar = () => {
-  const [username, setUsername] = useState(null);
+  const [username, setUsername] = useState('');
   const [showCartModal, setShowCartModal] = useState(false);
   const navigate = useNavigate();
   const { cartCount } = useCart();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const response = await fetch('/api/user', {
-            headers: {
-              'Authorization': `Bearer ${token}`
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    } else {
+      const fetchUser = async () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+          try {
+            const response = await fetch('/api/user', {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+            const data = await response.json();
+            if (response.ok) {
+              setUsername(data.username);
+              localStorage.setItem('username', data.username);
+            } else {
+              localStorage.removeItem('token');
             }
-          });
-          const data = await response.json();
-          if (response.ok) {
-            setUsername(data.username);
-          } else {
+          } catch (error) {
+            console.error('Error fetching user:', error);
             localStorage.removeItem('token');
           }
-        } catch (error) {
-          console.error('Error fetching user:', error);
-          localStorage.removeItem('token');
         }
-      }
-    };
-    fetchUser();
+      };
+      fetchUser();
+    }
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    setUsername(null);
+    localStorage.removeItem('username');
+    setUsername('');
     navigate('/');
   };
 

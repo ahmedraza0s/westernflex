@@ -174,7 +174,7 @@ const UploadProduct = () => {
             className='inputProduct'
             value={color.priority}
             onChange={(e) => handleColorChange(index, e)}
-            placeholder="Priority"
+            placeholder="Priority for bestseller 0/ shop page 1/ none 4 "
             required
           />
           <button type="button" className='remColor' onClick={() => handleRemoveColor(index)}>

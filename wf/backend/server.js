@@ -396,6 +396,67 @@ app.get('/api/products', async (req, res) => {
 });
 
 
+//this code is for update product jsx page 
+// Route to get product by ID
+app.get('/api/product/:id', async (req, res) => {
+  try {
+    const product = await Product.findOne({ productId: req.params.id });
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).send('Product not found');
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Route to update product by ID
+app.put('/api/product/:id', async (req, res) => {
+  try {
+    const updatedProduct = await Product.findOneAndUpdate(
+      { productId: req.params.id },
+      req.body,
+      { new: true }
+    );
+    res.json(updatedProduct);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Route to update color by product ID and color index
+app.put('/api/product/:id/color/:index', async (req, res) => {
+  try {
+    const product = await Product.findOne({ productId: req.params.id });
+    if (product) {
+      product.colors[req.params.index] = req.body;
+      await product.save();
+      res.json(product);
+    } else {
+      res.status(404).send('Product not found');
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+// Route to add new color to product
+app.post('/api/product/:id/color', async (req, res) => {
+  try {
+    const product = await Product.findOne({ productId: req.params.id });
+    if (product) {
+      product.colors.push(req.body);
+      await product.save();
+      res.json(product);
+    } else {
+      res.status(404).send('Product not found');
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+//update producte jsx page code ends here 
 
 
 // Start the server

@@ -17,6 +17,7 @@ import ProductList from './admin/ProductList';
 import Cart from './pages/Cart'; // Import the Cart component
 import UploadProduct from './admin/UploadProduct';
 import Dashboard from './admin/Dashboard'; // Import the Dashboard component
+import UpdateProduct from './admin/UpdateProduct';
 import Products from './admin/Products'; // Import the Products component
 import Orders from './admin/Orders'; // Import the Orders component
 import Users from './admin/Users'; // Import the Users component
@@ -54,6 +55,7 @@ const App = () => {
                 <Route path="product-list" element={<ProductList />} />
                 <Route path="admin-register" element={<AdminRegister />} />
                 <Route path="upload-product" element={<UploadProduct />} />
+                <Route path="update-product" element={<UpdateProduct />} />
               </Route>
             </Routes>
           </Router>
