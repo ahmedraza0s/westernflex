@@ -1,3 +1,4 @@
+// components/ShopList.js
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -34,62 +35,20 @@ const ShopList = () => {
   };
 
   const renderProducts = () => {
-    const filteredProducts = products.filter((product) =>
-      product.colors.some(
-        (color) =>
-          [1, 2, 3].includes(color.priority) &&
-          color.images.length > 0 &&
-          (!selectedPriceRange || product.sellingPrice < selectedPriceRange)
-      )
-    );
-
-    if (filteredProducts.length === 0) {
-      return (
-        <div className="no-products">
-          <p>No products found under the selected price range.</p>
-        </div>
-      );
-    }
-
     return (
       <div className="product-container">
-        {filteredProducts.map((product) =>
-          product.colors.map((color) =>
-            [1, 2, 3].includes(color.priority) && color.images.length > 0 &&
-            (!selectedPriceRange || product.sellingPrice < selectedPriceRange) ? (
-              <div className="product" key={`${product._id}-${color.color}`}>
-                <Link
-                  to={`/product/${product.name.replace(/\s+/g, '-').toLowerCase()}`}
-                  state={{
-                    image: color.images[0],
-                    title: product.name,
-                    description: product.shortDescription,
-                    listingPrice: product.listingPrice,
-                    sellingPrice: product.sellingPrice,
-                    details: product.longDescription,
-                    about: product.about,
-                    images: color.images,
-                    color: color.color,
-                    allColors: product.colors,
-                    productId: product.productId,
-                  }}
-                >
-                  <img
-                    src={`http://localhost:5000/${color.images[0]}`}
-                    alt={product.name}
-                    className="product-image"
-                  />
-                </Link>
-                <h3 className="product-title">{product.name}</h3>
-                <p className="product-description">{product.shortDescription}</p>
-                <p className="product-price">Listing Price: {product.listingPrice}</p>
-                <p className="product-selling-price">Selling Price: {product.sellingPrice}</p>
-                <p className="product-color">Color: {color.color}</p>
-                <button
-                  className="add-to-cart-btn"
-                  onClick={() =>
-                    addToCart({
-                      image: `http://localhost:5000/${color.images[0]}`,
+        {products.map((product) => (
+          product.colors.map((color) => {
+            if ([1, 2, 3].includes(color.priority) && color.images.length > 0 &&
+                (!selectedPriceRange || product.sellingPrice < selectedPriceRange)) {
+              const percentageDifference = ((product.listingPrice - product.sellingPrice) / product.listingPrice) * 100;
+
+              return (
+                <div className="product" key={`${product._id}-${color.color}`}>
+                  <Link
+                    to={`/product/${product.name.replace(/\s+/g, '-').toLowerCase()}`}
+                    state={{
+                      image: color.images[0],
                       title: product.name,
                       description: product.shortDescription,
                       listingPrice: product.listingPrice,
@@ -98,16 +57,49 @@ const ShopList = () => {
                       about: product.about,
                       images: color.images,
                       color: color.color,
+                      allColors: product.colors,
                       productId: product.productId,
-                    })
-                  }
-                >
-                  Add to Cart
-                </button>
-              </div>
-            ) : null
-          )
-        )}
+                    }}
+                  >
+                    <img
+                      src={`http://localhost:5000/${color.images[0]}`}
+                      alt={product.name}
+                      className="product-image"
+                    />
+                  </Link>
+                  <h3 className="product-title">{product.name}</h3>
+                  <p className="listingprice">${product.listingPrice} </p>
+                  <p className="product-selling-price"> ${product.sellingPrice}</p>
+                  <p className="product-color">Color: {color.color}</p>
+                  <p className="percentage-difference">
+                    Save {percentageDifference.toFixed(2)}%
+                  </p>
+                  <button
+                    className="add-to-cart-btn"
+                    onClick={() =>
+                      addToCart({
+                        image: `http://localhost:5000/${color.images[0]}`,
+                        title: product.name,
+                        description: product.shortDescription,
+                        listingPrice: product.listingPrice,
+                        sellingPrice: product.sellingPrice,
+                        details: product.longDescription,
+                        about: product.about,
+                        images: color.images,
+                        color: color.color,
+                        productId: product.productId,
+                      })
+                    }
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              );
+            } else {
+              return null;
+            }
+          })
+        ))}
       </div>
     );
   };
