@@ -1,3 +1,5 @@
+/* shop.css */
+
 .product-container {
   display: flex;
   flex-wrap: wrap;
@@ -23,9 +25,40 @@
   margin: 0.5em 0;
 }
 
-.product-description {
-  font-size: 1em;
-  margin: 0.5em 0;
+.product-price {
+  margin-bottom: 5px;
+}
+
+.product-price .underline-center {
+  position: relative;
+}
+.listingprice{
+  
+}
+
+.product-price .underline-center::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  border-bottom: 1px solid #333;
+}
+
+.product-selling-price {
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.product-color {
+  margin-top: 5px;
+}
+
+.percentage-difference {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #888;
 }
 
 .add-to-cart-btn {
