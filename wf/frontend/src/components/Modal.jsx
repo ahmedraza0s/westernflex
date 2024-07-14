@@ -1,9 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 import './modal.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Modal = ({ show, onClose, children }) => {
   const modalRef = useRef();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -32,6 +33,20 @@ const Modal = ({ show, onClose, children }) => {
     };
   }, [show, onClose]);
 
+  const handleCheckout = () => {
+    if (isLoggedIn()) {
+      navigate('/checkout');
+    } else {
+      navigate('/login');
+    }
+    onClose(); // Close the modal after navigation
+  };
+
+  const isLoggedIn = () => {
+    // Check your authentication state here, for example:
+    return localStorage.getItem('token') !== null;
+  };
+
   if (!show) {
     return null;
   }
@@ -42,10 +57,9 @@ const Modal = ({ show, onClose, children }) => {
         <button className="modal-close" onClick={onClose}>X</button>
         <div className="modal-content">
           {children}
-      
-        <Link to="/checkout">
-            <button className="add-to-cart-btn" onClick={onClose} >CHECK OUT</button>
-          </Link>
+          <button className="add-to-cart-btn" onClick={handleCheckout}>
+            CHECK OUT
+          </button>
         </div>
       </div>
     </div>
@@ -53,5 +67,3 @@ const Modal = ({ show, onClose, children }) => {
 };
 
 export default Modal;
-
-
