@@ -76,11 +76,22 @@
 .filter-navbar {
   display: flex;
   justify-content: space-around;
-  background-color: #f8f8f8;
+  background-color:  white;
+  color: black;
   padding: 10px;
   margin-bottom: 20px;
 }
+.dropbtnn{
+  background-color: white;
+}
 
+.dpprice .dropbtnn{
+  background-color: white;
+  height: 30px;
+  text-decoration: none;
+  font-size: 24px;
+  border: none;
+}
 .filter-label {
   font-size: 1.2em;
   margin-right: 20px;
@@ -90,19 +101,20 @@
   position: relative;
   display: inline-block;
 }
-
+.dropdown .dropbtn slide-in{
+    background-color: #ddd;
+}
 .dropbtn {
-  background-color: #f8f8f8;
-  color: #333;
+  color: white;
   padding: 10px;
   border: none;
   cursor: pointer;
   font-size: 1em;
 }
 
-.dropbtn:hover,
+.dropbtnn:hover,
 .dropbtn:focus {
-  background-color: #ddd;
+  background-color: ;
 }
 
 .dropdown-content {

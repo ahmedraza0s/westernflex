@@ -14,6 +14,8 @@ const LoginPage = () => {
     password: ''
   });
   const [error, setError] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+  const [username, setUsername] = useState(''); // State to store username
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -36,6 +38,8 @@ const LoginPage = () => {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('token', data.token);
+        setUsername(formData.username); // Store username
+        setIsLoggedIn(true); // Set login status to true
         navigate('/');
         window.location.reload(); // Refresh the page
       } else {
@@ -47,6 +51,17 @@ const LoginPage = () => {
     }
   };
 
+  // Function to handle sign-in button click
+  const handleSignInClick = () => {
+    setIsLoggedIn(true); // Set login status to true
+  };
+
+  // Function to handle sign-out button click
+  const handleSignOut = () => {
+    setIsLoggedIn(false); // Set login status to false
+    setUsername(''); // Clear username
+  };
+
   return (
     <div className="main">
       <section className="sign-in">
@@ -56,7 +71,11 @@ const LoginPage = () => {
               <figure>
                 <Link to="#"><img src={userIcon} alt="sign up" /></Link>
               </figure>
-              <Link to="/register" className="signup-image-link">Create an account</Link>
+              {isLoggedIn ? (
+                <span className="signup-image-link">Hello, {username}</span>
+              ) : (
+                <Link to="/register" className="signup-image-link">Create an account</Link>
+              )}
             </div>
 
             <div className="signin-form">
@@ -91,7 +110,14 @@ const LoginPage = () => {
                 </div>
                 {error && <div className="error-message">{error}</div>}
                 <div className="form-group form-button">
-                  <input type="submit" name="signin" id="signin" className="form-submit" value="Log in" />
+                  <input
+                    type="submit"
+                    name="signin"
+                    id="signin"
+                    className="form-submit"
+                    value="Log in"
+                    onClick={handleSignInClick}
+                  />
                 </div>
               </form>
 
