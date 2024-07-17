@@ -1,32 +1,34 @@
 /* @extend display-flex; */
-display-flex, .display-flex, .display-flex-center, .signup-content{
+display-flex, .display-flex, .display-flex-center, .signup-content {
   display: flex;
-  display: -webkit-flex; }
+  display: -webkit-flex;
+}
 
 /* @extend list-type-ulli; */
 list-type-ulli, .socials {
   list-style-type: none;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+}
 
 input, select, textarea {
   outline: none;
   appearance: unset !important;
-   }
+}
 
 img {
   max-width: 100%;
-  height: auto; 
+  height: auto;
 }
 
 figure {
-  margin: 0; 
+  margin: 0;
 }
 
 p {
   margin-bottom: 0px;
   font-size: 15px;
-  color: #777; 
+  color: #777;
 }
 
 h2 {
@@ -36,17 +38,17 @@ h2 {
   font-weight: bold;
   color: #222;
   font-family: Poppins;
-  font-size: 36px; 
+  font-size: 36px;
   margin-left: 100px;
 }
 
 .main {
   background: #bfabbf;
-  padding: 50px 0; 
+  padding: 50px 0;
 }
 
 .clear {
-  clear: both; 
+  clear: both;
 }
 
 body {
@@ -54,12 +56,12 @@ body {
   color: #222;
   background-color: #fff;
   font-weight: 400;
-  font-family: Poppins; 
+  font-family: Poppins;
 }
 
 .register-container {
   width: 900px;
-  background:#ede5e5;
+  background: #ede5e5;
   margin: 0 auto;
   box-shadow: -1px 2px 8px 10px #544;
   border-radius: 20px;
@@ -67,67 +69,85 @@ body {
   align-items: center;
   margin-top: 40px;
 }
+
 .signup {
-  margin-bottom: 50px; }
+  margin-bottom: 50px;
+}
 
 .signup-content {
-  padding: 75px 0; }
+  padding: 75px 0;
+}
 
 .signup-form, .signup-image, .signin-form, .signin-image {
   width: 50%;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .signup-image {
-  margin: 0 55px; }
+  margin: 0 55px;
+}
 
 .form-title {
-  margin-bottom: 33px; }
+  margin-bottom: 33px;
+}
 
 .signup-image {
-  margin-top: 45px; }
+  margin-top: 45px;
+}
 
 figure {
   margin-bottom: 50px;
-  text-align: center; }
+  text-align: center;
+}
 
 .form-submit {
   display: inline-block;
-  background-color:#3f1c44;
+  background-color: #3f1c44;
   border-bottom: none;
   width: auto;
   padding: 15px 39px;
   border-radius: 5px;
   margin-top: 25px;
-  cursor: pointer; 
+  cursor: pointer;
   font-size: 1.2rem;
   font-family: Georgia, 'Times New Roman', Times, serif;
   margin-left: 80px;
   color: #fff;
   font-family: 'Poppins';
 }
-  .form-submit:hover {
-    background:  #73626f; }
+
+.form-submit:hover {
+  background: #73626f;
+}
 
 .signin-image-link {
   font-size: 1.2rem;
   color: #222;
   display: block;
-  text-align: center; }
+  text-align: center;
+}
 
 .signup-form {
   margin-left: 75px;
   margin-right: 75px;
-  padding-left: 34px; }
+  padding-left: 34px;
+}
 
 .register-form {
-  width: 100%; }
+  width: 100%;
+}
 
 .form-group {
   position: relative;
   margin-bottom: 25px;
-  overflow: hidden; }
-  .form-group:last-child {
-    margin-bottom: 0px; }
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.form-group:last-child {
+  margin-bottom: 0px;
+}
 
 .input1 {
   width: 100%;
@@ -136,61 +156,59 @@ figure {
   border-bottom: 1px solid #999;
   padding: 0px;
   font-family: Poppins;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   font-size: 1.1rem;
   background-color: #ede5e5;
-  margin-left: -350px;
 }
- /*
-label {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #222; }
-*/
+
 @media screen and (max-width: 1200px) {
   .container {
-    width: calc( 100% - 30px);
-    max-width: 100%; } }
+    width: calc(100% - 30px);
+    max-width: 100%;
+  }
+}
+
 @media screen and (min-width: 1024px) {
   .container {
-    max-width: 1200px; } }
+    max-width: 1200px;
+  }
+}
+
 @media screen and (max-width: 768px) {
   .signup-content {
     flex-direction: column;
     justify-content: center;
-    }
+  }
 
   .signup-form {
     margin-left: 0px;
     margin-right: 0px;
     padding-left: 0px;
     /* box-sizing: border-box; */
-    padding: 0 30px; }
+    padding: 0 30px;
+  }
 
+  .signup-form, .signup-image {
+    width: auto;
+  }
 
-  .signup-form, .signup-image{
-    width: auto; }
-
-    
   .form-button {
-    text-align: center; }
+    text-align: center;
+  }
 
   .form-title {
-    text-align: center; } }
-  @media screen and (max-width: 400px) {
-  
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 400px) {
   .social-label {
     margin-right: 0px;
-    margin-bottom: 10px; } 
+    margin-bottom: 10px;
   }
-    .img{
-      width: 10%;
-      height:10%;
-    }
-    .form-group{
-      display: flex;
-      align-items: center;
-      
-    }
+}
+
+.img {
+  width: 10%;
+  height: 10%;
+}
