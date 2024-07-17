@@ -8,8 +8,12 @@ import repassIcon from '../components/assets/password.png';
 import emailIcon from '../components/assets/email.png';
 import registerIcon from '../components/assets/registeruser.png';
 import phoneIcon from '../components/assets/phoneCall.png';
+<<<<<<< HEAD
+import { useCart } from '../contexts/CartContext';
+=======
 import { auth } from '../firebase';
 import firebase from 'firebase/compat/app';
+>>>>>>> 1fbdd5d72f80c23b8fe46381281c27d066626e1f
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -25,6 +29,7 @@ const RegisterPage = () => {
   const [verificationId, setVerificationId] = useState('');
   const [showOtpInput, setShowOtpInput] = useState(false);
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const loadRecaptcha = () => {
@@ -103,8 +108,14 @@ const RegisterPage = () => {
       if (response.ok) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', formData.name);
-        navigate('/');
-        window.location.reload(); // Refresh the page
+        const pendingProduct = JSON.parse(localStorage.getItem('pendingProduct'));
+        if (pendingProduct) {
+          addToCart(pendingProduct);
+          localStorage.removeItem('pendingProduct');
+          navigate('/checkout');
+        } else {
+          navigate('/');
+        }
       } else {
         setError(`Registration failed: ${data.message}`);
       }
@@ -190,16 +201,22 @@ const RegisterPage = () => {
                 <div className="form-group">
                   <Link to="#"><img src={phoneIcon} alt="no image" className="img" /></Link>
                   <input
-                    type="text"
+                    type="tel"
                     name="phno"
                     id="phno"
-                    placeholder="Enter your Phone no."
+                    placeholder="Enter your Phone Number"
                     className="input1"
                     value={formData.phno}
                     onChange={handleChange}
                     required
                   />
                 </div>
+<<<<<<< HEAD
+                {error && <p className="error-message">{error}</p>}
+                <div className="form-group form-button">
+                  <input type="submit" name="signup" id="signup" className="form-submit" value="Register" />
+                </div>
+=======
                 {showOtpInput && (
                   <>
                     <div className="form-group">
@@ -225,13 +242,12 @@ const RegisterPage = () => {
                   </div>
                 )}
                 {error && <div className="error-message">{error}</div>}
+>>>>>>> 1fbdd5d72f80c23b8fe46381281c27d066626e1f
               </form>
             </div>
             <div className="signup-image">
-              <figure>
-                <Link to="#"><img src={registerIcon} alt="sign up" /></Link>
-              </figure>
-              <Link to="/login" className="signup-image-link">I am already member</Link>
+              <figure><img src={registerIcon} alt="sign up" /></figure>
+              <Link to="/login" className="signup-image-link">I am already a member</Link>
             </div>
           </div>
         </div>
