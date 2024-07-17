@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './register.css';
 import nameIcon from '../components/assets/name.png';
@@ -8,7 +8,12 @@ import repassIcon from '../components/assets/password.png';
 import emailIcon from '../components/assets/email.png';
 import registerIcon from '../components/assets/registeruser.png';
 import phoneIcon from '../components/assets/phoneCall.png';
+<<<<<<< HEAD
 import { useCart } from '../contexts/CartContext';
+=======
+import { auth } from '../firebase';
+import firebase from 'firebase/compat/app';
+>>>>>>> 1fbdd5d72f80c23b8fe46381281c27d066626e1f
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -20,8 +25,30 @@ const RegisterPage = () => {
     phno: ''
   });
   const [error, setError] = useState('');
+  const [otp, setOtp] = useState('');
+  const [verificationId, setVerificationId] = useState('');
+  const [showOtpInput, setShowOtpInput] = useState(false);
   const navigate = useNavigate();
   const { addToCart } = useCart();
+
+  useEffect(() => {
+    const loadRecaptcha = () => {
+      if (!window.recaptchaVerifier) {
+        const recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+          size: 'invisible',
+          callback: (response) => {
+            console.log('Recaptcha verified', response);
+          },
+          'expired-callback': () => {
+            console.log('Recaptcha expired');
+          }
+        });
+        window.recaptchaVerifier = recaptchaVerifier;
+      }
+    };
+
+    loadRecaptcha();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -30,8 +57,9 @@ const RegisterPage = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSendOtp = async (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.re_pass) {
       setError("Passwords do not match");
       return;
@@ -40,6 +68,34 @@ const RegisterPage = () => {
       setError("All fields are required");
       return;
     }
+
+    try {
+      const phoneNumber = `+${formData.phno}`; // Ensure the phone number is in the correct format
+      const confirmationResult = await auth.signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier);
+      setVerificationId(confirmationResult.verificationId);
+      setShowOtpInput(true);
+      console.log('OTP sent successfully');
+    } catch (error) {
+      console.error('Error during signInWithPhoneNumber:', error);
+      alert(`Failed to send OTP: ${error.message}`);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    try {
+      console.log('Verifying OTP:', otp);
+      const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, otp);
+      await auth.signInWithCredential(credential);
+      console.log('Phone number verified successfully');
+      alert('Phone number verified!');
+      handleSubmit(); // Submit the form data to the server after OTP verification
+    } catch (error) {
+      console.error('Error during signInWithCredential:', error);
+      alert(`Failed to verify OTP: ${error.message}`);
+    }
+  };
+
+  const handleSubmit = async () => {
     try {
       const response = await fetch('/api/register', {
         method: 'POST',
@@ -76,7 +132,7 @@ const RegisterPage = () => {
           <div className="signup-content">
             <div className="signup-form">
               <h2 className="form-title">Sign up</h2>
-              <form method="post" className="register-form" id="register-form" onSubmit={handleSubmit}>
+              <form method="post" className="register-form" id="register-form" onSubmit={handleSendOtp}>
                 <div className="form-group">
                   <Link to="#"><img src={nameIcon} alt="no image" className="img" /></Link>
                   <input
@@ -155,10 +211,38 @@ const RegisterPage = () => {
                     required
                   />
                 </div>
+<<<<<<< HEAD
                 {error && <p className="error-message">{error}</p>}
                 <div className="form-group form-button">
                   <input type="submit" name="signup" id="signup" className="form-submit" value="Register" />
                 </div>
+=======
+                {showOtpInput && (
+                  <>
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        name="otp"
+                        id="otp"
+                        placeholder="Enter OTP"
+                        className="input1"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="form-group form-button">
+                      <button type="button" onClick={handleVerifyOtp} className="form-submit">Verify OTP</button>
+                    </div>
+                  </>
+                )}
+                {!showOtpInput && (
+                  <div className="form-group form-button">
+                    <button type="submit" className="form-submit">Send OTP</button>
+                  </div>
+                )}
+                {error && <div className="error-message">{error}</div>}
+>>>>>>> 1fbdd5d72f80c23b8fe46381281c27d066626e1f
               </form>
             </div>
             <div className="signup-image">
@@ -167,6 +251,7 @@ const RegisterPage = () => {
             </div>
           </div>
         </div>
+        <div id="recaptcha-container"></div>
       </section>
     </div>
   );

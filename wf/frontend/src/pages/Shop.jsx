@@ -126,9 +126,11 @@ const ShopList = () => {
       <nav className="filter-navbar" ref={dropdownRef}>
         <span className="filter-label">Filter By</span>
         <div className="dropdown">
-          <button className="dropbtn slide-in" onClick={() => toggleDropdown('price')}>
+          <div className="dpprice">
+          <button className="dropbtnn" onClick={() => toggleDropdown('price')}>
             Price <i className="fas fa-caret-down"></i>
           </button>
+          </div>
           {visibleDropdown === 'price' && (
             <div className="dropdown-content fade-in">
               <button onClick={() => filterByPriceRange(299)}>Less than 299</button>

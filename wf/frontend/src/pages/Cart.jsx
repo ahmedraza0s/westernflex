@@ -1,6 +1,6 @@
-// components/Cart.js
 import React from 'react';
 import { useCart } from '../contexts/CartContext';
+import { Link } from 'react-router-dom';
 import './cart.css';
 
 const Cart = () => {
@@ -42,6 +42,7 @@ const Cart = () => {
       {cart.length > 0 && (
         <div className="cart-total">
           <h2>Total: INR {totalAmount.toFixed(2)}</h2>
+         
         </div>
       )}
     </div>
