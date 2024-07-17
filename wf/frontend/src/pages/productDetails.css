@@ -1,130 +1,182 @@
-/* Container for the entire product details section */
 .product-details-container {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 20px;
-    justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
 }
 
-/* Container for the product thumbnails */
-.thumbnails {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 20px; /* Add some space between thumbnails and main image */
+.image-gallery {
+  display: flex;
+  flex: 1;
+  max-width: 50%;
+  align-items: flex-start; /* Align thumbnails and main image at the top */
 }
 
-/* Individual thumbnail styles */
+.thumbnail-container {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px; /* Space between thumbnails and main image */
+}
+
 .thumbnail {
-    width: 80px;
-    height: 80px;
-    cursor: pointer;
-    border-radius: 5px;
-    border: 2px solid transparent;
-    margin-bottom: 10px; /* Add space between thumbnails */
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px; /* Space between thumbnails */
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  border-radius: 5px;
+  border: 2px solid transparent;
 }
 
-/* Thumbnail hover effect */
 .thumbnail:hover {
-    border: 2px solid rgb(97 59 96);
+  transform: scale(1.1);
+  border: 2px solid #000;
 }
 
-/* Container for the main product images */
-.product-images {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.main-image-container {
+  position: relative; /* Needed for positioning the sales tag */
 }
 
-/* Main product image styles */
+.sales-tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.sales-tag-image {
+  width: 75px;
+  height: 75px;
+}
+
+.sales-tag-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-size: 1.2em;
+  text-align: center;
+  line-height: 1;
+}
+
 .main-image {
-    width: 100%;
-    max-width: 400px;
-    border-radius: 5px;
-    margin-bottom: 10px;
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
 }
 
-/* Container for the product information */
 .product-info {
-    flex: 1;
-    padding: 20px;
-    min-width: 200px;
+  flex: 1;
+  max-width: 50%;
+  padding: 20px;
+  min-width: 200px;
 }
 
-/* Styles for the product title */
 .product-info h1 {
-    font-size: 2rem;
-    margin-bottom: 10px;
+  font-size: 2rem;
+  margin-bottom: 10px;
 }
 
-/* Styles for the product description, price, details, and additional information */
+.short-description,
+.long-description,
+.about-product,
 .product-description,
 .product-price,
 .product-details,
 .about-item {
-    margin-bottom: 20px;
+  margin: 10px 0;
 }
 
-/* Container for the purchase buttons */
-.purchase-buttons {
-    display: flex;
-    gap: 20px;
+.listing-price {
+  text-decoration: line-through;
+  color: #888;
 }
 
-/* Styles for the "Add to Cart" and "Buy Now" buttons */
+.product-selling-price {
+  font-size: 1.5em;
+  color: #e91e63;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.percentage-difference {
+  font-size: 0.9em;
+  color: #4caf50;
+}
+
+.color-options {
+  margin-top: 20px;
+}
+
+.color-options-buttons {
+  display: flex;
+}
+
+.color-options-buttons button {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.color-options-buttons button.active {
+  border: 2px solid #000;
+}
+
 .add-to-cart-btn,
 .buy-now-btn {
-    background-color: rgb(97 59 96);
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  background-color: rgb(97 59 96);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
 }
 
-/* Hover effect for the buttons */
 .add-to-cart-btn:hover,
 .buy-now-btn:hover {
-    background-color: #783b7d;
+  background-color: #783b7d;
 }
+
 .buy-now-btn:active {
-    transform: scale(0.75); /* Scale down slightly when clicked */
+  transform: scale(0.75); /* Scale down slightly when clicked */
 }
 
-/* Container for other color images */
+.add-to-cart-btn {
+  margin-right: 10px; /* Add space between the two buttons */
+}
+
 .other-colors {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
-/* Container for individual color items */
 .colors-container {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
-/* Styles for individual color items */
 .color-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Styles for color name */
 .color-item p {
-    margin-bottom: 5px;
-    font-weight: bold;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
-/* Styles for color image thumbnails */
 .color-thumbnail {
-    width: 60px;
-    height: 60px;
-    border-radius: 5px;
-    cursor: pointer;
-    border: 2px solid transparent;
+  width: 60px;
+  height: 60px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 2px solid transparent;
 }
 
-/* Thumbnail hover effect */
 .color-thumbnail:hover {
-    border: 2px solid rgb(97 59 96);
+  border: 2px solid rgb(97 59 96);
 }

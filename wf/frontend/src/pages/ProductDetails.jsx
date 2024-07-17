@@ -1,60 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './productDetails.css';
 import { useCart } from '../contexts/CartContext';
+import offerTag from '../components/assets/offer.png';
 
 const ProductDetails = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { image, title, description, listingPrice, sellingPrice, details, about, images, color, allColors, productId } = location.state;
-  const [mainImage, setMainImage] = useState(`http://localhost:5000/${image}`);
   const { addToCart } = useCart();
+  const [mainImage, setMainImage] = useState(`http://localhost:5000/${image}`);
   const [selectedColorImages, setSelectedColorImages] = useState(images);
   const [selectedColor, setSelectedColor] = useState(color);
 
   const handleAddToCart = () => {
-    const product = { 
-      image: mainImage, 
-      title, 
-      description, 
-      listingPrice, 
-      sellingPrice, 
-      details, 
-      about, 
-      color: selectedColor, 
+    addToCart({
+      image: mainImage,
+      title,
+      description,
+      listingPrice,
+      sellingPrice,
+      details,
+      about,
       images: selectedColorImages,
-      productId 
-    };
-    addToCart(product);
+      color: selectedColor,
+      productId,
+    });
   };
 
-  const handleColorChange = (colorImages, newColor) => {
+  const handleBuyNow = () => {
+    const product = {
+      image: mainImage,
+      title,
+      description,
+      listingPrice,
+      sellingPrice,
+      details,
+      about,
+      images: selectedColorImages,
+      color: selectedColor,
+      productId,
+    };
+
+    if (localStorage.getItem('token')) {
+      addToCart(product);
+      navigate('/checkout');
+    } else {
+      localStorage.setItem('pendingProduct', JSON.stringify(product));
+      navigate('/register');
+    }
+  };
+
+  const handleColorChange = (colorImages, colorName) => {
     setSelectedColorImages(colorImages);
-    setSelectedColor(newColor);
+    setSelectedColor(colorName);
     setMainImage(`http://localhost:5000/${colorImages[0]}`);
   };
 
+  const percentageDifference = Math.round(((listingPrice - sellingPrice) / listingPrice) * 100);
+
   return (
     <div className="product-details-container">
-      <div className="thumbnails">
-        {selectedColorImages.map((img, index) => (
-          <img
-            key={index}
-            src={`http://localhost:5000/${img}`}
-            alt={`${title} ${index + 1}`}
-            className="thumbnail"
-            onMouseOver={() => setMainImage(`http://localhost:5000/${img}`)}
-          />
-        ))}
-      </div>
-      <div className="product-images">
-        <img src={mainImage} alt={title} className="main-image" />
+      <div className="image-gallery">
+        <div className="thumbnail-container">
+          {selectedColorImages.map((img, index) => (
+            <img
+              key={index}
+              src={`http://localhost:5000/${img}`}
+              alt={`${title} ${index + 1}`}
+              className="thumbnail"
+              onMouseOver={() => setMainImage(`http://localhost:5000/${img}`)}
+            />
+          ))}
+        </div>
+        <div className="main-image-container">
+          <div className="sales-tag">
+            <img src={offerTag} alt="Sales Tag" className="sales-tag-image" />
+            <span className="sales-tag-text">{percentageDifference}%</span>
+          </div>
+          <img src={mainImage} alt={title} className="main-image" />
+        </div>
       </div>
       <div className="product-info">
         <h1>{title}</h1>
         <p className="product-description">{description}</p>
-        <p className="product-price"><strong>Listing Price: </strong>${listingPrice}</p>
+        <p className="product-price"><strong>Listing Price: </strong><s>${listingPrice}</s></p>
         <p className="product-selling-price"><strong>Selling Price: </strong>${sellingPrice}</p>
+        <p className="percentage-difference">Save {percentageDifference}%</p>
         <p className="product-color"><strong>Color: </strong>{selectedColor}</p>
         <p className="product-id"><strong>Product ID: </strong>{productId}</p>
         <div className="product-details">
@@ -67,7 +99,7 @@ const ProductDetails = () => {
         </div>
         <div className="purchase-buttons">
           <button className="add-to-cart-btn" onClick={handleAddToCart}>Add to Cart</button>
-          <button className="buy-now-btn">Buy Now</button>
+          <button className="buy-now-btn" onClick={handleBuyNow}>Buy Now</button>
         </div>
         <div className="other-colors">
           <h2>Other Colors Available</h2>
@@ -88,6 +120,5 @@ const ProductDetails = () => {
     </div>
   );
 };
-
 
 export default ProductDetails;

@@ -8,6 +8,7 @@ import repassIcon from '../components/assets/password.png';
 import emailIcon from '../components/assets/email.png';
 import registerIcon from '../components/assets/registeruser.png';
 import phoneIcon from '../components/assets/phoneCall.png';
+import { useCart } from '../contexts/CartContext';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,7 @@ const RegisterPage = () => {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   const handleChange = (e) => {
     setFormData({
@@ -50,8 +52,14 @@ const RegisterPage = () => {
       if (response.ok) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', formData.name);
-        navigate('/');
-        window.location.reload(); // Refresh the page
+        const pendingProduct = JSON.parse(localStorage.getItem('pendingProduct'));
+        if (pendingProduct) {
+          addToCart(pendingProduct);
+          localStorage.removeItem('pendingProduct');
+          navigate('/checkout');
+        } else {
+          navigate('/');
+        }
       } else {
         setError(`Registration failed: ${data.message}`);
       }
@@ -137,33 +145,31 @@ const RegisterPage = () => {
                 <div className="form-group">
                   <Link to="#"><img src={phoneIcon} alt="no image" className="img" /></Link>
                   <input
-                    type="text"
+                    type="tel"
                     name="phno"
                     id="phno"
-                    placeholder="Enter your Phone no."
+                    placeholder="Enter your Phone Number"
                     className="input1"
                     value={formData.phno}
                     onChange={handleChange}
                     required
                   />
                 </div>
-                {error && <div className="error-message">{error}</div>}
+                {error && <p className="error-message">{error}</p>}
                 <div className="form-group form-button">
                   <input type="submit" name="signup" id="signup" className="form-submit" value="Register" />
                 </div>
               </form>
             </div>
             <div className="signup-image">
-              <figure>
-                <Link to="#"><img src={registerIcon} alt="sign up" /></Link>
-              </figure>
-              <Link to="/login" className="signup-image-link">I am already member</Link>
+              <figure><img src={registerIcon} alt="sign up" /></figure>
+              <Link to="/login" className="signup-image-link">I am already a member</Link>
             </div>
           </div>
         </div>
       </section>
     </div>
   );
-}
+};
 
 export default RegisterPage;
