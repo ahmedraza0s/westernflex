@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
+
 
 const User = require('./models/User'); //importing model of user
 
@@ -458,6 +460,67 @@ app.post('/api/product/:id/color', async (req, res) => {
 
 //update producte jsx page code ends here 
 
+
+// Authentication Middleware with Debugging
+const authenticateUser = async (req, res, next) => {
+  const token = req.headers['authorization'];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Access denied. No token provided.' });
+  }
+
+  try {
+    console.log('Received token:', token); // Debugging line
+
+    // Remove "Bearer " prefix if present
+    const actualToken = token.startsWith('Bearer ') ? token.slice(7, token.length).trim() : token;
+
+    console.log('Actual token:', actualToken); // Debugging line
+    const decoded = jwt.verify(actualToken, secretKey);
+    console.log('Decoded token:', decoded); // Debugging line
+    const user = await User.findOne({ username: decoded.username });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
+    console.error('Error authenticating user:', error);
+    res.status(500).json({ error: 'Authentication failed' });
+  }
+};
+
+
+
+// Route to place an order
+app.post('/api/orders', authenticateUser, async (req, res) => {
+  const { address, items, totalAmount, orderStatus } = req.body;
+  const user = req.user;
+
+  try {
+    const order = {
+      orderId: uuidv4(),
+      orderStatus,
+      items: items.map(item => ({
+        productId: item.productId,
+        productName: item.title,
+        quantity: item.quantity,
+        price: item.totalPrice,
+      })),
+      orderDate: new Date(),
+    };
+
+    user.orders.push(order);
+    await user.save();
+
+    res.status(201).json({ message: 'Order placed successfully' });
+  } catch (error) {
+    console.error('Error placing order:', error);
+    res.status(500).json({ error: 'Failed to place order' });
+  }
+});
 
 // Start the server
 app.listen(port, () => {
