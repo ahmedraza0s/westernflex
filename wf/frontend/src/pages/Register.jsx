@@ -106,7 +106,11 @@ const RegisterPage = () => {
         navigate('/');
         window.location.reload(); // Refresh the page
       } else {
-        setError(`Registration failed: ${data.message}`);
+        if (response.status === 400 && data === 'Username already exists') {
+          setError('Username already exists');
+        } else {
+          setError(`Registration failed: ${data.message}`);
+        }
       }
     } catch (error) {
       console.error('Error:', error);

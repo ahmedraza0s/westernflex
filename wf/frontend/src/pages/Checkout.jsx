@@ -1,12 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './checkout.css';
 import { useCart } from '../contexts/CartContext';
 
 const Checkout = () => {
   const { cart, totalAmount, updateQuantity } = useCart();
+  const [address, setAddress] = useState({
+    addressLine1: '',
+    addressLine2: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    country: '',
+  });
 
   const handleDelete = (item) => {
     updateQuantity(item.title, item.color, -1);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setAddress(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const orderData = {
+      address,
+      items: cart,
+      totalAmount,
+      orderStatus: 'pending',
+    };
+
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token'), // Ensure you include the token
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        console.log('Order placed successfully');
+      } else {
+        const errorData = await response.json();
+        console.log('Error placing order:', errorData);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -59,23 +105,29 @@ const Checkout = () => {
 
       <div className="checkout-container">
         <div className="checkout-content">
-          <div className="delivery-address">
-            <h2>1. Delivery address</h2>
-            <label>Enter your address:</label>
-            <input type="text" className="address" placeholder="Enter your address" required /><br /><br />
-            <label>Enter your State:</label>
-            <input type="text" className="address" placeholder="Enter your state" required /><br /><br />
-            <label>Enter your city:</label>
-            <input type="text" className="address" placeholder="Enter your city" required /><br /><br />
-            <label>Enter the pincode:</label>
-            <input type="number" className="address" placeholder="Enter the pincode" required /><br /><br />
-          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="delivery-address">
+              <h2>1. Delivery address</h2>
+              <label>Enter your address:</label>
+              <input type="text" name="addressLine1" className="address" placeholder="Enter your address" required onChange={handleChange} /><br /><br />
+              <label>Enter your address line 2:</label>
+              <input type="text" name="addressLine2" className="address" placeholder="Enter your address line 2" required onChange={handleChange} /><br /><br />
+              <label>Enter your State:</label>
+              <input type="text" name="state" className="address" placeholder="Enter your state" required onChange={handleChange} /><br /><br />
+              <label>Enter your city:</label>
+              <input type="text" name="city" className="address" placeholder="Enter your city" required onChange={handleChange} /><br /><br />
+              <label>Enter the pincode:</label>
+              <input type="number" name="postalCode" className="address" placeholder="Enter the pincode" required onChange={handleChange} /><br /><br />
+              <label>Enter your country:</label>
+              <input type="text" name="country" className="address" placeholder="Enter your country" required onChange={handleChange} /><br /><br />
+            </div>
 
-          <div className="payment-method">
-            <h2>2. Select a payment method</h2><br />
-            <label>Cash on Delivery</label><br />
-            <button className="order">Place Order</button>
-          </div>
+            <div className="payment-method">
+              <h2>2. Select a payment method</h2><br />
+              <label>Cash on Delivery</label><br />
+              <button type="submit" className="order">Place Order</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

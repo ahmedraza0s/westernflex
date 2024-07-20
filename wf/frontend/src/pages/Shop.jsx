@@ -1,14 +1,16 @@
-// components/ShopList.js
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import './shop.css';
+import offerTag from '../components/assets/offer.png'; // Import the sales tag image
 
 const ShopList = () => {
   const [products, setProducts] = useState([]);
   const [visibleDropdown, setVisibleDropdown] = useState(null);
   const [selectedPriceRange, setSelectedPriceRange] = useState(null); // State for selected price range
+  const [currentPage, setCurrentPage] = useState(0); // State for current page
+  const productsPerPage = 16; // Number of products per page
   const dropdownRef = useRef(null);
   const { addToCart } = useCart();
 
@@ -34,17 +36,34 @@ const ShopList = () => {
     setVisibleDropdown(null); // Close the dropdown after selecting price range
   };
 
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
   const renderProducts = () => {
+    const filteredProducts = products.filter(product =>
+      product.colors.some(color =>
+        [1, 2, 3].includes(color.priority) &&
+        color.images.length > 0 &&
+        (!selectedPriceRange || product.sellingPrice < selectedPriceRange)
+      )
+    );
+
+    const paginatedProducts = filteredProducts.slice(currentPage * productsPerPage, (currentPage + 1) * productsPerPage);
+
     return (
       <div className="product-container">
-        {products.map((product) => (
+        {paginatedProducts.map((product) =>
           product.colors.map((color) => {
-            if ([1, 2, 3].includes(color.priority) && color.images.length > 0 &&
-                (!selectedPriceRange || product.sellingPrice < selectedPriceRange)) {
-              const percentageDifference = ((product.listingPrice - product.sellingPrice) / product.listingPrice) * 100;
+            if ([1, 2, 3].includes(color.priority) && color.images.length > 0) {
+              const percentageDifference = Math.round(((product.listingPrice - product.sellingPrice) / product.listingPrice) * 100);
 
               return (
                 <div className="product" key={`${product._id}-${color.color}`}>
+                  <div className="sales-tag">
+                    <img src={offerTag} alt="Sales Tag" className="sales-tag-image" />
+                    <span className="sales-tag-text">{percentageDifference}%</span>
+                  </div>
                   <Link
                     to={`/product/${product.name.replace(/\s+/g, '-').toLowerCase()}`}
                     state={{
@@ -68,12 +87,10 @@ const ShopList = () => {
                     />
                   </Link>
                   <h3 className="product-title">{product.name}</h3>
-                  <p className="listingprice">${product.listingPrice} </p>
-                  <p className="product-selling-price"> ${product.sellingPrice}</p>
+                  <p className="listing-price"><s>${product.listingPrice}</s></p>
+                  <p className="product-selling-price">${product.sellingPrice}</p>
+                  <p className="percentage-difference">Save {percentageDifference}%</p>
                   <p className="product-color">Color: {color.color}</p>
-                  <p className="percentage-difference">
-                    Save {percentageDifference.toFixed(2)}%
-                  </p>
                   <button
                     className="add-to-cart-btn"
                     onClick={() =>
@@ -99,7 +116,7 @@ const ShopList = () => {
               return null;
             }
           })
-        ))}
+        )}
       </div>
     );
   };
@@ -128,6 +145,11 @@ const ShopList = () => {
         {/* Add other dropdowns as needed */}
       </nav>
       {renderProducts()}
+      <div className="pagination">
+        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>&lt;</button>
+        <div className="page-indicator">{currentPage}</div>
+        <button onClick={() => handlePageChange(currentPage + 1)} disabled={(currentPage + 1) * productsPerPage >= products.length}>&gt;</button>
+      </div>
     </div>
   );
 };

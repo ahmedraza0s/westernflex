@@ -7,6 +7,10 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
+
+
+const User = require('./models/User'); //importing model of user
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -29,14 +33,38 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
-// User Schema
-const userSchema = new mongoose.Schema({
-  name: String,
-  username: String,
-  password: String,
-  email: String,
-  phno: String
+
+
+
+// User Registration
+app.post('/api/register', async (req, res) => {
+  const { name, username, password, email, phno } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = new User({ name, username, password: hashedPassword, email,phno });
+  try {
+    await user.save();
+    res.status(201).send({ message: 'User registered successfully' });
+  } catch (error) {
+    res.status(500).send({ message: 'Error registering user', error });
+  }
 });
+
+// User Login
+app.post('/api/user-login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const user = await User.findOne({ username });
+    if (user && await bcrypt.compare(password, user.password)) {
+      const token = jwt.sign({ id: user._id, username: user.username }, secretKey, { expiresIn: '1h' });
+      res.status(200).json({ token });
+    } else {
+      res.status(400).send({ message: 'Invalid credentials' });
+    }
+  } catch (error) {
+    res.status(500).send({ message: 'Error logging in', error });
+  }
+});
+
 
 // Admin Schema
 const adminSchema = new mongoose.Schema({
@@ -70,7 +98,6 @@ const shopSchema = new mongoose.Schema({
 });
 
 // Models
-const User = mongoose.model('User', userSchema);
 const Admin = mongoose.model('Admin', adminSchema);
 const Product = mongoose.model('Product', productSchema);
 const Shop = mongoose.model('Shop', shopSchema);
@@ -86,35 +113,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// User Registration
-app.post('/api/register', async (req, res) => {
-  const { name, username, password, email, phno } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const user = new User({ name, username, password: hashedPassword, email,phno });
-  try {
-    await user.save();
-    res.status(201).send({ message: 'User registered successfully' });
-  } catch (error) {
-    res.status(500).send({ message: 'Error registering user', error });
-  }
-});
-
-// User Login
-app.post('/api/user-login', async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    const user = await User.findOne({ username });
-    if (user && await bcrypt.compare(password, user.password)) {
-      const token = jwt.sign({ id: user._id, username: user.username }, secretKey, { expiresIn: '1h' });
-      res.status(200).json({ token });
-    } else {
-      res.status(400).send({ message: 'Invalid credentials' });
-    }
-  } catch (error) {
-    res.status(500).send({ message: 'Error logging in', error });
-  }
-});
-
+//admin
 // Admin Login
 app.post('/api/admin-login', async (req, res) => {
   const { username, password } = req.body;
@@ -130,6 +129,22 @@ app.post('/api/admin-login', async (req, res) => {
     res.status(500).send({ message: 'Error logging in', error });
   }
 });
+
+// Admin Registration
+app.post('/register', async (req, res) => {
+  const { username, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const admin = new Admin({ username, password: hashedPassword });
+
+  try {
+    await admin.save();
+    res.status(201).send('Admin registered');
+  } catch (error) {
+    res.status(400).send('Error registering admin');
+  }
+});
+
+//admin end here 
 
 // Protected Admin Route Example
 app.get('/api/admin', (req, res) => {
@@ -164,19 +179,6 @@ app.get('/api/user', (req, res) => {
   }
 });
 
-// Admin Registration
-app.post('/register', async (req, res) => {
-  const { username, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const admin = new Admin({ username, password: hashedPassword });
-
-  try {
-    await admin.save();
-    res.status(201).send('Admin registered');
-  } catch (error) {
-    res.status(400).send('Error registering admin');
-  }
-});
 
 
 
@@ -458,6 +460,76 @@ app.post('/api/product/:id/color', async (req, res) => {
 
 //update producte jsx page code ends here 
 
+
+// Authentication Middleware with Debugging
+const authenticateUser = async (req, res, next) => {
+  const token = req.headers['authorization'];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Access denied. No token provided.' });
+  }
+
+  try {
+    console.log('Received token:', token); // Debugging line
+
+    // Remove "Bearer " prefix if present
+    const actualToken = token.startsWith('Bearer ') ? token.slice(7, token.length).trim() : token;
+
+    console.log('Actual token:', actualToken); // Debugging line
+    const decoded = jwt.verify(actualToken, secretKey);
+    console.log('Decoded token:', decoded); // Debugging line
+    const user = await User.findOne({ username: decoded.username });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
+    console.error('Error authenticating user:', error);
+    res.status(500).json({ error: 'Authentication failed' });
+  }
+};
+
+
+
+// Route to place an order
+app.post('/api/orders', authenticateUser, async (req, res) => {
+  const { address, items, totalAmount, orderStatus } = req.body;
+  const user = req.user;
+
+  try {
+    const order = {
+      orderId: uuidv4(),
+      orderStatus,
+      address: {
+        addressline1: address.addressLine1,
+        addressline2: address.addressLine2,
+        city: address.city,
+        state: address.state,
+        postalCode: address.postalCode,
+        country: address.country, // Add country if required
+      },
+      items: items.map(item => ({
+        productId: item.productId,
+        productName: item.title,
+        quantity: item.quantity,
+        price: item.totalPrice,
+        color: item.color, // Include color information
+      })),
+      orderDate: new Date(),
+    };
+
+    user.orders.push(order);
+    await user.save();
+
+    res.status(201).json({ message: 'Order placed successfully' });
+  } catch (error) {
+    console.error('Error placing order:', error);
+    res.status(500).json({ error: 'Failed to place order' });
+  }
+});
 
 // Start the server
 app.listen(port, () => {
