@@ -1,4 +1,3 @@
-// src/components/Checkout.js
 import React, { useState } from 'react';
 import './checkout.css';
 import { useCart } from '../contexts/CartContext';
@@ -11,6 +10,7 @@ const Checkout = () => {
     city: '',
     state: '',
     postalCode: '',
+    country: '',
   });
 
   const handleDelete = (item) => {
@@ -110,12 +110,16 @@ const Checkout = () => {
               <h2>1. Delivery address</h2>
               <label>Enter your address:</label>
               <input type="text" name="addressLine1" className="address" placeholder="Enter your address" required onChange={handleChange} /><br /><br />
+              <label>Enter your address line 2:</label>
+              <input type="text" name="addressLine2" className="address" placeholder="Enter your address line 2" required onChange={handleChange} /><br /><br />
               <label>Enter your State:</label>
               <input type="text" name="state" className="address" placeholder="Enter your state" required onChange={handleChange} /><br /><br />
               <label>Enter your city:</label>
               <input type="text" name="city" className="address" placeholder="Enter your city" required onChange={handleChange} /><br /><br />
               <label>Enter the pincode:</label>
               <input type="number" name="postalCode" className="address" placeholder="Enter the pincode" required onChange={handleChange} /><br /><br />
+              <label>Enter your country:</label>
+              <input type="text" name="country" className="address" placeholder="Enter your country" required onChange={handleChange} /><br /><br />
             </div>
 
             <div className="payment-method">

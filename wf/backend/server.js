@@ -503,11 +503,20 @@ app.post('/api/orders', authenticateUser, async (req, res) => {
     const order = {
       orderId: uuidv4(),
       orderStatus,
+      address: {
+        addressline1: address.addressLine1,
+        addressline2: address.addressLine2,
+        city: address.city,
+        state: address.state,
+        postalCode: address.postalCode,
+        country: address.country, // Add country if required
+      },
       items: items.map(item => ({
         productId: item.productId,
         productName: item.title,
         quantity: item.quantity,
         price: item.totalPrice,
+        color: item.color, // Include color information
       })),
       orderDate: new Date(),
     };
