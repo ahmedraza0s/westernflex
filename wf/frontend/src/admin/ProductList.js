@@ -71,9 +71,9 @@ const ProductList = () => {
   };
 
   return (
-    <div>
+    <div className='productList'>
       <h2>Product List</h2>
-      <table>
+      <table className='plTable'>
         <thead>
           <tr>
             <th>Name</th>
@@ -126,7 +126,7 @@ const ProductList = () => {
                 </ul>
               </td>
               <td>
-                <button onClick={() => handleDelete(product._id)}>Delete</button>
+                <button onClick={() => handleDelete(product._id)} className='plButton'>Delete</button>
               </td>
             </tr>
           ))}
