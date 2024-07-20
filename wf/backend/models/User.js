@@ -8,8 +8,18 @@ const addressSchema = new mongoose.Schema({
   city: { type: String, required: true },
   state: { type: String, required: true },
   postalCode: { type: String, required: true },
-  country: { type: String, required: true },
+  country: { type: String },
   isDefault: { type: Boolean, default: false },
+});
+
+const orderaddress = new mongoose.Schema({
+  addressline1 : { type: String, required: true },
+  addressline2: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  postalCode: { type: String, required: true },
+  country: { type: String, required: true },
+
 });
 
 const orderItemSchema = new mongoose.Schema({
@@ -17,6 +27,8 @@ const orderItemSchema = new mongoose.Schema({
   productName: { type: String, required: true },
   quantity: { type: Number, required: true },
   price: { type: Number, required: true },
+  color: {type: String},
+ 
 });
 
 const orderSchema = new mongoose.Schema({
@@ -24,6 +36,7 @@ const orderSchema = new mongoose.Schema({
   orderDate: { type: Date, default: Date.now },
   orderStatus: { type: String, required: true },
   items: [orderItemSchema],
+  address: [orderaddress],
 });
 
 const paymentMethodSchema = new mongoose.Schema({
