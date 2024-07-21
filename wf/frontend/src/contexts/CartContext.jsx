@@ -47,17 +47,20 @@ export const CartProvider = ({ children }) => {
     );
   };
 
+  const removeFromCart = (title, color) => {
+    setCart((prevCart) =>
+      prevCart.filter(
+        (item) => !(item.title === title && item.color === color)
+      )
+    );
+  };
+
   const cartCount = cart.length;
   const totalAmount = cart.reduce((acc, item) => acc + item.totalPrice, 0);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateQuantity, cartCount, totalAmount }}>
+    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart, cartCount, totalAmount }}>
       {children}
     </CartContext.Provider>
   );
 };
-
-
-
-
-
