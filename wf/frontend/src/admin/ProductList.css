@@ -1,25 +1,140 @@
 /* ProductList.css */
-
+/*
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+*/
 .image-list {
-    list-style-type: none;
-    padding: 0;
+  list-style-type: none;
+  padding: 0;
+}
+
+.small-images {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.small-images li {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.small-images li img {
+  max-width: 100px; /* Adjust max-width as per your design */
+  height: auto;
+  border: 1px solid #ddd; /* Optional: Add a border for image clarity */
+}
+
+.productList {
+  width: 90%;
+  max-width: 1200px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 1rem;
+  margin: 20px;
+  overflow-x: auto; /* Ensure horizontal scroll if content overflows */
+}
+
+.productList h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.plTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.plTable th,
+.plTable td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.plButton {
+  padding: 8px 12px;
+  border: none;
+  background-color: #e74c3c;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.plButton:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .productList {
+    width: 95%;
+    padding: 15px;
   }
-  
-  .small-images {
-    list-style-type: none;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
+
+  .productList h2 {
+    font-size: 1.25rem;
   }
-  
-  .small-images li {
-    margin-right: 10px;
-    margin-bottom: 10px;
+
+  .plTable th, 
+  .plTable td {
+    padding: 8px;
+    font-size: 0.9rem;
   }
-  
+
+  .plButton {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+
   .small-images li img {
-    max-width: 100px; /* Adjust max-width as per your design */
-    height: auto;
-    border: 1px solid #ddd; /* Optional: Add a border for image clarity */
+    max-width: 80px;
   }
-  
+}
+
+@media (max-width: 480px) {
+  .productList {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .productList h2 {
+    font-size: 1rem;
+  }
+
+  .plTable th, 
+  .plTable td {
+    padding: 6px;
+    font-size: 0.8rem;
+  }
+
+  .plButton {
+    padding: 5px 8px;
+    font-size: 0.8rem;
+  }
+
+  .small-images li img {
+    max-width: 60px;
+  }
+}
+
+.plTable input[type="number"] {
+  width: 60px;
+  padding: 5px;
+  margin-left: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
