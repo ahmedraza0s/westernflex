@@ -1,10 +1,9 @@
 import React from 'react';
 import { useCart } from '../contexts/CartContext';
-import { Link } from 'react-router-dom';
 import './cart.css';
 
 const Cart = () => {
-  const { cart, updateQuantity, totalAmount } = useCart();
+  const { cart, updateQuantity, removeFromCart, totalAmount } = useCart();
 
   const incrementQuantity = (title, color) => {
     updateQuantity(title, color, 1);
@@ -12,6 +11,10 @@ const Cart = () => {
 
   const decrementQuantity = (title, color) => {
     updateQuantity(title, color, -1);
+  };
+
+  const handleRemove = (title, color) => {
+    removeFromCart(title, color);
   };
 
   return (
@@ -32,6 +35,7 @@ const Cart = () => {
                     <button onClick={() => decrementQuantity(item.title, item.color)}>-</button>
                     <span>{item.quantity}</span>
                     <button onClick={() => incrementQuantity(item.title, item.color)}>+</button>
+                    <button className="delete-button" onClick={() => handleRemove(item.title, item.color)}>Remove</button>
                   </div>
                 </div>
               </li>
@@ -42,7 +46,6 @@ const Cart = () => {
       {cart.length > 0 && (
         <div className="cart-total">
           <h2>Total: INR {totalAmount.toFixed(2)}</h2>
-         
         </div>
       )}
     </div>

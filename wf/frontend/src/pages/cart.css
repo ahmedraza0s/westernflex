@@ -51,7 +51,10 @@
   margin: 0 5px;
 }
 
+.cart-item-quantity .delete-button {
+  background-color: #dc3545; /* Red background for delete */
+}
+
 .cart-item-quantity span {
   margin: 0 10px;
-  
 }
