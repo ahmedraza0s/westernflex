@@ -13,7 +13,8 @@ import firebase from 'firebase/compat/app';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    fname: '',
+    lname: '',
     username: '',
     password: '',
     re_pass: '',
@@ -59,7 +60,7 @@ const RegisterPage = () => {
       setError("Passwords do not match");
       return;
     }
-    if (!formData.username || !formData.password || !formData.email || !formData.name || !formData.phno) {
+    if (!formData.username || !formData.password || !formData.email || !formData.fname || !formData.phno) {
       setError("All fields are required");
       return;
     }
@@ -101,12 +102,10 @@ const RegisterPage = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('username', formData.name);
-        navigate('/');
-        window.location.reload(); // Refresh the page
+        alert('Registration successful! Please log in.');
+        navigate('/login'); // Navigate to the login page
       } else {
-        if (response.status === 400 && data === 'Username already exists') {
+        if (response.status === 400 && data.message === 'Username already exists') {
           setError('Username already exists');
         } else {
           setError(`Registration failed: ${data.message}`);
@@ -130,11 +129,24 @@ const RegisterPage = () => {
                   <Link to="#"><img src={nameIcon} alt="no image" className="img" /></Link>
                   <input
                     type="text"
-                    name="name"
-                    id="name"
-                    placeholder="Enter Your Name"
+                    name="fname"
+                    id="fname"
+                    placeholder="First Name"
                     className="input1"
-                    value={formData.name}
+                    value={formData.fname}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <Link to="#"><img src={nameIcon} alt="no image" className="img" /></Link>
+                  <input
+                    type="text"
+                    name="lname"
+                    id="lname"
+                    placeholder="Last Name"
+                    className="input1"
+                    value={formData.lname}
                     onChange={handleChange}
                     required
                   />
