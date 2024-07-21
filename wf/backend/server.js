@@ -563,6 +563,21 @@ app.get('/api/user/me', authenticateUser, async (req, res) => {
   }
 });
 
+// Route to update user by username
+app.put('/api/user/update/:username', authenticateUser, async (req, res) => {
+  try {
+    const { username } = req.params;
+    const updatedUser = await User.findOneAndUpdate({ username }, req.body, { new: true, runValidators: true });
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(updatedUser);
+  } catch (error) {
+    console.error('Error updating user data:', error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
