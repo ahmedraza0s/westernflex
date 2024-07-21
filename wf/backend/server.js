@@ -38,9 +38,9 @@ db.once('open', () => {
 
 // User Registration
 app.post('/api/register', async (req, res) => {
-  const { name, username, password, email, phno } = req.body;
+  const { fname, lname, username, password, email, phno } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = new User({ name, username, password: hashedPassword, email,phno });
+  const user = new User({ fname,lname, username, password: hashedPassword, email,phno });
   try {
     await user.save();
     res.status(201).send({ message: 'User registered successfully' });
