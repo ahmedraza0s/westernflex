@@ -88,7 +88,14 @@ const productSchema = new mongoose.Schema({
     priority: { type: Number, required: true },
     images: [{ type: String, required: true }],
     numberOfImages: { type: Number }
-  }]
+  }],
+
+  tags: [{ type: String }],
+  metaTitle: { type: String },
+  metaDescription: { type: String },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+  isActive: { type: Boolean, default: true },
 });
 
 // Shop Schema
