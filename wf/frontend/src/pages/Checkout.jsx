@@ -190,10 +190,10 @@ const Checkout = () => {
                         <p>{address.country}</p>
                       </div>
                     ))}
-                    <button type="button" onClick={() => setAddingNewAddress(true)}>Add New Address</button>
                   </div>
                 )}
-                {existingAddresses.length === 0 && <div>No addresses found.</div>}
+                <button type="button" onClick={() => setAddingNewAddress(true)}>Add New Address</button>
+                {existingAddresses.length === 0 && !addingNewAddress && <div>No addresses found.</div>}
                 {addingNewAddress && (
                   <div className="new-address-form">
                     <h3>Add New Address</h3>
