@@ -39,13 +39,13 @@ const UploadProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const formData = new FormData();
     Object.keys(productDetails).forEach((key) => {
       formData.append(key, productDetails[key]);
     });
     formData.append('colors', JSON.stringify(colors));
-
+  
     try {
       await axios.post('http://localhost:5000/upload-product', formData, {
         headers: {
@@ -55,9 +55,14 @@ const UploadProduct = () => {
       alert('Product uploaded successfully');
     } catch (error) {
       console.error('Error uploading product:', error);
-      alert('Error uploading product');
+      if (error.response && error.response.data === 'Product ID already exists') {
+        alert('Product ID already exists. Please choose a different Product ID.');
+      } else {
+        alert('Error uploading product');
+      }
     }
   };
+  
 
   const colorOptions = [
     { value: '', label: 'Select Color' },

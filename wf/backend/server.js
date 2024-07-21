@@ -274,26 +274,33 @@ app.post('/upload-product', upload.any(), async (req, res) => {
     numberOfImages: color.numberOfImages,
   }));
 
-  const product = new Product({
-    name,
-    category,
-    subCategory,
-    shortDescription,
-    longDescription,
-    listingPrice,
-    sellingPrice,
-    productId,
-    colors: productColors,
-  });
-
   try {
+    // Check if a product with the same productId already exists
+    const existingProduct = await Product.findOne({ productId });
+    if (existingProduct) {
+      return res.status(400).send('Product ID already exists');
+    }
+
+    const product = new Product({
+      name,
+      category,
+      subCategory,
+      shortDescription,
+      longDescription,
+      listingPrice,
+      sellingPrice,
+      productId,
+      colors: productColors,
+    });
+
     await product.save();
     res.status(201).send('Product uploaded successfully');
   } catch (error) {
     console.error('Error uploading product:', error);
-    res.status(400).send('Error uploading product');
+    res.status(500).send('Error uploading product');
   }
 });
+
 
 // Fetch products route
 app.get('/products', async (req, res) => {
