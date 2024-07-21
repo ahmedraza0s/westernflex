@@ -4,7 +4,7 @@ import { useCart } from '../contexts/CartContext';
 import axios from 'axios';
 
 const Checkout = () => {
-  const { cart, totalAmount, updateQuantity } = useCart();
+  const { cart, totalAmount, updateQuantity, setCart } = useCart();
   const [address, setAddress] = useState({
     addressLine1: '',
     addressLine2: '',
@@ -17,6 +17,8 @@ const Checkout = () => {
   const [selectedAddressId, setSelectedAddressId] = useState('');
   const [addingNewAddress, setAddingNewAddress] = useState(false);
   const [error, setError] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [showEmptyCartPopup, setShowEmptyCartPopup] = useState(false);
 
   useEffect(() => {
     const fetchUserAddresses = async () => {
@@ -39,6 +41,16 @@ const Checkout = () => {
     fetchUserAddresses();
   }, []);
 
+  useEffect(() => {
+    if (showPopup || showEmptyCartPopup) {
+      const timer = setTimeout(() => {
+        setShowPopup(false);
+        setShowEmptyCartPopup(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showPopup, showEmptyCartPopup]);
+
   const handleDelete = (item) => {
     updateQuantity(item.title, item.color, -1);
   };
@@ -53,7 +65,13 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    // Show popup if cart is empty
+    if (cart.length === 0) {
+      setShowEmptyCartPopup(true);
+      return;
+    }
+
     // Validate if address is selected or provided
     if (!selectedAddressId && !addingNewAddress) {
       setError('Please select or add an address.');
@@ -84,7 +102,8 @@ const Checkout = () => {
 
       if (response.ok) {
         console.log('Order placed successfully');
-        // Optionally, redirect to an order confirmation page or clear the cart
+        setCart([]); // Clear the cart
+        setShowPopup(true); // Show the success popup
       } else {
         const errorData = await response.json();
         console.log('Error placing order:', errorData);
@@ -237,6 +256,24 @@ const Checkout = () => {
           </form>
         </div>
       </div>
+
+      {showPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmh3M2NuOHp1OHJzYzA5Y2hmMjAxYWU5N2U4a2phYjF2emIwamk4NyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3kuSo744UIPJjcJUEn/giphy.gif" alt="Order placed successfully" />
+            <p>Your order has been placed successfully!</p>
+          </div>
+        </div>
+      )}
+
+      {showEmptyCartPopup && (
+        <div className="popup">
+          <div className="popup-content">
+          <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMW50NXhlNjZhNGQyN3RyYTJ3MDE0dDZpdnhoeHdrYWw3djVmemsxbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/JT7Td5xRqkvHQvTdEu/giphy.gif" alt="Success" />
+            <p>Please select the product first.</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
