@@ -7,7 +7,8 @@ import Home from './pages/Home';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import ChangeUserDetails from './my account/ChangeUserDetails';
+import ChangeUserDetails from './my account/ChangeUserDetails';  //my account folder pages 
+import UserProfile from './my account/UserProfile';
 import ProductDetails from './pages/ProductDetails';
 import AdminLogin from './admin/AdminLogin';
 import AdminPage from './admin/AdminPage'; // Import the AdminPage component
@@ -44,6 +45,7 @@ const App = () => {
               <Route path="/product/:title" element={<ProductDetails />} />
               <Route path="/admin-login" element={<AdminLogin />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/User-Profile" element={<UserProfile />} />
               
               {/* Admin Routes */}
               <Route path="/admin" element={<ProtectedRoute element={<AdminPage />} />}>

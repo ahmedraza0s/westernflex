@@ -460,7 +460,7 @@ app.post('/api/product/:id/color', async (req, res) => {
 
 //update producte jsx page code ends here 
 
-
+//auth code and order code 
 // Authentication Middleware with Debugging
 const authenticateUser = async (req, res, next) => {
   const token = req.headers['authorization'];
@@ -528,6 +528,24 @@ app.post('/api/orders', authenticateUser, async (req, res) => {
   } catch (error) {
     console.error('Error placing order:', error);
     res.status(500).json({ error: 'Failed to place order' });
+  }
+});
+
+//order code ends here 
+
+//route to fetch user data from backend
+
+// Route to get authenticated user data
+app.get('/api/user/me', authenticateUser, async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.user.username }).select('-password');
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
