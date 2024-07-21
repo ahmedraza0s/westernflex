@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './checkout.css';
 import { useCart } from '../contexts/CartContext';
+import axios from 'axios';
 
 const Checkout = () => {
   const { cart, totalAmount, updateQuantity } = useCart();
@@ -12,6 +13,31 @@ const Checkout = () => {
     postalCode: '',
     country: '',
   });
+  const [existingAddresses, setExistingAddresses] = useState([]);
+  const [selectedAddressId, setSelectedAddressId] = useState('');
+  const [addingNewAddress, setAddingNewAddress] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchUserAddresses = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('/api/user/me', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setExistingAddresses(response.data.addresses);
+        if (response.data.addresses.length > 0) {
+          setSelectedAddressId(response.data.addresses[0].addressId);
+        }
+      } catch (err) {
+        console.error('Error fetching addresses:', err);
+      }
+    };
+
+    fetchUserAddresses();
+  }, []);
 
   const handleDelete = (item) => {
     updateQuantity(item.title, item.color, -1);
@@ -27,8 +53,20 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate if address is selected or provided
+    if (!selectedAddressId && !addingNewAddress) {
+      setError('Please select or add an address.');
+      return;
+    }
+
+    // Prepare the order address
+    const orderAddress = addingNewAddress
+      ? address
+      : existingAddresses.find(addr => addr.addressId === selectedAddressId);
+
     const orderData = {
-      address,
+      address: orderAddress, // Use the selected or new address
       items: cart,
       totalAmount,
       orderStatus: 'pending',
@@ -39,19 +77,47 @@ const Checkout = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.getItem('token'), // Ensure you include the token
+          'Authorization': 'Bearer ' + localStorage.getItem('token'),
         },
         body: JSON.stringify(orderData),
       });
 
       if (response.ok) {
         console.log('Order placed successfully');
+        // Optionally, redirect to an order confirmation page or clear the cart
       } else {
         const errorData = await response.json();
         console.log('Error placing order:', errorData);
+        setError('Error placing order.');
       }
     } catch (error) {
       console.error('Error:', error);
+      setError('Error placing order.');
+    }
+  };
+
+  const handleAddressSelect = (addressId) => {
+    setSelectedAddressId(addressId);
+    setAddingNewAddress(false); // Ensure adding new address mode is disabled when selecting existing address
+  };
+
+  const handleAddAddress = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.put(`/api/user/update/${localStorage.getItem('username')}`, {
+        addresses: [...existingAddresses, { ...address, addressId: Date.now().toString() }]
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setExistingAddresses(response.data.addresses);
+      setAddingNewAddress(false);
+      setSelectedAddressId(response.data.addresses[response.data.addresses.length - 1].addressId);
+    } catch (err) {
+      console.error('Error adding address:', err);
+      setError('Error adding address.');
     }
   };
 
@@ -107,23 +173,64 @@ const Checkout = () => {
         <div className="checkout-content">
           <form onSubmit={handleSubmit}>
             <div className="delivery-address">
-              <h2>1. Delivery address</h2>
-              <label>Enter your address:</label>
-              <input type="text" name="addressLine1" className="address" placeholder="Enter your address" required onChange={handleChange} /><br /><br />
-              <label>Enter your address line 2:</label>
-              <input type="text" name="addressLine2" className="address" placeholder="Enter your address line 2" required onChange={handleChange} /><br /><br />
-              <label>Enter your State:</label>
-              <input type="text" name="state" className="address" placeholder="Enter your state" required onChange={handleChange} /><br /><br />
-              <label>Enter your city:</label>
-              <input type="text" name="city" className="address" placeholder="Enter your city" required onChange={handleChange} /><br /><br />
-              <label>Enter the pincode:</label>
-              <input type="number" name="postalCode" className="address" placeholder="Enter the pincode" required onChange={handleChange} /><br /><br />
-              <label>Enter your country:</label>
-              <input type="text" name="country" className="address" placeholder="Enter your country" required onChange={handleChange} /><br /><br />
+              <h2>1. Delivery Address</h2>
+              <div>
+                {existingAddresses.length > 0 && (
+                  <div className="address-selection">
+                    <label>Select an existing address:</label>
+                    {existingAddresses.map(address => (
+                      <div 
+                        key={address.addressId} 
+                        className={`address-box ${selectedAddressId === address.addressId ? 'selected' : ''}`}
+                        onClick={() => handleAddressSelect(address.addressId)}
+                      >
+                        <p>{address.addressLine1}</p>
+                        {address.addressLine2 && <p>{address.addressLine2}</p>}
+                        <p>{address.city}, {address.state}, {address.postalCode}</p>
+                        <p>{address.country}</p>
+                      </div>
+                    ))}
+                    <button type="button" onClick={() => setAddingNewAddress(true)}>Add New Address</button>
+                  </div>
+                )}
+                {existingAddresses.length === 0 && <div>No addresses found.</div>}
+                {addingNewAddress && (
+                  <div className="new-address-form">
+                    <h3>Add New Address</h3>
+                    <div>
+                      <label>Address Line 1</label>
+                      <input type="text" name="addressLine1" value={address.addressLine1} onChange={handleChange} required />
+                    </div>
+                    <div>
+                      <label>Address Line 2</label>
+                      <input type="text" name="addressLine2" value={address.addressLine2} onChange={handleChange} />
+                    </div>
+                    <div>
+                      <label>City</label>
+                      <input type="text" name="city" value={address.city} onChange={handleChange} required />
+                    </div>
+                    <div>
+                      <label>State</label>
+                      <input type="text" name="state" value={address.state} onChange={handleChange} required />
+                    </div>
+                    <div>
+                      <label>Postal Code</label>
+                      <input type="text" name="postalCode" value={address.postalCode} onChange={handleChange} required />
+                    </div>
+                    <div>
+                      <label>Country</label>
+                      <input type="text" name="country" value={address.country} onChange={handleChange} required />
+                    </div>
+                    <button type="button" onClick={handleAddAddress}>Save Address</button>
+                    <button type="button" onClick={() => setAddingNewAddress(false)}>Cancel</button>
+                  </div>
+                )}
+                {error && <div className="error">{error}</div>}
+              </div>
             </div>
 
             <div className="payment-method">
-              <h2>2. Select a payment method</h2><br />
+              <h2>2. Select a Payment Method</h2><br />
               <label>Cash on Delivery</label><br />
               <button type="submit" className="order">Place Order</button>
             </div>

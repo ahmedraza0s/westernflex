@@ -170,3 +170,25 @@ p {
 .delete-button:hover {
     background-color: #ff1a1a;
 }
+
+.address-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  
+  .address-box.selected {
+    border-color: #007bff;
+    background-color: #e7f0ff;
+  }
+  
+  .new-address-form {
+    margin-top: 20px;
+  }
+  
+  .error {
+    color: red;
+    margin-top: 10px;
+  }
+  
