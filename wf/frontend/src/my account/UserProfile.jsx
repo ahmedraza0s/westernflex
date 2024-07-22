@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './userProfile.css';
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -80,9 +81,9 @@ const UserProfile = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
+    <div className='user-profile-container'>
       <h1>Welcome, {user.fname} {user.lname}</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='user-profile-form'>
         <div>
           <label>First Name</label>
           <input type="text" name="fname" value={user.fname} onChange={handleChange} required />
@@ -93,7 +94,7 @@ const UserProfile = () => {
         </div>
         <div>
           <label>Username</label>
-          <input type="text" name="username" value={user.username} onChange={handleChange} required />
+          <input type="text" name="username" value={user.username} onChange={handleChange} required disabled/>
         </div>
         <div>
           <label>Email</label>
@@ -148,7 +149,7 @@ const UserProfile = () => {
                   <p>Postal Code: {address.postalCode}</p>
                   <p>Country: {address.country}</p>
                   <p>Default Address: {address.isDefault ? 'Yes' : 'No'}</p>
-                  <button type="button" onClick={() => handleAddressEdit(index)}>Edit</button>
+                  <button type="button" onClick={() => handleAddressEdit(index)} className='editButton'>Edit</button>
                 </div>
               )}
             </div>
@@ -156,8 +157,8 @@ const UserProfile = () => {
         ) : (
           <div>No addresses found.</div>
         )}
-        <button type="button" onClick={addAddress}>Add New Address</button>
-        <button type="submit">Submit</button>
+        <button type="button" onClick={addAddress} className='addButton'>Add New Address</button><br/>
+        <button type="submit" className='subButton'>Submit</button>
       </form>
     </div>
   );
