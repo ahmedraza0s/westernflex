@@ -578,6 +578,27 @@ app.put('/api/user/update/:username', authenticateUser, async (req, res) => {
   }
 });
 
+
+// Get all orders for a user
+app.get('/api/orders', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ error: 'No token provided' });
+
+    const decoded = jwt.verify(token, 'your_jwt_secret'); // Replace 'your_jwt_secret' with your JWT secret
+    const user = await User.findById(decoded.userId).select('orders');
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({ orders: user.orders });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

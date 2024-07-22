@@ -4,6 +4,8 @@ import axios from 'axios';
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
+  const [expandedOrderId, setExpandedOrderId] = useState(null); // Track expanded order
+  const [showTracking, setShowTracking] = useState({}); // Track visibility of tracking details
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -27,6 +29,17 @@ const MyOrders = () => {
     fetchOrders();
   }, []);
 
+  const handleOrderClick = (orderId) => {
+    setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
+  };
+
+  const toggleTracking = (orderId) => {
+    setShowTracking((prev) => ({
+      ...prev,
+      [orderId]: !prev[orderId], // Toggle visibility for the specific order
+    }));
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -34,19 +47,47 @@ const MyOrders = () => {
     <div>
       <h2>My Orders</h2>
       {orders.length > 0 ? (
-        orders.map(order => (
+        orders.map((order, index) => (
           <div key={order.orderId}>
-            <h3>Order ID: {order.orderId}</h3>
-            <p>Order Date: {new Date(order.orderDate).toLocaleDateString()}</p>
-            <p>Order Status: {order.orderStatus}</p>
-            <h4>Items</h4>
-            <ul>
-              {order.items.map(item => (
-                <li key={item.productId}>
-                  {item.productName} - {item.quantity} x ${item.price}
-                </li>
-              ))}
-            </ul>
+            <h3 onClick={() => handleOrderClick(order.orderId)}>
+              Order {index + 1}
+            </h3>
+            {expandedOrderId === order.orderId && (
+              <div>
+                <p>Order Number: {order.orderId}</p>
+                <p>Order Date: {new Date(order.orderDate).toLocaleDateString()}</p>
+                <p>Order Status: {order.orderStatus}</p>
+                <button onClick={() => toggleTracking(order.orderId)}>
+                  {showTracking[order.orderId] ? 'Hide Tracking Details' : 'Track Order'}
+                </button>
+                
+                {showTracking[order.orderId] && (
+                  <div>
+                    <h4>Tracking Details</h4>
+                    {order.tracking && order.tracking.length > 0 ? (
+                      <ul>
+                        {order.tracking.map((track, index) => (
+                          <li key={index}>
+                            {track.status} - {new Date(track.date).toLocaleDateString()}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>No tracking details available.</p>
+                    )}
+                  </div>
+                )}
+
+                <h4>Items</h4>
+                <ul>
+                  {order.items.map(item => (
+                    <li key={item.productId}>
+                      {item.productName} - {item.quantity} x ${item.price}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         ))
       ) : (
