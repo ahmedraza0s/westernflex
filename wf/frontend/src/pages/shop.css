@@ -1,5 +1,3 @@
-/* shop.css */
-
 .product-container {
   display: flex;
   flex-wrap: wrap;
@@ -71,36 +69,45 @@
 }
 
 .add-to-cart-btn {
-  background-color: #4caf50;
+  background-color: rgb(97, 59, 96);
   color: white;
-  padding: 10px 20px;
+  padding: 10px 15px;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease; /* Adding transition for smooth color change and transform */
 }
 
-.add-to-cart-btn:hover {
-  background-color: #45a049;
+.add-to-cart-btn:hover,
+.add-to-cart-btn:focus {
+  background-color: #783b7d; /* Adjusted color on hover/focus */
+}
+
+.add-to-cart-btn:active {
+  transform: scale(0.86); /* Adding slight downward movement and scaling inward on click */
 }
 
 .filter-navbar {
   display: flex;
   justify-content: space-around;
-  background-color:  white;
+  background-color: white;
   color: black;
   padding: 10px;
   margin-bottom: 20px;
 }
-.dropbtnn{
+
+.dropbtnn {
   background-color: white;
 }
 
-.dpprice .dropbtnn{
+.dpprice .dropbtnn {
   background-color: white;
   height: 30px;
   text-decoration: none;
   font-size: 24px;
   border: none;
 }
+
 .filter-label {
   font-size: 1.2em;
   margin-right: 20px;
@@ -110,9 +117,7 @@
   position: relative;
   display: inline-block;
 }
-.dropdown .dropbtn slide-in{
-    background-color: #ddd;
-}
+
 .dropbtn {
   color: white;
   padding: 10px;
@@ -123,7 +128,7 @@
 
 .dropbtnn:hover,
 .dropbtn:focus {
-  background-color: ;
+  background-color: #ddd;
 }
 
 .dropdown-content {
@@ -131,7 +136,7 @@
   position: absolute;
   background-color: #f1f1f1;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -235,37 +240,4 @@
   .sales-tag-text {
     font-size: 0.8em;
   }
-}
-
-/*Newly added css*/
-.add-to-cart-btn {
-  background-color: rgb(97, 59, 96);
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease; /* Adding transition for smooth color change and transform */
-}
-
-.add-to-cart-btn:hover,
-.add-to-cart-btn:focus {
-  background-color: #783b7d; /* Adjusted color on hover/focus */
-}
-
-.add-to-cart-btn:active {
-  transform: scale(0.86); /* Adding slight downward movement and scaling inward on click */
-}
-
-.add-to-cart-btn {
-  background-color: rgb(97 59 96);
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.add-to-cart-btn:hover {
-  background-color: #783b7d;
 }
