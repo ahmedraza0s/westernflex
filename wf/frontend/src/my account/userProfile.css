@@ -1,0 +1,18 @@
+.user-profile-container {
+    max-width: 60%;
+    margin: auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+    margin-top: 30px;
+}
+.editButton,.addButton ,.subButton{
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    background-color: #3f1c44;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 4px;
+}
