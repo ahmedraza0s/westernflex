@@ -31,13 +31,20 @@ const orderItemSchema = new mongoose.Schema({
  
 });
 
+const trackingSchema = new mongoose.Schema({
+  status: { type: String, required: true },
+  date: { type: Date, default: Date.now },
+});
+
 const orderSchema = new mongoose.Schema({
   orderId: { type: String, required: true },
   orderDate: { type: Date, default: Date.now },
   orderStatus: { type: String, required: true },
   items: [orderItemSchema],
   address: [orderaddress],
+  tracking: [trackingSchema],  // Track status updates
 });
+
 
 const paymentMethodSchema = new mongoose.Schema({
   paymentMethodId: { type: String, required: true },
