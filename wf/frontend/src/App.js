@@ -8,8 +8,7 @@ import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ChangeUserDetails from './my account/ChangeUserDetails';  //my account folder pages 
-import UpdateOrderPage from './my account/UpdateOrders';
-import TrackOrder from './my account/TrackOrder';
+
 import MyOrders from './my account/MyOrders';
 import UserProfile from './my account/UserProfile';
 import ProductDetails from './pages/ProductDetails';
@@ -52,8 +51,8 @@ const App = () => {
               <Route path="/cart" element={<Cart />} />
               <Route path="/User-Profile" element={<UserProfile />} />
               <Route path="/My-orders" element={<MyOrders />} />
-              <Route path="/Track-order" element={<TrackOrder />} />
-              <Route path="/Update-orders" element={<UpdateOrderPage />} />
+              
+            
               <Route path='/forget-password' element={<ForgetPassword/>}/>
               
               {/* Admin Routes */}

@@ -1,6 +1,7 @@
 // src/components/MyOrders.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './myOrders.css';
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -44,8 +45,8 @@ const MyOrders = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
-      <h2>My Orders</h2>
+    <div className='order-container'>
+      <h4>My Orders</h4>
       {orders.length > 0 ? (
         orders.map((order, index) => (
           <div key={order.orderId}>
@@ -57,7 +58,7 @@ const MyOrders = () => {
                 <p>Order Number: {order.orderId}</p>
                 <p>Order Date: {new Date(order.orderDate).toLocaleDateString()}</p>
                 <p>Order Status: {order.orderStatus}</p>
-                <button onClick={() => toggleTracking(order.orderId)}>
+                <button onClick={() => toggleTracking(order.orderId)} className='trackButton'> 
                   {showTracking[order.orderId] ? 'Hide Tracking Details' : 'Track Order'}
                 </button>
                 
