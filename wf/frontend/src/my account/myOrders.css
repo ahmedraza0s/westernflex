@@ -1,4 +1,4 @@
-.user-profile-container {
+.order-container {
     max-width: 60%;
     margin: auto;
     background-color: #fff;
@@ -9,20 +9,41 @@
 
 /* Adjust max-width and padding for smaller screens */
 @media (max-width: 768px) {
-    .user-profile-container {
+    .order-container {
         max-width: 80%;
         padding: 15px;
     }
 }
 
 @media (max-width: 480px) {
-    .user-profile-container {
+    .order-container {
         max-width: 95%;
         padding: 10px;
     }
 }
 
-.editButton, .addButton, .subButton {
+.order-container h4 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-left: -10px;
+}
+
+/* Adjust font-size for smaller screens */
+@media (max-width: 768px) {
+    .order-container h4 {
+        font-size: 2rem;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .order-container h4 {
+        font-size: 1.5rem;
+        margin-left: 0;
+    }
+}
+
+.trackButton {
     padding: 6px 10px;
     font-size: 0.9rem;
     background-color: #3f1c44;
@@ -35,14 +56,14 @@
 
 /* Adjust padding and font-size for smaller screens */
 @media (max-width: 768px) {
-    .editButton, .addButton, .subButton {
+    .trackButton {
         padding: 5px 8px;
         font-size: 0.8rem;
     }
 }
 
 @media (max-width: 480px) {
-    .editButton, .addButton, .subButton {
+    .trackButton {
         padding: 4px 6px;
         font-size: 0.7rem;
     }
