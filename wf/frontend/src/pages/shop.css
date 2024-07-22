@@ -236,3 +236,36 @@
     font-size: 0.8em;
   }
 }
+
+/*Newly added css*/
+.add-to-cart-btn {
+  background-color: rgb(97, 59, 96);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease; /* Adding transition for smooth color change and transform */
+}
+
+.add-to-cart-btn:hover,
+.add-to-cart-btn:focus {
+  background-color: #783b7d; /* Adjusted color on hover/focus */
+}
+
+.add-to-cart-btn:active {
+  transform: scale(0.86); /* Adding slight downward movement and scaling inward on click */
+}
+
+.add-to-cart-btn {
+  background-color: rgb(97 59 96);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #783b7d;
+}

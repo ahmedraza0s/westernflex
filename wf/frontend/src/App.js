@@ -27,6 +27,7 @@ import { UserProvider } from './contexts/UserContext';
 import { CartProvider } from './contexts/CartContext';
 import { AuthProvider } from './contexts/AuthContext'; // Import AuthProvider
 import ProtectedRoute from './routes/ProtectedRoute'; // Import ProtectedRoute
+import ForgetPassword from './my account/ForgetPassword';//Import The Forget Password component
 
 const App = () => {
   return (
@@ -47,6 +48,7 @@ const App = () => {
               <Route path="/admin-login" element={<AdminLogin />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/User-Profile" element={<UserProfile />} />
+              <Route path='/forget-password' element={<ForgetPassword/>}/>
               
               {/* Admin Routes */}
               <Route path="/admin" element={<ProtectedRoute element={<AdminPage />} />}>
