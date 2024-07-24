@@ -643,81 +643,60 @@ app.get('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
   const { orderId } = req.params;
 
   try {
-    const orders = await User.aggregate([
-      { $unwind: "$orders" },
-      { $match: { "orders.orderId": orderId } },
-      { $project: { orders: 1 } }
-    ]);
-
-    if (!orders.length) {
+    const user = await User.findOne({ "orders.orderId": orderId });
+    if (!user) {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    res.status(200).json({ order: orders[0].orders });
+    const order = user.orders.find(order => order.orderId === orderId);
+    if (order) {
+      const { fname, lname, username } = user; // Get user details
+      return res.status(200).json({
+        order: {
+          ...order._doc,
+          user: { fname, lname, username } // Include user details
+        }
+      });
+    }
+
+    res.status(404).json({ message: 'Order not found' });
   } catch (error) {
     console.error('Error fetching order for admin:', error);
     res.status(500).json({ message: 'Error fetching order' });
   }
 });
 
-// Fetch or Update Order for Admin
-app.route('/api/admin/orders/:orderId')
-  .get(authenticateAdmin, async (req, res) => {
-    const { orderId } = req.params;
 
-    try {
-      const orders = await User.aggregate([
-        { $unwind: "$orders" },
-        { $match: { "orders.orderId": orderId } },
-        { $project: { orders: 1 } }
-      ]);
 
-      if (!orders.length) {
-        return res.status(404).json({ message: 'Order not found' });
-      }
 
-      res.status(200).json({ order: orders[0].orders });
-    } catch (error) {
-      console.error('Error fetching order for admin:', error);
-      res.status(500).json({ message: 'Error fetching order' });
+// Update Order for Admin
+app.put('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
+  const { orderId } = req.params;
+  const { orderStatus, estimatedDelivery, orderHistory, items } = req.body;
+
+  try {
+    const user = await User.findOne({ "orders.orderId": orderId });
+    if (!user) {
+      return res.status(404).json({ message: 'Order not found' });
     }
-  })
-  .put(authenticateAdmin, async (req, res) => {
-    const { orderId } = req.params;
-    const { orderStatus, estimatedDelivery, historyStatus, historyLocation } = req.body;
 
-    try {
-      // Find the user document that contains the order
-      const user = await User.findOne({ "orders.orderId": orderId });
-
-      if (!user) {
-        return res.status(404).json({ message: 'Order not found' });
-      }
-
-      // Find the specific order within the user's orders array
-      const order = user.orders.id(orderId);
-      if (!order) {
-        return res.status(404).json({ message: 'Order not found' });
-      }
-
-      // Update order status and estimated delivery date
-      if (orderStatus) order.orderStatus = orderStatus;
-      if (estimatedDelivery) order.estimatedDelivery = new Date(estimatedDelivery);
-
-      // Add new order history entry
-      if (historyStatus && historyLocation) {
-        order.orderHistory.push({ status: historyStatus, location: historyLocation });
-      }
-
-      // Save the user document with the updated order
+    const order = user.orders.find(order => order.orderId === orderId);
+    if (order) {
+      order.orderStatus = orderStatus;
+      order.estimatedDelivery = estimatedDelivery;
+      order.items = items;
+      order.orderHistory = orderHistory;
       await user.save();
-
-      res.status(200).json({ message: 'Order updated successfully' });
-    } catch (error) {
-      console.error('Error updating order for admin:', error);
-      res.status(500).json({ message: 'Error updating order' });
+      return res.status(200).json({ message: 'Order updated successfully' });
     }
-  });
+
+    res.status(404).json({ message: 'Order not found' });
+  } catch (error) {
+    console.error('Error updating order for admin:', error);
+    res.status(500).json({ message: 'Error updating order' });
+  }
+});
+
 
 
 // Start the server
