@@ -31,8 +31,9 @@ const orderItemSchema = new mongoose.Schema({
  
 });
 
-const trackingSchema = new mongoose.Schema({
+const orderHistorySchema = new mongoose.Schema({
   status: { type: String, required: true },
+  location: { type: String, required: true },
   date: { type: Date, default: Date.now },
 });
 
@@ -42,7 +43,8 @@ const orderSchema = new mongoose.Schema({
   orderStatus: { type: String, required: true },
   items: [orderItemSchema],
   address: [orderaddress],
-  tracking: [trackingSchema],  // Track status updates
+  orderHistory: [orderHistorySchema],
+  estimatedDelivery: { type: Date } // Add estimated delivery date
 });
 
 

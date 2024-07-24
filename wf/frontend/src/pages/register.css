@@ -212,3 +212,20 @@ figure {
   width: 10%;
   height: 10%;
 }
+
+
+.phone-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.country-code {
+  font-size: 1rem;
+  color: #333;
+  margin-right: 4px;
+}
+
+.phone-input.focused {
+  padding-left: 2rem; /* Adjust this value based on the width of the country code */
+}
+

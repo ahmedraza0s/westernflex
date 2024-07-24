@@ -25,6 +25,7 @@ const RegisterPage = () => {
   const [otp, setOtp] = useState('');
   const [verificationId, setVerificationId] = useState('');
   const [showOtpInput, setShowOtpInput] = useState(false);
+  const [isPhoneFocused, setIsPhoneFocused] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -205,16 +206,21 @@ const RegisterPage = () => {
                 </div>
                 <div className="form-group">
                   <Link to="#"><img src={phoneIcon} alt="no image" className="img" /></Link>
-                  <input
-                    type="text"
-                    name="phno"
-                    id="phno"
-                    placeholder="Enter your Phone no."
-                    className="input1"
-                    value={formData.phno}
-                    onChange={handleChange}
-                    required
-                  />
+                  <div className="phone-input-container">
+                    {isPhoneFocused && <span className="country-code">+91</span>}
+                    <input
+                      type="text"
+                      name="phno"
+                      id="phno"
+                      placeholder="Enter your Phone no."
+                      className={`input1 phone-input ${isPhoneFocused ? 'focused' : ''}`}
+                      value={formData.phno}
+                      onChange={handleChange}
+                      onFocus={() => setIsPhoneFocused(true)}
+                      onBlur={() => setIsPhoneFocused(false)}
+                      required
+                    />
+                  </div>
                 </div>
                 {showOtpInput && (
                   <>
@@ -241,17 +247,15 @@ const RegisterPage = () => {
                   </div>
                 )}
                 {error && <div className="error-message">{error}</div>}
+                <div id="recaptcha-container"></div>
               </form>
             </div>
             <div className="signup-image">
-              <figure>
-                <Link to="#"><img src={registerIcon} alt="sign up" /></Link>
-              </figure>
+              <figure><img src={registerIcon} alt="register" /></figure>
               <Link to="/login" className="signup-image-link">I am already member</Link>
             </div>
           </div>
         </div>
-        <div id="recaptcha-container"></div>
       </section>
     </div>
   );
