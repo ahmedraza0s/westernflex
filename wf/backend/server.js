@@ -599,6 +599,127 @@ app.get('/api/orders', async (req, res) => {
 });
 
 
+
+// Middleware for authenticating admins
+const authenticateAdmin = async (req, res, next) => {
+  const token = req.headers['authorization'];
+  if (!token) {
+    return res.status(401).json({ error: 'Access denied. No token provided.' });
+  }
+
+  try {
+    const decoded = jwt.verify(token.split(' ')[1], secretKey);
+    if (!decoded.isAdmin) {
+      return res.status(403).json({ error: 'Not authorized' });
+    }
+
+    req.user = await User.findOne({ username: decoded.username });
+    next();
+  } catch (error) {
+    console.error('Error authenticating admin:', error);
+    res.status(401).json({ error: 'Failed to authenticate token' });
+  }
+};
+
+// Fetch Order for User
+app.get('/api/orders/:orderId', authenticateUser, async (req, res) => {
+  const { orderId } = req.params;
+  
+  try {
+    const order = req.user.orders.find(order => order.orderId === orderId);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+    
+    res.status(200).json({ order });
+  } catch (error) {
+    console.error('Error fetching order:', error);
+    res.status(500).json({ message: 'Error fetching order' });
+  }
+});
+
+// Fetch Order for Admin
+app.get('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
+  const { orderId } = req.params;
+
+  try {
+    const orders = await User.aggregate([
+      { $unwind: "$orders" },
+      { $match: { "orders.orderId": orderId } },
+      { $project: { orders: 1 } }
+    ]);
+
+    if (!orders.length) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.status(200).json({ order: orders[0].orders });
+  } catch (error) {
+    console.error('Error fetching order for admin:', error);
+    res.status(500).json({ message: 'Error fetching order' });
+  }
+});
+
+// Fetch or Update Order for Admin
+app.route('/api/admin/orders/:orderId')
+  .get(authenticateAdmin, async (req, res) => {
+    const { orderId } = req.params;
+
+    try {
+      const orders = await User.aggregate([
+        { $unwind: "$orders" },
+        { $match: { "orders.orderId": orderId } },
+        { $project: { orders: 1 } }
+      ]);
+
+      if (!orders.length) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+
+      res.status(200).json({ order: orders[0].orders });
+    } catch (error) {
+      console.error('Error fetching order for admin:', error);
+      res.status(500).json({ message: 'Error fetching order' });
+    }
+  })
+  .put(authenticateAdmin, async (req, res) => {
+    const { orderId } = req.params;
+    const { orderStatus, estimatedDelivery, historyStatus, historyLocation } = req.body;
+
+    try {
+      // Find the user document that contains the order
+      const user = await User.findOne({ "orders.orderId": orderId });
+
+      if (!user) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+
+      // Find the specific order within the user's orders array
+      const order = user.orders.id(orderId);
+      if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+
+      // Update order status and estimated delivery date
+      if (orderStatus) order.orderStatus = orderStatus;
+      if (estimatedDelivery) order.estimatedDelivery = new Date(estimatedDelivery);
+
+      // Add new order history entry
+      if (historyStatus && historyLocation) {
+        order.orderHistory.push({ status: historyStatus, location: historyLocation });
+      }
+
+      // Save the user document with the updated order
+      await user.save();
+
+      res.status(200).json({ message: 'Order updated successfully' });
+    } catch (error) {
+      console.error('Error updating order for admin:', error);
+      res.status(500).json({ message: 'Error updating order' });
+    }
+  });
+
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

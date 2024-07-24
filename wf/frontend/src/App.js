@@ -7,16 +7,16 @@ import Home from './pages/Home';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import ChangeUserDetails from './my account/ChangeUserDetails';  //my account folder pages 
-
+import ChangeUserDetails from './my account/ChangeUserDetails';  // my account folder pages 
 import MyOrders from './my account/MyOrders';
 import UserProfile from './my account/UserProfile';
 import ProductDetails from './pages/ProductDetails';
 import AdminLogin from './admin/AdminLogin';
-import AdminPage from './admin/AdminPage'; // Import the AdminPage component
+import AdminPage from './admin/AdminPage'; // import the AdminPage component
+import UpdateOrder from './admin/UpdateOrder';
 import UpdateRank from './admin/UpdateRank';
 import AddImageToProduct from './admin/AddImageToProduct';
-import AdminRegister from './admin/AdminRegister'
+import AdminRegister from './admin/AdminRegister';
 import ProductList from './admin/ProductList';
 import Cart from './pages/Cart'; // Import the Cart component
 import UploadProduct from './admin/UploadProduct';
@@ -29,7 +29,9 @@ import { UserProvider } from './contexts/UserContext';
 import { CartProvider } from './contexts/CartContext';
 import { AuthProvider } from './contexts/AuthContext'; // Import AuthProvider
 import ProtectedRoute from './routes/ProtectedRoute'; // Import ProtectedRoute
+import Account from './my account/Account';
 import ForgetPassword from './my account/ForgetPassword';//Import The Forget Password component
+import loaduser from './my account/loaduser';//Import The Forget Password component
 
 const App = () => {
   return (
@@ -49,11 +51,11 @@ const App = () => {
               <Route path="/product/:title" element={<ProductDetails />} />
               <Route path="/admin-login" element={<AdminLogin />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/account/*" element={<Account />} />
               <Route path="/User-Profile" element={<UserProfile />} />
               <Route path="/My-orders" element={<MyOrders />} />
-              
-            
               <Route path='/forget-password' element={<ForgetPassword/>}/>
+              <Route path='/loaduser' element={<loaduser/>}/>
               
               {/* Admin Routes */}
               <Route path="/admin" element={<ProtectedRoute element={<AdminPage />} />}>
@@ -67,6 +69,7 @@ const App = () => {
                 <Route path="upload-product" element={<UploadProduct />} />
                 <Route path="update-product" element={<UpdateProduct />} />
                 <Route path="update-Metadata" element={<UpdateRank />} />
+                <Route path="update-order" element={<UpdateOrder />} />
               </Route>
             </Routes>
           </Router>
