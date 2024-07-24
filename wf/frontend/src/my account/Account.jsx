@@ -32,9 +32,9 @@ const Account = () => {
           <Route path="/UserProfile" element={<UserProfile />} />
           <Route path="/changeuser" element={<ChangeUserDetails />} />
           <Route path="/myorder" element={<MyOrders />} /> {/* Add MyOrders route */}
-          <Route path="/account/ForgetPassword" element={<ForgetPassword />} /> {/* Route for ForgetPassword */}
+          <Route path="/forget-password" element={<ForgetPassword />} /> {/* Route for ForgetPassword */}
           <Route path="/loaduser" element={<Loaduser />} /> {/* Add MyOrders route */}
-          <Route path="/account/forget-password" element={<ForgetPassword />} /> {/* Route for ForgetPassword */}
+          
 
           {/* Add other routes here as needed */}
         </Routes>
