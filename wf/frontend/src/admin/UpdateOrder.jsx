@@ -5,6 +5,7 @@ const UpdateOrder = () => {
   const [orderId, setOrderId] = useState('');
   const [orderDetails, setOrderDetails] = useState({
     orderStatus: '',
+    orderDate: '', // Add orderDate to state
     estimatedDelivery: '',
     items: [],
     orderHistory: [],
@@ -25,14 +26,20 @@ const UpdateOrder = () => {
               Authorization: `Bearer ${token}`,
             },
           });
-          const { orderStatus, estimatedDelivery, orderHistory, items, user } = response.data.order;
-          setOrderDetails({
-            orderStatus,
-            estimatedDelivery: estimatedDelivery ? new Date(estimatedDelivery).toISOString().split('T')[0] : '',
-            items: items || [],
-            orderHistory: orderHistory || [],
-            user: user || { fname: '', lname: '', username: '' } // Default user details
-          });
+
+          if (response.data.order) {
+            const { orderStatus, orderDate, estimatedDelivery, orderHistory, items, user } = response.data.order;
+            setOrderDetails({
+              orderStatus,
+              orderDate: orderDate ? new Date(orderDate).toISOString().split('T')[0] : '',
+              estimatedDelivery: estimatedDelivery ? new Date(estimatedDelivery).toISOString().split('T')[0] : '',
+              items: items || [],
+              orderHistory: orderHistory || [],
+              user: user || { fname: '', lname: '', username: '' } // Default user details
+            });
+          } else {
+            alert('Order not found.');
+          }
         } catch (error) {
           console.error('Error fetching order details:', error);
           alert('Order not found or an error occurred.');
@@ -110,7 +117,7 @@ const UpdateOrder = () => {
               onChange={handleInputChange}
             />
           </p>
-          <p><strong>Order Date:</strong> {new Date(orderDetails.orderDate).toLocaleDateString()}</p>
+          <p><strong>Order Date:</strong> {orderDetails.orderDate ? new Date(orderDetails.orderDate).toLocaleDateString() : ''}</p>
           <p><strong>Estimated Delivery Date:</strong>
             <input
               type="date"
@@ -138,7 +145,7 @@ const UpdateOrder = () => {
               <li key={index}>
                 <p><strong>Status:</strong> {history.status}</p>
                 <p><strong>Location:</strong> {history.location}</p>
-                <p><strong>Date:</strong> {new Date(history.date).toLocaleDateString()}</p>
+                <p><strong>Date:</strong> {history.date ? new Date(history.date).toLocaleDateString() : ''}</p>
               </li>
             ))}
           </ul>
