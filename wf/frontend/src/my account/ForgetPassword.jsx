@@ -1,7 +1,7 @@
 import React from 'react';
 import './forgetPassword.css';
 
-const ChangePassword = () => {
+const ForgetPassword = () => {
     return (
         <div className="page-container">
             <div className="containerPass">
@@ -29,4 +29,4 @@ const ChangePassword = () => {
     );
 };
 
-export default ChangePassword;
+export default ForgetPassword;
