@@ -1,7 +1,16 @@
+.product-details-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .product-details-container {
   display: flex;
   flex-wrap: wrap;
   padding: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 50px; /* Added margin-bottom to separate from reviews section */
 }
 
 .image-gallery {
@@ -179,4 +188,42 @@
 
 .color-thumbnail:hover {
   border: 2px solid rgb(97 59 96);
+}
+
+.reviews-section {
+  width: 50%; /* Ensure the reviews section takes full width */
+  padding: 20px;
+  margin-right: 600px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #ddd;
+  max-width: 1200px;
+}
+
+.review-form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.review-form label {
+  margin-bottom: 10px;
+}
+
+.review-form textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.review {
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+.review-rating .star {
+  color: #ddd;
+}
+
+.review-rating .star.filled {
+  color: #f39c12;
 }
