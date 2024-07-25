@@ -710,6 +710,33 @@ app.get('/api/admin/users-orders', authenticateAdmin, async (req, res) => {
 });
 
 
+// Change Password Route
+app.post('/api/change-password', authenticateUser, async (req, res) => {
+  const { oldPassword, newPassword, confirmPassword } = req.body;
+
+  if (newPassword !== confirmPassword) {
+    return res.status(400).json({ error: 'New passwords do not match' });
+  }
+
+  try {
+    const user = req.user;
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Old password is incorrect' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({ message: 'Password changed successfully' });
+  } catch (error) {
+    console.error('Error changing password:', error);
+    res.status(500).json({ error: 'Error changing password' });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
