@@ -1,4 +1,3 @@
-// src/components/MyOrders.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './myOrders.css';
@@ -9,6 +8,9 @@ const MyOrders = () => {
   const [showTracking, setShowTracking] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Filter state
+  const [statusFilter, setStatusFilter] = useState('All');
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -41,14 +43,36 @@ const MyOrders = () => {
     }));
   };
 
+  // Handle filter changes
+  const handleFilterChange = (e) => {
+    setStatusFilter(e.target.value);
+  };
+
+  // Apply status filter to orders
+  const filteredOrders = orders.filter(order => {
+    return statusFilter === 'All' || order.orderStatus.toLowerCase() === statusFilter.toLowerCase();
+  });
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <div className='order-container'>
       <h4>My Orders</h4>
-      {orders.length > 0 ? (
-        orders.map((order, index) => {
+
+      {/* Filter options */}
+      <div className='filter-options'>
+        <label>Filter by Status: </label>
+        <select name="status" value={statusFilter} onChange={handleFilterChange}>
+          <option value="All">All</option>
+          <option value="pending">Pending</option>
+          <option value="delivered">Delivered</option>
+          <option value="shipped">Shipped</option>
+        </select>
+      </div>
+
+      {filteredOrders.length > 0 ? (
+        filteredOrders.map((order, index) => {
           const isDelivered = order.orderHistory.some(
             (history) => history.status.toLowerCase() === 'delivered'
           );
