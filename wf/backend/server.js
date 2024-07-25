@@ -707,9 +707,7 @@ app.get('/api/admin/users-orders', authenticateAdmin, async (req, res) => {
     console.error('Error fetching users and their orders:', error);
     res.status(500).json({ message: 'Error fetching users and their orders' });
   }
-});
-
-
+})
 // Change Password Route
 app.post('/api/change-password', authenticateUser, async (req, res) => {
   const { oldPassword, newPassword, confirmPassword } = req.body;
