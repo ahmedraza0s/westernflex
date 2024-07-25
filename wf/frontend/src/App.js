@@ -13,6 +13,7 @@ import UserProfile from './my account/UserProfile';
 import ProductDetails from './pages/ProductDetails';
 import AdminLogin from './admin/AdminLogin';
 import AdminPage from './admin/AdminPage'; // import the AdminPage component
+import UserOrders from './admin/UserOrders';
 import UpdateOrder from './admin/UpdateOrder';
 import UpdateRank from './admin/UpdateRank';
 import AddImageToProduct from './admin/AddImageToProduct';
@@ -70,6 +71,7 @@ const App = () => {
                 <Route path="update-product" element={<UpdateProduct />} />
                 <Route path="update-Metadata" element={<UpdateRank />} />
                 <Route path="update-order" element={<UpdateOrder />} />
+                <Route path="user-order" element={<UserOrders />} />
               </Route>
             </Routes>
           </Router>

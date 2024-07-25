@@ -1,0 +1,69 @@
+/* userorder.css */
+
+.admin-user-orders-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .admin-user-orders-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .admin-user-orders-container .filter-options {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .admin-user-orders-container .filter-options label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .admin-user-orders-container .filter-options select {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .admin-user-orders-container ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .admin-user-orders-container li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    padding: 15px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  .admin-user-orders-container p {
+    margin: 5px 0;
+    color: #555;
+  }
+  
+  .admin-user-orders-container p strong {
+    color: #333;
+  }
+  
+  .admin-user-orders-container ul ul {
+    padding-left: 20px;
+    border-left: 2px solid #ddd;
+    margin-top: 10px;
+  }
+  
+  .admin-user-orders-container ul ul li {
+    background-color: #f1f1f1;
+    border: none;
+    box-shadow: none;
+  }
+  
