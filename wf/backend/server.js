@@ -698,6 +698,17 @@ app.put('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
 });
 
 
+// Get all users and their orders (Admin)
+app.get('/api/admin/users-orders', authenticateAdmin, async (req, res) => {
+  try {
+    const users = await User.find({}, 'fname lname username orders');
+    res.status(200).json({ users });
+  } catch (error) {
+    console.error('Error fetching users and their orders:', error);
+    res.status(500).json({ message: 'Error fetching users and their orders' });
+  }
+});
+
 
 // Start the server
 app.listen(port, () => {
