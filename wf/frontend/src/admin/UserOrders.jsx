@@ -60,12 +60,12 @@ const UserOrders = () => {
     <div className="admin-user-orders-container">
       <h2>All Users' Orders</h2>
       <div className="filter-options">
-        <label>Filter by Status: </label>
+        <label>Filter by Status: </label>                                      
         <select value={filter} onChange={handleFilterChange}>
           <option value="All">All</option>
-          <option value="Pending">Pending</option>
-          <option value="Delivered">Delivered</option>
-          <option value="Shipped">Shipped</option>
+          <option value="pending">Pending</option>
+          <option value="delivered">Delivered</option>
+          <option value="shipped">Shipped</option>
         </select>
       </div>
       {filteredAndSortedUsers.length === 0 ? (
