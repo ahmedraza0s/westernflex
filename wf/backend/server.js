@@ -710,10 +710,10 @@ app.put('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
 });
 
 
-// Get all users and their orders (Admin)
+// Get all users and their orders (Admin)  manage users also 
 app.get('/api/admin/users-orders', authenticateAdmin, async (req, res) => {
   try {
-    const users = await User.find({}, 'fname lname username orders');
+    const users = await User.find({}, 'fname lname username orders phno addresses');
     res.status(200).json({ users });
   } catch (error) {
     console.error('Error fetching users and their orders:', error);
