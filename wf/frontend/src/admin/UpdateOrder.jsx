@@ -57,6 +57,10 @@ const UpdateOrder = () => {
     setOrderDetails({ ...orderDetails, [name]: value });
   };
 
+  const handleStatusChange = (e) => {
+    setOrderDetails({ ...orderDetails, orderStatus: e.target.value });
+  };
+
   const handleHistoryChange = (e) => {
     const { name, value } = e.target;
     setNewHistoryEntry({ ...newHistoryEntry, [name]: value });
@@ -115,12 +119,16 @@ const UpdateOrder = () => {
           <h3>Order Details</h3>
           <p><strong>Order ID:</strong> {orderId}</p>
           <p><strong>Status:</strong>
-            <input
-              type="text"
+            <select
               name="orderStatus"
               value={orderDetails.orderStatus}
-              onChange={handleInputChange}
-            />
+              onChange={handleStatusChange}
+            >
+              <option value="">Select Status</option>
+              <option value="pending">Pending</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+            </select>
           </p>
           <p><strong>Order Date:</strong> {orderDetails.orderDate ? new Date(orderDetails.orderDate).toLocaleDateString() : ''}</p>
           <p><strong>Estimated Delivery Date:</strong>
