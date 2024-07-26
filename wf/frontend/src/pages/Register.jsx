@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './register.css';
 import nameIcon from '../components/assets/name.png';
 import loginIcon from '../components/assets/loginuser.png';
 import passIcon from '../components/assets/password.png';
-import repassIcon from '../components/assets/password.png';
 import emailIcon from '../components/assets/email.png';
 import registerIcon from '../components/assets/registeruser.png';
 import phoneIcon from '../components/assets/phoneCall.png';
-import { auth } from '../firebase';
-import firebase from 'firebase/compat/app';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -22,30 +19,8 @@ const RegisterPage = () => {
     phno: ''
   });
   const [error, setError] = useState('');
-  const [otp, setOtp] = useState('');
-  const [verificationId, setVerificationId] = useState('');
-  const [showOtpInput, setShowOtpInput] = useState(false);
-  const [isPhoneFocused, setIsPhoneFocused] = useState(false);
+  const [errorField, setErrorField] = useState('');
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const loadRecaptcha = () => {
-      if (!window.recaptchaVerifier) {
-        const recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-          size: 'invisible',
-          callback: (response) => {
-            console.log('Recaptcha verified', response);
-          },
-          'expired-callback': () => {
-            console.log('Recaptcha expired');
-          }
-        });
-        window.recaptchaVerifier = recaptchaVerifier;
-      }
-    };
-
-    loadRecaptcha();
-  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -54,45 +29,17 @@ const RegisterPage = () => {
     });
   };
 
-  const handleSendOtp = async (e) => {
+  const validatePhoneNumber = (phno) => {
+    return phno.length === 10;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (formData.password !== formData.re_pass) {
-      setError("Passwords do not match");
+    if (!validatePhoneNumber(formData.phno)) {
+      setError('Phone number must be 10 digits');
+      setErrorField('phno');
       return;
     }
-    if (!formData.username || !formData.password || !formData.email || !formData.fname || !formData.phno) {
-      setError("All fields are required");
-      return;
-    }
-
-    try {
-      const phoneNumber = `+${formData.phno}`; // Ensure the phone number is in the correct format
-      const confirmationResult = await auth.signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier);
-      setVerificationId(confirmationResult.verificationId);
-      setShowOtpInput(true);
-      console.log('OTP sent successfully');
-    } catch (error) {
-      console.error('Error during signInWithPhoneNumber:', error);
-      alert(`Failed to send OTP: ${error.message}`);
-    }
-  };
-
-  const handleVerifyOtp = async () => {
-    try {
-      console.log('Verifying OTP:', otp);
-      const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, otp);
-      await auth.signInWithCredential(credential);
-      console.log('Phone number verified successfully');
-      alert('Phone number verified!');
-      handleSubmit(); // Submit the form data to the server after OTP verification
-    } catch (error) {
-      console.error('Error during signInWithCredential:', error);
-      alert(`Failed to verify OTP: ${error.message}`);
-    }
-  };
-
-  const handleSubmit = async () => {
     try {
       const response = await fetch('/api/register', {
         method: 'POST',
@@ -101,16 +48,17 @@ const RegisterPage = () => {
         },
         body: JSON.stringify(formData)
       });
+
       const data = await response.json();
       if (response.ok) {
-        alert('Registration successful! Please log in.');
-        navigate('/login'); // Navigate to the login page
+        alert('Registration successful! Redirecting to login...');
+        setTimeout(() => {
+          navigate('/login');
+        }, 3000);
       } else {
-        if (response.status === 400 && data.message === 'Username already exists') {
-          setError('Username already exists');
-        } else {
-          setError(`Registration failed: ${data.message}`);
-        }
+        setError(data.message);
+        setErrorField(data.field);
+        alert(data.message);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -125,129 +73,95 @@ const RegisterPage = () => {
           <div className="signup-content">
             <div className="signup-form">
               <h2 className="form-title">Sign up</h2>
-              <form method="post" className="register-form" id="register-form" onSubmit={handleSendOtp}>
+              <form method="post" className="register-form" id="register-form" onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <Link to="#"><img src={nameIcon} alt="no image" className="img" /></Link>
+                  <Link to="#"><img src={nameIcon} alt="icon" className="img" /></Link>
                   <input
                     type="text"
                     name="fname"
                     id="fname"
                     placeholder="First Name"
-                    className="input1"
+                    className={`input1 ${errorField === 'fname' ? 'error-input' : ''}`}
                     value={formData.fname}
                     onChange={handleChange}
-                    required
                   />
                 </div>
                 <div className="form-group">
-                  <Link to="#"><img src={nameIcon} alt="no image" className="img" /></Link>
+                  <Link to="#"><img src={nameIcon} alt="icon" className="img" /></Link>
                   <input
                     type="text"
                     name="lname"
                     id="lname"
                     placeholder="Last Name"
-                    className="input1"
+                    className={`input1 ${errorField === 'lname' ? 'error-input' : ''}`}
                     value={formData.lname}
                     onChange={handleChange}
-                    required
                   />
                 </div>
                 <div className="form-group">
-                  <Link to="#"><img src={loginIcon} alt="no image" className="img" /></Link>
+                  <Link to="#"><img src={loginIcon} alt="icon" className="img" /></Link>
                   <input
                     type="text"
                     name="username"
                     id="username"
                     placeholder="Enter your Username"
-                    className="input1"
+                    className={`input1 ${errorField === 'username' ? 'error-input' : ''}`}
                     value={formData.username}
                     onChange={handleChange}
-                    required
                   />
                 </div>
                 <div className="form-group">
-                  <Link to="#"><img src={passIcon} alt="no image" className="img" /></Link>
+                  <Link to="#"><img src={passIcon} alt="icon" className="img" /></Link>
                   <input
                     type="password"
                     name="password"
                     id="password"
                     placeholder="Enter your Password"
-                    className="input1"
+                    className={`input1 ${errorField === 'password' ? 'error-input' : ''}`}
                     value={formData.password}
                     onChange={handleChange}
-                    required
                   />
                 </div>
                 <div className="form-group">
-                  <Link to="#"><img src={repassIcon} alt="no image" className="img" /></Link>
+                  <Link to="#"><img src={passIcon} alt="icon" className="img" /></Link>
                   <input
                     type="password"
                     name="re_pass"
                     id="re_pass"
                     placeholder="Repeat your password"
-                    className="input1"
+                    className={`input1 ${errorField === 're_pass' ? 'error-input' : ''}`}
                     value={formData.re_pass}
                     onChange={handleChange}
-                    required
                   />
                 </div>
                 <div className="form-group">
-                  <Link to="#"><img src={emailIcon} alt="no image" className="img" /></Link>
+                  <Link to="#"><img src={emailIcon} alt="icon" className="img" /></Link>
                   <input
                     type="email"
                     name="email"
                     id="email"
                     placeholder="Enter your Email"
-                    className="input1"
+                    className={`input1 ${errorField === 'email' ? 'error-input' : ''}`}
                     value={formData.email}
                     onChange={handleChange}
-                    required
                   />
                 </div>
                 <div className="form-group">
-                  <Link to="#"><img src={phoneIcon} alt="no image" className="img" /></Link>
-                  <div className="phone-input-container">
-                    {isPhoneFocused && <span className="country-code">+91</span>}
-                    <input
-                      type="text"
-                      name="phno"
-                      id="phno"
-                      placeholder="Enter your Phone no."
-                      className={`input1 phone-input ${isPhoneFocused ? 'focused' : ''}`}
-                      value={formData.phno}
-                      onChange={handleChange}
-                      onFocus={() => setIsPhoneFocused(true)}
-                      onBlur={() => setIsPhoneFocused(false)}
-                      required
-                    />
-                  </div>
+                  <Link to="#"><img src={phoneIcon} alt="icon" className="img" /></Link>
+                  <input
+                    type="text"
+                    name="phno"
+                    id="phno"
+                    placeholder="Enter your Phone no."
+                    className={`input1 ${errorField === 'phno' ? 'error-input' : ''}`}
+                    value={formData.phno}
+                    onChange={handleChange}
+                  />
                 </div>
-                {showOtpInput && (
-                  <>
-                    <div className="form-group">
-                      <input
-                        type="text"
-                        name="otp"
-                        id="otp"
-                        placeholder="Enter OTP"
-                        className="input1"
-                        value={otp}
-                        onChange={(e) => setOtp(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="form-group form-button">
-                      <button type="button" onClick={handleVerifyOtp} className="form-submit">Verify OTP</button>
-                    </div>
-                  </>
-                )}
-                {!showOtpInput && (
-                  <div className="form-group form-button">
-                    <button type="submit" className="form-submit">Send OTP</button>
-                  </div>
-                )}
+                <div className="form-group form-button">
+                  <button type="submit" className="form-submit">Register</button>
+                </div>
                 {error && <div className="error-message">{error}</div>}
-                <div id="recaptcha-container"></div>
               </form>
             </div>
             <div className="signup-image">
