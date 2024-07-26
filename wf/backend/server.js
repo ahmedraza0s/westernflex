@@ -39,9 +39,23 @@ db.once('open', () => {
 // User Registration
 app.post('/api/register', async (req, res) => {
   const { fname, lname, username, password, email, phno } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const user = new User({ fname,lname, username, password: hashedPassword, email,phno });
+
   try {
+    // Check if email or phone number already exists
+    const existingUser = await User.findOne({ $or: [{ email }, { phno }] });
+
+    if (existingUser) {
+      if (existingUser.email === email) {
+        return res.status(400).send({ message: 'Email is already registered', field: 'email' });
+      }
+      if (existingUser.phno === phno) {
+        return res.status(400).send({ message: 'Phone number is already registered', field: 'phno' });
+      }
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ fname, lname, username, password: hashedPassword, email, phno });
+
     await user.save();
     res.status(201).send({ message: 'User registered successfully' });
   } catch (error) {
