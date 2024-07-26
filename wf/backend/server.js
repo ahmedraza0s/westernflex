@@ -34,29 +34,34 @@ db.once('open', () => {
 });
 
 
+
+
+// User Registration
 app.post('/api/register', async (req, res) => {
   const { fname, lname, username, password, email, phno } = req.body;
-
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = new User({ fname,lname, username, password: hashedPassword, email,phno });
   try {
-    // Check if email or phone number already exists
-    const existingUser = await User.findOne({ $or: [{ email }, { phno }] });
-
-    if (existingUser) {
-      if (existingUser.email === email) {
-        return res.status(400).send({ message: 'Email is already registered', field: 'email' });
-      }
-      if (existingUser.phno === phno) {
-        return res.status(400).send({ message: 'Phone number is already registered', field: 'phno' });
-      }
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ fname, lname, username, password: hashedPassword, email, phno });
-
     await user.save();
     res.status(201).send({ message: 'User registered successfully' });
   } catch (error) {
     res.status(500).send({ message: 'Error registering user', error });
+  }
+});
+
+// User Login
+app.post('/api/user-login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const user = await User.findOne({ username });
+    if (user && await bcrypt.compare(password, user.password)) {
+      const token = jwt.sign({ id: user._id, username: user.username }, secretKey, { expiresIn: '1h' });
+      res.status(200).json({ token });
+    } else {
+      res.status(400).send({ message: 'Invalid credentials' });
+    }
+  } catch (error) {
+    res.status(500).send({ message: 'Error logging in', error });
   }
 });
 
@@ -702,7 +707,9 @@ app.get('/api/admin/users-orders', authenticateAdmin, async (req, res) => {
     console.error('Error fetching users and their orders:', error);
     res.status(500).json({ message: 'Error fetching users and their orders' });
   }
-})
+});
+
+
 // Change Password Route
 app.post('/api/change-password', authenticateUser, async (req, res) => {
   const { oldPassword, newPassword, confirmPassword } = req.body;
