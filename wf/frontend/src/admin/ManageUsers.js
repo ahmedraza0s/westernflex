@@ -6,6 +6,7 @@ const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showOrders, setShowOrders] = useState({});
+  const [showAddresses, setShowAddresses] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
 
@@ -46,6 +47,13 @@ const ManageUsers = () => {
     }));
   };
 
+  const toggleAddressesVisibility = (username) => {
+    setShowAddresses((prevShowAddresses) => ({
+      ...prevShowAddresses,
+      [username]: !prevShowAddresses[username],
+    }));
+  };
+
   const handleSearch = () => {
     const query = searchQuery.toLowerCase();
     const filtered = users.filter(user =>
@@ -80,8 +88,8 @@ const ManageUsers = () => {
             <li key={user.username}>
               <p><strong>Name:</strong> {user.fname} {user.lname}</p>
               <p><strong>Username:</strong> {user.username}</p>
-              <p>
-                <strong>Total Orders:</strong> {user.orders.length}
+              <p><strong>Phone Number:</strong> {user.phno}</p>
+              <p><strong>Total Orders:</strong> {user.orders.length}
                 <button onClick={() => toggleOrdersVisibility(user.username)}>
                   {showOrders[user.username] ? 'Hide Orders' : 'Show Orders'}
                 </button>
@@ -92,8 +100,33 @@ const ManageUsers = () => {
                     <li key={order.orderId}>
                       <p><strong>Order ID:</strong> {order.orderId}</p>
                       <p><strong>Status:</strong> {order.orderStatus}</p>
+                      <p><strong>Order Date:</strong> {new Date(order.orderDate).toLocaleDateString()}</p>
                     </li>
                   ))}
+                </ul>
+              )}
+              <p>
+                <button onClick={() => toggleAddressesVisibility(user.username)}>
+                  {showAddresses[user.username] ? 'Hide Addresses' : 'Show Addresses'}
+                </button>
+              </p>
+              {showAddresses[user.username] && (
+                <ul>
+                  {user.addresses && user.addresses.length > 0 ? (
+                    user.addresses.map((address, index) => (
+                      <li key={index}>
+                        <p><strong>Address Line 1:</strong> {address.addressLine1}</p>
+                        {address.addressLine2 && <p><strong>Address Line 2:</strong> {address.addressLine2}</p>}
+                        <p><strong>City:</strong> {address.city}</p>
+                        <p><strong>State:</strong> {address.state}</p>
+                        <p><strong>Postal Code:</strong> {address.postalCode}</p>
+                        {address.country && <p><strong>Country:</strong> {address.country}</p>}
+                        {address.isDefault && <p><strong>Default Address</strong></p>}
+                      </li>
+                    ))
+                  ) : (
+                    <p>No addresses available.</p>
+                  )}
                 </ul>
               )}
             </li>
