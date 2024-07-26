@@ -11,7 +11,7 @@ const AdminNavbar = () => {
         <li><Link to="/admin/dashboard">Dashboard</Link></li>
         <li><Link to="/admin/products">Products</Link></li>
         <li><Link to="/admin/update-order">Update Orders</Link></li>
-        <li><Link to="/admin/users">Users</Link></li>
+        <li><Link to="/admin/manage-users">manage Users</Link></li>
         <li><Link to="/admin/upload-product">Upload Product</Link></li>
         <li><Link to="/admin/update-product">Update and add colors to Product</Link></li>
         <li><Link to="/admin/add-image">Add Image</Link></li>
