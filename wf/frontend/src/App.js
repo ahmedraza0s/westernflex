@@ -25,7 +25,7 @@ import Dashboard from './admin/Dashboard'; // Import the Dashboard component
 import UpdateProduct from './admin/UpdateProduct';
 import Products from './admin/Products'; // Import the Products component
 import Orders from './admin/Orders'; // Import the Orders component
-import Users from './admin/Users'; // Import the Users component
+import ManageUsers from './admin/ManageUsers';
 import { UserProvider } from './contexts/UserContext';
 import { CartProvider } from './contexts/CartContext';
 import { AuthProvider } from './contexts/AuthContext'; // Import AuthProvider
@@ -63,7 +63,7 @@ const App = () => {
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="products" element={<Products />} />
                 <Route path="orders" element={<Orders />} />
-                <Route path="users" element={<Users />} />
+                <Route path="manage-users" element={<ManageUsers />} />
                 <Route path="Add-Image" element={<AddImageToProduct />} />
                 <Route path="product-list" element={<ProductList />} />
                 <Route path="admin-register" element={<AdminRegister />} />

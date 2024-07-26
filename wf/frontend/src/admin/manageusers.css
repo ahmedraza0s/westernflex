@@ -1,0 +1,43 @@
+.admin-manage-users-container {
+    padding: 20px;
+  }
+  
+  .admin-manage-users-container h2 {
+    margin-bottom: 20px;
+  }
+  
+  .search-container {
+    margin-bottom: 20px;
+  }
+  
+  .search-container input {
+    padding: 5px;
+    margin-right: 10px;
+  }
+  
+  .search-container button {
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .admin-manage-users-container ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .admin-manage-users-container li {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .admin-manage-users-container p {
+    margin: 5px 0;
+  }
+  
+  .admin-manage-users-container button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
