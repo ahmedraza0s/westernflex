@@ -650,6 +650,9 @@ app.get('/api/orders/:orderId', authenticateUser, async (req, res) => {
   }
 });
 
+
+//update order page 
+// Fetch Order for Admin
 // Fetch Order for Admin
 app.get('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
   const { orderId } = req.params;
@@ -663,10 +666,14 @@ app.get('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
     const order = user.orders.find(order => order.orderId === orderId);
     if (order) {
       const { fname, lname, username } = user; // Get user details
+      // Get the first address or modify as needed
+      const orderAddress = order.address[0] || {}; 
+
       return res.status(200).json({
         order: {
           ...order._doc,
-          user: { fname, lname, username } // Include user details
+          user: { fname, lname, username }, // Include user details
+          orderAddress // Include the first address
         }
       });
     }
@@ -677,8 +684,6 @@ app.get('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
     res.status(500).json({ message: 'Error fetching order' });
   }
 });
-
-
 
 
 // Update Order for Admin
