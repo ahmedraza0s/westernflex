@@ -34,8 +34,6 @@ db.once('open', () => {
 });
 
 
-
-
 // User Registration
 app.post('/api/register', async (req, res) => {
   const { fname, lname, username, password, email, phno } = req.body;
