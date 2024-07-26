@@ -1,27 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import './home.css'; // Assuming pg1.css contains your custom styles
+import React, { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import './shop.css';
-
-const Product = ({ image, title, description, price, details, about, images }) => {
-  const { addToCart } = useCart();
-
-  return (
-    <div className="product">
-      <Link to={`/product/${title.replace(/\s+/g, '-').toLowerCase()}`} state={{ image, title, description, price, details, about, images }}>
-        <img src={image} alt={title} className="product-image" />
-      </Link>
-      <h3 className="product-title">{title}</h3>
-      <p className="product-description">{description}</p>
-      <button className="add-to-cart-btn" onClick={() => addToCart({ image, title, description, price, details, about, images })}>Add to Cart</button>
-    </div>
-  );
-};
+import './home.css';
+import offerTag from '../components/assets/offer.png'; // Import the sales tag image
 
 const Shop = () => {
+  const [products, setProducts] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0); // State to track current slide index
   const [slideInterval, setSlideInterval] = useState(null); // State to hold interval ID
+  const [selectedPriceRange, setSelectedPriceRange] = useState(null); // State for selected price range
+  const [currentPage, setCurrentPage] = useState(0); // State for current page
+  const productsPerPage = 16; // Number of products per page
+  const dropdownRef = useRef(null);
+  const { addToCart } = useCart();
 
   // Array of slide image URLs
   const slides = [
@@ -44,14 +37,113 @@ const Shop = () => {
 
   // Effect to start and stop interval
   useEffect(() => {
-    const interval = setInterval(nextSlide, 1000); // Change slide every 1 second (1000ms)
+    const interval = setInterval(nextSlide, 3000); // Change slide every 3 seconds (3000ms)
     setSlideInterval(interval); // Save interval ID to state
 
     return () => {
       clearInterval(interval); // Cleanup: Clear interval on component unmount
     };
-  }, []); // Empty dependency array ensures effect runs only on mount and unmount
-  
+  }, [currentSlide]);
+
+  // Effect to fetch products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/products');
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const renderProducts = () => {
+    const filteredProducts = products.filter(product =>
+      product.colors.some(color =>
+        [1, 2, 3].includes(color.priority) &&
+        color.images.length > 0 &&
+        (!selectedPriceRange || product.sellingPrice < selectedPriceRange)
+      )
+    );
+
+    const paginatedProducts = filteredProducts.slice(currentPage * productsPerPage, (currentPage + 1) * productsPerPage);
+
+    return (
+      <div className="product-container">
+        {paginatedProducts.map((product) =>
+          product.colors.map((color) => {
+            if ([1, 2, 3].includes(color.priority) && color.images.length > 0) {
+              const percentageDifference = Math.round(((product.listingPrice - product.sellingPrice) / product.listingPrice) * 100);
+
+              return (
+                <div className="product" key={`${product._id}-${color.color}`}>
+                  <div className="sales-tag">
+                    <img src={offerTag} alt="Sales Tag" className="sales-tag-image" />
+                    <span className="sales-tag-text">{percentageDifference}%</span>
+                  </div>
+                  <Link
+                    to={`/product/${product.name.replace(/\s+/g, '-').toLowerCase()}`}
+                    state={{
+                      image: color.images[0],
+                      title: product.name,
+                      description: product.shortDescription,
+                      listingPrice: product.listingPrice,
+                      sellingPrice: product.sellingPrice,
+                      details: product.longDescription,
+                      about: product.about,
+                      images: color.images,
+                      color: color.color,
+                      allColors: product.colors,
+                      productId: product.productId,
+                    }}
+                  >
+                    <img
+                      src={`http://localhost:5000/${color.images[0]}`}
+                      alt={product.name}
+                      className="product-image"
+                    />
+                  </Link>
+                  <h3 className="product-title">{product.name}</h3>
+                  <p className="listing-price"><s>${product.listingPrice}</s></p>
+                  <p className="product-selling-price">${product.sellingPrice}</p>
+                  <p className="percentage-difference">Save {percentageDifference}%</p>
+                  <p className="product-color">Color: {color.color}</p>
+                  <button
+                    className="add-to-cart-btn"
+                    onClick={() =>
+                      addToCart({
+                        image: `http://localhost:5000/${color.images[0]}`,
+                        title: product.name,
+                        description: product.shortDescription,
+                        listingPrice: product.listingPrice,
+                        sellingPrice: product.sellingPrice,
+                        details: product.longDescription,
+                        about: product.about,
+                        images: color.images,
+                        color: color.color,
+                        productId: product.productId,
+                      })
+                    }
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              );
+            } else {
+              return null;
+            }
+          })
+        )}
+      </div>
+    );
+  };
+
   return (
     <div>
       <section>
@@ -63,7 +155,7 @@ const Shop = () => {
                 src={slide}
                 alt={`Slide ${index}`}
                 className={index === currentSlide ? 'img active' : 'img'}
-                style={{ transform: `translateX(-${currentSlide * 180}px)` }}
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }} // Adjust to full width of slider
               />
             ))}
           </div>
@@ -81,80 +173,13 @@ const Shop = () => {
       
       <div>
         <h1>BEST SELLER PRODUCTS</h1>
-        <div className="product-container">
-          <Product
-            image="https://m.media-amazon.com/images/I/71WNjY5bRRL._AC_SX679_.jpg"
-            title="Hand bag"
-            description="BeeGreen Personalized Tote Bags for Women Initial Monogrammed Carnation Embroidered Canvas Jute Birthday Gift Bags"
-            price="599"
-            details="Size: 12'x14', Color: Red, Material: Canvas"
-            about="【VERSATILE & DURABLE WOMEN'S TOTE BAG】: This personalized tote bag is designed with convenience in mind, featuring 1 side pockets for essentials like a water bottle, inner zipper pockets for your phone, and a zipper closure to secure your items. Suitable for various occasions including the beach, weddings, work, or travel, this canvas tote is a thoughtful and practical gift option for women of all ages."
-            images={[
-              "https://m.media-amazon.com/images/I/81aXfD4KdVL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/71RnFQDRxwL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/71Gzx5sJJQL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/610qYpAOiNL._AC_SX569_.jpg"
-            ]}
-          />
-          <Product
-            image="https://m.media-amazon.com/images/I/71WNjY5bRRL._AC_SX679_.jpg"
-            title="Hand bag"
-            description="BeeGreen Personalized Tote Bags for Women Initial Monogrammed Carnation Embroidered Canvas Jute Birthday Gift Bags"
-            price="599"
-            details="Size: 12'x14', Color: Red, Material: Canvas"
-            about="【VERSATILE & DURABLE WOMEN'S TOTE BAG】: This personalized tote bag is designed with convenience in mind, featuring 1 side pockets for essentials like a water bottle, inner zipper pockets for your phone, and a zipper closure to secure your items. Suitable for various occasions including the beach, weddings, work, or travel, this canvas tote is a thoughtful and practical gift option for women of all ages."
-            images={[
-              "https://m.media-amazon.com/images/I/81aXfD4KdVL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/71RnFQDRxwL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/71Gzx5sJJQL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/610qYpAOiNL._AC_SX569_.jpg"
-            ]}
-          />
-          <Product
-            image="https://m.media-amazon.com/images/I/71WNjY5bRRL._AC_SX679_.jpg"
-            title="Hand bag"
-            description="BeeGreen Personalized Tote Bags for Women Initial Monogrammed Carnation Embroidered Canvas Jute Birthday Gift Bags"
-            price="599"
-            details="Size: 12'x14', Color: Red, Material: Canvas"
-            about="【VERSATILE & DURABLE WOMEN'S TOTE BAG】: This personalized tote bag is designed with convenience in mind, featuring 1 side pockets for essentials like a water bottle, inner zipper pockets for your phone, and a zipper closure to secure your items. Suitable for various occasions including the beach, weddings, work, or travel, this canvas tote is a thoughtful and practical gift option for women of all ages."
-            images={[
-              "https://m.media-amazon.com/images/I/81aXfD4KdVL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/71RnFQDRxwL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/71Gzx5sJJQL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/610qYpAOiNL._AC_SX569_.jpg"
-            ]}
-          />
-          <Product
-            image="https://m.media-amazon.com/images/I/71WNjY5bRRL._AC_SX679_.jpg"
-            title="Hand bag"
-            description="BeeGreen Personalized Tote Bags for Women Initial Monogrammed Carnation Embroidered Canvas Jute Birthday Gift Bags"
-            price="599"
-            details="Size: 12'x14', Color: Red, Material: Canvas"
-            about="【VERSATILE & DURABLE WOMEN'S TOTE BAG】: This personalized tote bag is designed with convenience in mind, featuring 1 side pockets for essentials like a water bottle, inner zipper pockets for your phone, and a zipper closure to secure your items. Suitable for various occasions including the beach, weddings, work, or travel, this canvas tote is a thoughtful and practical gift option for women of all ages."
-            images={[
-              "https://m.media-amazon.com/images/I/81aXfD4KdVL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/71RnFQDRxwL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/71Gzx5sJJQL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/610qYpAOiNL._AC_SX569_.jpg"
-            ]}
-          />
-          <Product
-            image="https://m.media-amazon.com/images/I/71WNjY5bRRL._AC_SX679_.jpg"
-            title="Hand bag"
-            description="BeeGreen Personalized Tote Bags for Women Initial Monogrammed Carnation Embroidered Canvas Jute Birthday Gift Bags"
-            price="599"
-            details="Size: 12'x14', Color: Red, Material: Canvas"
-            about="【VERSATILE & DURABLE WOMEN'S TOTE BAG】: This personalized tote bag is designed with convenience in mind, featuring 1 side pockets for essentials like a water bottle, inner zipper pockets for your phone, and a zipper closure to secure your items. Suitable for various occasions including the beach, weddings, work, or travel, this canvas tote is a thoughtful and practical gift option for women of all ages."
-            images={[
-              "https://m.media-amazon.com/images/I/81aXfD4KdVL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/71RnFQDRxwL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/71Gzx5sJJQL._AC_SX569_.jpg",
-              "https://m.media-amazon.com/images/I/610qYpAOiNL._AC_SX569_.jpg"
-            ]}
-          />
-          {/* Repeat for other products */}
+        {renderProducts()}
+        <div className="pagination">
+          <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>&lt;</button>
+          <div className="page-indicator">{currentPage + 1}</div>
+          <button onClick={() => handlePageChange(currentPage + 1)} disabled={(currentPage + 1) * productsPerPage >= products.length}>&gt;</button>
         </div>
-         </div>
+      </div>
     </div>
   );
 };
