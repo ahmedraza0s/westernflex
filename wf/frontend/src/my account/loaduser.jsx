@@ -1,8 +1,7 @@
-// src/components/UserProfile.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const UserProfile = () => {
+const Loaduser = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,38 +26,63 @@ const UserProfile = () => {
     fetchUserData();
   }, []);
 
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`/api/reviews/${reviewId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Remove the deleted review from the state
+      setUser(prevUser => ({
+        ...prevUser,
+        reviews: prevUser.reviews.filter(review => review.reviewId !== reviewId)
+      }));
+    } catch (err) {
+      setError(err.response ? err.response.data.error : 'Error deleting review');
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  const imageBaseURL = 'http://localhost:5000'; // Adjust to your backend's base URL
+
   return (
     <div>
-      <h1>Welcome, {user.name}</h1>
+      <h1>Welcome, {user.fname} {user.lname}</h1>
       <p>Username: {user.username}</p>
       <p>Email: {user.email}</p>
       <p>Phone Number: {user.phno}</p>
-      
-      <h2>Orders</h2>
-      {user.orders.length > 0 ? (
-        user.orders.map(order => (
-          <div key={order.orderId}>
-            <h3>Order ID: {order.orderId}</h3>
-            <p>Order Date: {new Date(order.orderDate).toLocaleDateString()}</p>
-            <p>Order Status: {order.orderStatus}</p>
-            <h4>Items</h4>
-            <ul>
-              {order.items.map(item => (
-                <li key={item.productId}>
-                  {item.productName} - {item.quantity} x ${item.price}
-                </li>
-              ))}
-            </ul>
+
+      <h2>Reviews</h2>
+      {user.reviews.length > 0 ? (
+        user.reviews.map(review => (
+          <div key={review.reviewId}>
+            <h3>Product ID: {review.productId}</h3>
+            <p>Rating: {review.rating}</p>
+            <p>Comment: {review.comment}</p>
+            {review.imageUrl && (
+              <div>
+                <img 
+                  src={`${imageBaseURL}${review.imageUrl}`} 
+                  alt={`Review for Product ID: ${review.productId}`} 
+                  style={{ maxWidth: '100%', height: 'auto' }} 
+                  onError={(e) => e.target.src = 'https://example.com/path/to/placeholder-image.jpg'} 
+                />
+              </div>
+            )}
+            <p>Review Date: {new Date(review.reviewDate).toLocaleDateString()}</p>
+            <button onClick={() => handleDeleteReview(review.reviewId)}>Delete Review</button>
           </div>
         ))
       ) : (
-        <p>No orders found.</p>
+        <p>No reviews found.</p>
       )}
     </div>
   );
 };
 
-export default UserProfile;
+export default Loaduser;
