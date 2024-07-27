@@ -60,10 +60,13 @@ const paymentMethodSchema = new mongoose.Schema({
 const reviewSchema = new mongoose.Schema({
   reviewId: { type: String, required: true },
   productId: { type: String, required: true },
+  color: { type: String},
   rating: { type: Number, required: true },
   comment: { type: String, required: true },
   reviewDate: { type: Date, default: Date.now },
+  imageUrl: { type: String },
 });
+
 
 const preferenceSchema = new mongoose.Schema({
   newsletter: { type: Boolean, default: false },

@@ -32,7 +32,7 @@ import { AuthProvider } from './contexts/AuthContext'; // Import AuthProvider
 import ProtectedRoute from './routes/ProtectedRoute'; // Import ProtectedRoute
 import Account from './my account/Account';
 import ForgetPassword from './my account/ForgetPassword';//Import The Forget Password component
-import loaduser from './my account/loaduser';//Import The Forget Password component
+import Loaduser from './my account/loaduser';//Import The Forget Password component
 
 const App = () => {
   return (
@@ -56,7 +56,7 @@ const App = () => {
               <Route path="/User-Profile" element={<UserProfile />} />
               <Route path="/My-orders" element={<MyOrders />} />
               <Route path='/forget-password' element={<ForgetPassword/>}/>
-              <Route path='/loaduser' element={<loaduser/>}/>
+              <Route path='/loaduser' element={<Loaduser/>}/>
               
               {/* Admin Routes */}
               <Route path="/admin" element={<ProtectedRoute element={<AdminPage />} />}>
