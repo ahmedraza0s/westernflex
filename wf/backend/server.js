@@ -681,6 +681,29 @@ app.get('/api/product/:productId/:color', async (req, res) => {
 });
 
 
+//fetch reviews in order page 
+// Route to get reviews for a specific product ID and color
+app.get('/api/reviews/:productId/:color', authenticateUser, async (req, res) => {
+  try {
+    const { productId, color } = req.params;
+
+    const user = await User.findOne({ username: req.user.username });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const review = user.reviews.find(review => review.productId === productId && review.color === color);
+    if (!review) {
+      return res.status(404).json({ error: 'Review not found' });
+    }
+
+    res.status(200).json(review);
+  } catch (error) {
+    console.error('Error fetching review:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 // Middleware for authenticating admins
 const authenticateAdmin = async (req, res, next) => {
