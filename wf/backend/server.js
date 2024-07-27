@@ -610,6 +610,52 @@ app.get('/api/orders', async (req, res) => {
   }
 });
 
+//to add review
+// Route to handle review submission
+app.post('/api/review', authenticateUser, upload.single('image'), async (req, res) => {
+  try {
+    const { orderId, productId, rating, comment } = req.body;
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null; // Store relative path
+
+    const user = await User.findOne({ username: req.user.username });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const order = user.orders.find(order => order.orderId === orderId);
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    const review = {
+      reviewId: new mongoose.Types.ObjectId().toString(),
+      productId,
+      rating: parseInt(rating),
+      comment,
+      reviewDate: new Date(),
+      imageUrl
+    };
+
+    user.reviews.push(review);
+    await user.save();
+
+    res.status(200).json({ message: 'Review submitted successfully', review });
+  } catch (error) {
+    console.error('Error submitting review:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Serve uploaded images
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+
 
 
 // Middleware for authenticating admins

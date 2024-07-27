@@ -8,6 +8,7 @@ const MyOrders = () => {
   const [showTracking, setShowTracking] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [reviews, setReviews] = useState({});
 
   // Filter state
   const [statusFilter, setStatusFilter] = useState('All');
@@ -43,12 +44,55 @@ const MyOrders = () => {
     }));
   };
 
-  // Handle filter changes
   const handleFilterChange = (e) => {
     setStatusFilter(e.target.value);
   };
 
-  // Apply status filter to orders
+  const handleReviewChange = (e, orderId, productId) => {
+    const { name, value, files } = e.target;
+    setReviews((prevReviews) => ({
+      ...prevReviews,
+      [orderId]: {
+        ...prevReviews[orderId],
+        [productId]: {
+          ...prevReviews[orderId]?.[productId],
+          [name]: name === 'image' ? files[0] : value,
+        },
+      },
+    }));
+  };
+
+  const handleReviewSubmit = async (orderId, productId) => {
+    const review = reviews[orderId]?.[productId] || {};
+    const formData = new FormData();
+    formData.append('rating', review.rating);
+    formData.append('comment', review.comment);
+    formData.append('image', review.image);
+    formData.append('orderId', orderId);
+    formData.append('productId', productId);
+
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post('/api/review', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      alert('Review submitted successfully');
+      setReviews((prevReviews) => ({
+        ...prevReviews,
+        [orderId]: {
+          ...prevReviews[orderId],
+          [productId]: { rating: '', comment: '', image: null },
+        },
+      }));
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert('Error submitting review');
+    }
+  };
+
   const filteredOrders = orders.filter(order => {
     return statusFilter === 'All' || order.orderStatus.toLowerCase() === statusFilter.toLowerCase();
   });
@@ -129,6 +173,44 @@ const MyOrders = () => {
                     {order.items.map(item => (
                       <li key={item.productId}>
                         {item.productName} - {item.quantity} x ${item.price}
+                        {isDelivered && (
+                          <div>
+                            <h5>Submit a Review</h5>
+                            <form onSubmit={(e) => { e.preventDefault(); handleReviewSubmit(order.orderId, item.productId); }}>
+                              <div>
+                                <label>Rating: </label>
+                                <input
+                                  type="number"
+                                  name="rating"
+                                  value={reviews[order.orderId]?.[item.productId]?.rating || ''}
+                                  onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
+                                  min="1"
+                                  max="5"
+                                  required
+                                />
+                              </div>
+                              <div>
+                                <label>Comment: </label>
+                                <textarea
+                                  name="comment"
+                                  value={reviews[order.orderId]?.[item.productId]?.comment || ''}
+                                  onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
+                                  required
+                                />
+                              </div>
+                              <div>
+                                <label>Image: </label>
+                                <input
+                                  type="file"
+                                  name="image"
+                                  onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
+                                  accept="image/*"
+                                />
+                              </div>
+                              <button type="submit">Submit Review</button>
+                            </form>
+                          </div>
+                        )}
                       </li>
                     ))}
                   </ul>
