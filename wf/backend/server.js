@@ -657,6 +657,29 @@ app.use((err, req, res, next) => {
 
 
 
+// Fetch Product Images by Product ID and Color
+app.get('/api/product/:productId/:color', async (req, res) => {
+  const { productId, color } = req.params;
+
+  try {
+    const product = await Product.findOne({ productId });
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    const colorData = product.colors.find(c => c.color === color);
+    if (!colorData) {
+      return res.status(404).json({ message: 'Color not found for this product' });
+    }
+
+    res.status(200).json(colorData.images);
+  } catch (error) {
+    console.error('Error fetching product images:', error);
+    res.status(500).json({ message: 'Error fetching product images' });
+  }
+});
+
+
 
 // Middleware for authenticating admins
 const authenticateAdmin = async (req, res, next) => {
