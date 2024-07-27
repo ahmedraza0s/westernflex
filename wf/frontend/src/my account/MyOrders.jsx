@@ -23,7 +23,6 @@ const MyOrders = () => {
           },
         });
         setOrders(response.data.orders);
-        // Fetch images for all products regardless of their status
         const newProductImages = {};
         for (const order of response.data.orders) {
           for (const item of order.items) {
@@ -52,14 +51,8 @@ const MyOrders = () => {
     }
   };
 
-  const handleOrderClick = async (orderId) => {
-    if (expandedOrderId === orderId) {
-      setExpandedOrderId(null);
-      return;
-    }
-
-    // Expand order
-    setExpandedOrderId(orderId);
+  const handleOrderClick = (orderId) => {
+    setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
   };
 
   const toggleTracking = (orderId) => {
@@ -95,7 +88,7 @@ const MyOrders = () => {
     formData.append('image', review.image);
     formData.append('orderId', orderId);
     formData.append('productId', productId);
-    formData.append('color', color); // Include color in the formData
+    formData.append('color', color);
 
     try {
       const token = localStorage.getItem('token');
@@ -119,6 +112,28 @@ const MyOrders = () => {
     }
   };
 
+  const handleCancelOrder = async (orderId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(`/api/order/cancel/${orderId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.orderId === orderId
+            ? { ...order, orderStatus: 'canceled' }
+            : order
+        )
+      );
+      alert('Order canceled successfully');
+    } catch (error) {
+      console.error('Error canceling order:', error);
+      alert('Error canceling order');
+    }
+  };
+
   const filteredOrders = orders.filter(order => {
     return statusFilter === 'All' || order.orderStatus.toLowerCase() === statusFilter.toLowerCase();
   });
@@ -130,7 +145,6 @@ const MyOrders = () => {
     <div className='order-container'>
       <h4>My Orders</h4>
 
-      {/* Filter options */}
       <div className='filter-options'>
         <label>Filter by Status: </label>
         <select name="status" value={statusFilter} onChange={handleFilterChange}>
@@ -160,6 +174,15 @@ const MyOrders = () => {
                   <button onClick={() => toggleTracking(order.orderId)} className='trackButton'>
                     {showTracking[order.orderId] ? 'Hide Tracking Details' : 'Track Order'}
                   </button>
+
+                  {order.orderStatus.toLowerCase() === 'pending' && (
+                    <button
+                      onClick={() => handleCancelOrder(order.orderId)}
+                      className='cancelButton'
+                    >
+                      Cancel Order
+                    </button>
+                  )}
 
                   {showTracking[order.orderId] && (
                     <div className='tracking-container'>
@@ -216,44 +239,48 @@ const MyOrders = () => {
                                 ...prev,
                                 [`${order.orderId}_${item.productId}`]: !prev[`${order.orderId}_${item.productId}`]
                               }))}>
-                                {showReviewForm[`${order.orderId}_${item.productId}`] ? 'Hide Review Form' : 'Submit a Review'}
+                                {showReviewForm[`${order.orderId}_${item.productId}`] ? 'Hide Review Form' : 'Write a Review'}
                               </button>
                               {showReviewForm[`${order.orderId}_${item.productId}`] && (
-                                <div>
-                                  <form onSubmit={(e) => { e.preventDefault(); handleReviewSubmit(order.orderId, item.productId, item.color); }}>
-                                    <div>
-                                      <label>Rating: </label>
-                                      <input
-                                        type="number"
-                                        name="rating"
-                                        value={reviews[order.orderId]?.[item.productId]?.rating || ''}
-                                        onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
-                                        min="1"
-                                        max="5"
-                                        required
-                                      />
-                                    </div>
-                                    <div>
-                                      <label>Comment: </label>
-                                      <textarea
-                                        name="comment"
-                                        value={reviews[order.orderId]?.[item.productId]?.comment || ''}
-                                        onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
-                                        required
-                                      />
-                                    </div>
-                                    <div>
-                                      <label>Image: </label>
-                                      <input
-                                        type="file"
-                                        name="image"
-                                        onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
-                                        accept="image/*"
-                                      />
-                                    </div>
-                                    <button type="submit">Submit Review</button>
-                                  </form>
-                                </div>
+                                <form onSubmit={(e) => {
+                                  e.preventDefault();
+                                  handleReviewSubmit(order.orderId, item.productId, item.color);
+                                }}>
+                                  <div>
+                                    <label htmlFor={`rating-${order.orderId}-${item.productId}`}>Rating:</label>
+                                    <input
+                                      type='number'
+                                      id={`rating-${order.orderId}-${item.productId}`}
+                                      name='rating'
+                                      value={reviews[order.orderId]?.[item.productId]?.rating || ''}
+                                      onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
+                                      min='1'
+                                      max='5'
+                                      required
+                                    />
+                                  </div>
+                                  <div>
+                                    <label htmlFor={`comment-${order.orderId}-${item.productId}`}>Comment:</label>
+                                    <textarea
+                                      id={`comment-${order.orderId}-${item.productId}`}
+                                      name='comment'
+                                      value={reviews[order.orderId]?.[item.productId]?.comment || ''}
+                                      onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
+                                      required
+                                    ></textarea>
+                                  </div>
+                                  <div>
+                                    <label htmlFor={`image-${order.orderId}-${item.productId}`}>Image:</label>
+                                    <input
+                                      type='file'
+                                      id={`image-${order.orderId}-${item.productId}`}
+                                      name='image'
+                                      onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
+                                      accept='image/*'
+                                    />
+                                  </div>
+                                  <button type='submit'>Submit Review</button>
+                                </form>
                               )}
                             </div>
                           )}
@@ -267,7 +294,7 @@ const MyOrders = () => {
           );
         })
       ) : (
-        <p>No orders found</p>
+        <p>No orders found.</p>
       )}
     </div>
   );
