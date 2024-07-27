@@ -247,22 +247,22 @@ const MyOrders = () => {
                                   handleReviewSubmit(order.orderId, item.productId, item.color);
                                 }}>
                                   <div>
-                                    <label htmlFor={`rating-${order.orderId}-${item.productId}`}>Rating:</label>
+                                    <label htmlFor={`rating_${order.orderId}_${item.productId}`}>Rating:</label>
                                     <input
                                       type='number'
-                                      id={`rating-${order.orderId}-${item.productId}`}
+                                      id={`rating_${order.orderId}_${item.productId}`}
                                       name='rating'
-                                      value={reviews[order.orderId]?.[item.productId]?.rating || ''}
-                                      onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
                                       min='1'
                                       max='5'
+                                      value={reviews[order.orderId]?.[item.productId]?.rating || ''}
+                                      onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
                                       required
                                     />
                                   </div>
                                   <div>
-                                    <label htmlFor={`comment-${order.orderId}-${item.productId}`}>Comment:</label>
+                                    <label htmlFor={`comment_${order.orderId}_${item.productId}`}>Comment:</label>
                                     <textarea
-                                      id={`comment-${order.orderId}-${item.productId}`}
+                                      id={`comment_${order.orderId}_${item.productId}`}
                                       name='comment'
                                       value={reviews[order.orderId]?.[item.productId]?.comment || ''}
                                       onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
@@ -270,13 +270,12 @@ const MyOrders = () => {
                                     ></textarea>
                                   </div>
                                   <div>
-                                    <label htmlFor={`image-${order.orderId}-${item.productId}`}>Image:</label>
+                                    <label htmlFor={`image_${order.orderId}_${item.productId}`}>Image:</label>
                                     <input
                                       type='file'
-                                      id={`image-${order.orderId}-${item.productId}`}
+                                      id={`image_${order.orderId}_${item.productId}`}
                                       name='image'
                                       onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
-                                      accept='image/*'
                                     />
                                   </div>
                                   <button type='submit'>Submit Review</button>

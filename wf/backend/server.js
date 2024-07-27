@@ -724,6 +724,35 @@ app.delete('/api/reviews/:reviewId', async (req, res) => {
   }
 });
 
+// Cancel an order
+app.post('/api/order/cancel/:orderId', authenticateUser, async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const user = await User.findOne({ username: req.user.username });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const order = user.orders.find(order => order.orderId === orderId);
+
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    if (order.orderStatus.toLowerCase() !== 'pending') {
+      return res.status(400).json({ error: 'Only pending orders can be canceled' });
+    }
+
+    order.orderStatus = 'canceled';
+    await user.save();
+
+    res.status(200).json({ message: 'Order canceled successfully', order });
+  } catch (error) {
+    console.error('Error canceling order:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 // Middleware for authenticating admins
