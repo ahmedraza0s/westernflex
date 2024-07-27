@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './productDetails.css';
 import { useCart } from '../contexts/CartContext';
@@ -7,15 +7,33 @@ import offerTag from '../components/assets/offer.png';
 const ProductDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { image, title, description, listingPrice, sellingPrice, details, about, images, color, allColors, productId } = location.state;
   const { addToCart } = useCart();
-  const [mainImage, setMainImage] = useState(`http://localhost:5000/${image}`);
-  const [selectedColorImages, setSelectedColorImages] = useState(images);
-  const [selectedColor, setSelectedColor] = useState(color);
+  
+  // Ensure hooks are called unconditionally
+  const [mainImage, setMainImage] = useState('');
+  const [selectedColorImages, setSelectedColorImages] = useState([]);
+  const [selectedColor, setSelectedColor] = useState('');
   const [reviews, setReviews] = useState([]);
   const [reviewText, setReviewText] = useState('');
   const [rating, setRating] = useState(0);
   const [reviewImage, setReviewImage] = useState(null);
+
+  useEffect(() => {
+    if (!location.state) {
+      navigate('/'); // Redirect to home page or any other fallback page
+    } else {
+      const { image, images, color } = location.state;
+      setMainImage(`http://localhost:5000/${image}`);
+      setSelectedColorImages(images);
+      setSelectedColor(color);
+    }
+  }, [location.state, navigate]);
+
+  if (!location.state) {
+    return null; // Render nothing while redirecting
+  }
+
+  const { image, title, description, listingPrice, sellingPrice, details, about, allColors, productId } = location.state;
 
   const handleAddToCart = () => {
     addToCart({
