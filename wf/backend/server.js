@@ -681,28 +681,49 @@ app.get('/api/product/:productId/:color', async (req, res) => {
 });
 
 
-//fetch reviews in order page 
-// Route to get reviews for a specific product ID and color
-app.get('/api/reviews/:productId/:color', authenticateUser, async (req, res) => {
+//delete review 
+// Route to delete a review
+app.delete('/api/reviews/:reviewId', async (req, res) => {
   try {
-    const { productId, color } = req.params;
+    const { reviewId } = req.params;
 
-    const user = await User.findOne({ username: req.user.username });
+    // Find the user with the review
+    const user = await User.findOne({ 'reviews.reviewId': reviewId });
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).send({ error: 'Review not found' });
     }
 
-    const review = user.reviews.find(review => review.productId === productId && review.color === color);
-    if (!review) {
-      return res.status(404).json({ error: 'Review not found' });
+    // Get the review
+    const review = user.reviews.find(r => r.reviewId === reviewId);
+
+    // If there is an image URL, delete the image from the server
+    if (review.imageUrl) {
+      const imagePath = path.join(__dirname, 'uploads', path.basename(review.imageUrl)); // Ensure only the filename is used
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error('Error deleting image:', err);
+          return res.status(500).send({ error: 'Failed to delete image' });
+        }
+      });
     }
 
-    res.status(200).json(review);
-  } catch (error) {
-    console.error('Error fetching review:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    // Remove the review from the user's reviews array
+    const result = await User.updateOne(
+      { 'reviews.reviewId': reviewId },
+      { $pull: { reviews: { reviewId: reviewId } } }
+    );
+
+    if (result.nModified === 0) {
+      return res.status(404).send({ error: 'Review not found' });
+    }
+
+    res.send({ message: 'Review deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ error: 'Server error' });
   }
 });
+
 
 
 // Middleware for authenticating admins
@@ -846,6 +867,8 @@ app.post('/api/change-password', authenticateUser, async (req, res) => {
     res.status(500).json({ error: 'Error changing password' });
   }
 });
+
+
 
 // Start the server
 app.listen(port, () => {
