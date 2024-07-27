@@ -614,7 +614,7 @@ app.get('/api/orders', async (req, res) => {
 // Route to handle review submission
 app.post('/api/review', authenticateUser, upload.single('image'), async (req, res) => {
   try {
-    const { orderId, productId, rating, comment } = req.body;
+    const { orderId, productId, rating, comment ,color} = req.body;
     const imageUrl = req.file ? `/uploads/${req.file.filename}` : null; // Store relative path
 
     const user = await User.findOne({ username: req.user.username });
@@ -630,6 +630,7 @@ app.post('/api/review', authenticateUser, upload.single('image'), async (req, re
     const review = {
       reviewId: new mongoose.Types.ObjectId().toString(),
       productId,
+      color,
       rating: parseInt(rating),
       comment,
       reviewDate: new Date(),

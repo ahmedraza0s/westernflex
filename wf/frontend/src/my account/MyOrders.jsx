@@ -87,7 +87,7 @@ const MyOrders = () => {
     }));
   };
 
-  const handleReviewSubmit = async (orderId, productId) => {
+  const handleReviewSubmit = async (orderId, productId, color) => {
     const review = reviews[orderId]?.[productId] || {};
     const formData = new FormData();
     formData.append('rating', review.rating);
@@ -95,6 +95,7 @@ const MyOrders = () => {
     formData.append('image', review.image);
     formData.append('orderId', orderId);
     formData.append('productId', productId);
+    formData.append('color', color); // Include color in the formData
 
     try {
       const token = localStorage.getItem('token');
@@ -219,7 +220,7 @@ const MyOrders = () => {
                               </button>
                               {showReviewForm[`${order.orderId}_${item.productId}`] && (
                                 <div>
-                                  <form onSubmit={(e) => { e.preventDefault(); handleReviewSubmit(order.orderId, item.productId); }}>
+                                  <form onSubmit={(e) => { e.preventDefault(); handleReviewSubmit(order.orderId, item.productId, item.color); }}>
                                     <div>
                                       <label>Rating: </label>
                                       <input
