@@ -1,130 +1,167 @@
 .order-container {
-    max-width: 60%;
-    margin: auto;
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
-    margin-top: 30px;
+  max-width: 60%;
+  margin: auto;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+  margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+  .order-container {
+    max-width: 80%;
+    padding: 15px;
   }
-  
-  /* Adjust max-width and padding for smaller screens */
-  @media (max-width: 768px) {
-    .order-container {
-      max-width: 80%;
-      padding: 15px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .order-container {
-      max-width: 95%;
-      padding: 10px;
-    }
-  }
-  
-  .order-container h4 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-left: -10px;
-  }
-  
-  /* Adjust font-size for smaller screens */
-  @media (max-width: 768px) {
-    .order-container h4 {
-      font-size: 2rem;
-      margin-left: 0;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .order-container h4 {
-      font-size: 1.5rem;
-      margin-left: 0;
-    }
-  }
-  
-  .trackButton {
-    padding: 6px 10px;
-    font-size: 0.9rem;
-    background-color: #3f1c44;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    margin-top: 10px;
-    border-radius: 4px;
-  }
-  
-  /* Adjust padding and font-size for smaller screens */
-  @media (max-width: 768px) {
-    .trackButton {
-      padding: 5px 8px;
-      font-size: 0.8rem;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .trackButton {
-      padding: 4px 6px;
-      font-size: 0.7rem;
-    }
-  }
-  
-  .tracking-container {
-    margin-top: 10px;
-  }
-  
-  .timeline {
-    position: relative;
-    margin-top: 20px;
-    padding-left: 20px;
-  }
-  
-  .timeline:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 15px;
-    width: 2px;
-    height: 100%;
-    background: #ddd;
-  }
-  
-  .timeline-item {
-    position: relative;
-    padding-left: 40px;
-    margin-bottom: 20px;
-  }
-  
-  .timeline-item:last-child {
-    margin-bottom: 0;
-  }
-  
-  .timeline-icon {
-    position: absolute;
-    left: 5px;
-    width: 20px;
-    height: 20px;
-    background: #3f1c44;
-    border-radius: 50%;
-  }
-  
-  .timeline-content {
+}
+
+@media (max-width: 480px) {
+  .order-container {
+    max-width: 95%;
     padding: 10px;
-    background: #f9f9f9;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
-  
-  .timeline-status {
-    font-weight: bold;
-    margin-bottom: 5px;
+}
+
+.order-container h4 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-left: -10px;
+}
+
+@media (max-width: 768px) {
+  .order-container h4 {
+    font-size: 2rem;
+    margin-left: 0;
   }
-  
-  .timeline-location {
-    color: #666;
+}
+
+@media (max-width: 480px) {
+  .order-container h4 {
+    font-size: 1.5rem;
+    margin-left: 0;
   }
-  
-  .timeline-content p {
-    margin: 0;
+}
+
+.filter-options {
+  margin-bottom: 20px;
+}
+
+.filter-options select {
+  margin-left: 10px;
+}
+
+.order-container h3 {
+  cursor: pointer;
+}
+
+.product-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.trackButton {
+  background-color: #3f1c44; /* Consistent color */
+  color: white;
+  padding: 10px 20px; /* Consistent padding */
+  font-size: 0.9rem; /* Consistent font-size */
+  border: none;
+  cursor: pointer;
+  border-radius: 5px; /* Consistent border-radius */
+  margin: 10px 5px; /* Consistent margin */
+}
+
+.trackButton:hover {
+  background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+  .trackButton {
+    padding: 5px 8px;
+    font-size: 0.8rem;
   }
-  
+}
+
+@media (max-width: 480px) {
+  .trackButton {
+    padding: 4px 6px;
+    font-size: 0.7rem;
+  }
+}
+
+.tracking-container {
+  margin-top: 20px;
+}
+
+.timeline {
+  position: relative;
+  margin-top: 20px;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.timeline:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 15px;
+  width: 2px;
+  height: 100%;
+  background: #ddd;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 40px;
+  margin-bottom: 20px;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-icon {
+  width: 20px;
+  height: 20px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.timeline-content {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-status {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.timeline-location {
+  color: #666;
+}
+
+.timeline-content p {
+  margin: 0;
+}
+
+.timeline-date {
+  color: gray;
+}
+
+.delivered .timeline-icon {
+  background-color: #2196F3;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px; /* Add some space between the buttons */
+}

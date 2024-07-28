@@ -34,14 +34,26 @@ db.once('open', () => {
 });
 
 
-
-
 // User Registration
 app.post('/api/register', async (req, res) => {
   const { fname, lname, username, password, email, phno } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const user = new User({ fname,lname, username, password: hashedPassword, email,phno });
+
   try {
+    // Check if email or phone number already exists
+    const existingUser = await User.findOne({ $or: [{ email }, { phno }] });
+
+    if (existingUser) {
+      if (existingUser.email === email) {
+        return res.status(400).send({ message: 'Email is already registered', field: 'email' });
+      }
+      if (existingUser.phno === phno) {
+        return res.status(400).send({ message: 'Phone number is already registered', field: 'phno' });
+      }
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ fname, lname, username, password: hashedPassword, email, phno });
+
     await user.save();
     res.status(201).send({ message: 'User registered successfully' });
   } catch (error) {
@@ -598,6 +610,149 @@ app.get('/api/orders', async (req, res) => {
   }
 });
 
+//to add review
+// Route to handle review submission
+app.post('/api/review', authenticateUser, upload.single('image'), async (req, res) => {
+  try {
+    const { orderId, productId, rating, comment ,color} = req.body;
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null; // Store relative path
+
+    const user = await User.findOne({ username: req.user.username });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const order = user.orders.find(order => order.orderId === orderId);
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    const review = {
+      reviewId: new mongoose.Types.ObjectId().toString(),
+      productId,
+      color,
+      rating: parseInt(rating),
+      comment,
+      reviewDate: new Date(),
+      imageUrl
+    };
+
+    user.reviews.push(review);
+    await user.save();
+
+    res.status(200).json({ message: 'Review submitted successfully', review });
+  } catch (error) {
+    console.error('Error submitting review:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Serve uploaded images
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+
+
+// Fetch Product Images by Product ID and Color
+app.get('/api/product/:productId/:color', async (req, res) => {
+  const { productId, color } = req.params;
+
+  try {
+    const product = await Product.findOne({ productId });
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    const colorData = product.colors.find(c => c.color === color);
+    if (!colorData) {
+      return res.status(404).json({ message: 'Color not found for this product' });
+    }
+
+    res.status(200).json(colorData.images);
+  } catch (error) {
+    console.error('Error fetching product images:', error);
+    res.status(500).json({ message: 'Error fetching product images' });
+  }
+});
+
+
+//delete review 
+// Route to delete a review
+app.delete('/api/reviews/:reviewId', async (req, res) => {
+  try {
+    const { reviewId } = req.params;
+
+    // Find the user with the review
+    const user = await User.findOne({ 'reviews.reviewId': reviewId });
+    if (!user) {
+      return res.status(404).send({ error: 'Review not found' });
+    }
+
+    // Get the review
+    const review = user.reviews.find(r => r.reviewId === reviewId);
+
+    // If there is an image URL, delete the image from the server
+    if (review.imageUrl) {
+      const imagePath = path.join(__dirname, 'uploads', path.basename(review.imageUrl)); // Ensure only the filename is used
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error('Error deleting image:', err);
+          return res.status(500).send({ error: 'Failed to delete image' });
+        }
+      });
+    }
+
+    // Remove the review from the user's reviews array
+    const result = await User.updateOne(
+      { 'reviews.reviewId': reviewId },
+      { $pull: { reviews: { reviewId: reviewId } } }
+    );
+
+    if (result.nModified === 0) {
+      return res.status(404).send({ error: 'Review not found' });
+    }
+
+    res.send({ message: 'Review deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ error: 'Server error' });
+  }
+});
+
+// Cancel an order
+app.post('/api/order/cancel/:orderId', authenticateUser, async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const user = await User.findOne({ username: req.user.username });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const order = user.orders.find(order => order.orderId === orderId);
+
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    if (order.orderStatus.toLowerCase() !== 'pending') {
+      return res.status(400).json({ error: 'Only pending orders can be canceled' });
+    }
+
+    order.orderStatus = 'canceled';
+    await user.save();
+
+    res.status(200).json({ message: 'Order canceled successfully', order });
+  } catch (error) {
+    console.error('Error canceling order:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 // Middleware for authenticating admins
@@ -638,6 +793,9 @@ app.get('/api/orders/:orderId', authenticateUser, async (req, res) => {
   }
 });
 
+
+//update order page 
+// Fetch Order for Admin
 // Fetch Order for Admin
 app.get('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
   const { orderId } = req.params;
@@ -651,10 +809,14 @@ app.get('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
     const order = user.orders.find(order => order.orderId === orderId);
     if (order) {
       const { fname, lname, username } = user; // Get user details
+      // Get the first address or modify as needed
+      const orderAddress = order.address[0] || {}; 
+
       return res.status(200).json({
         order: {
           ...order._doc,
-          user: { fname, lname, username } // Include user details
+          user: { fname, lname, username }, // Include user details
+          orderAddress // Include the first address
         }
       });
     }
@@ -665,8 +827,6 @@ app.get('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
     res.status(500).json({ message: 'Error fetching order' });
   }
 });
-
-
 
 
 // Update Order for Admin
@@ -698,16 +858,18 @@ app.put('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
 });
 
 
-// Get all users and their orders (Admin)
+// Get all users and their orders (Admin)  manage users also 
 app.get('/api/admin/users-orders', authenticateAdmin, async (req, res) => {
   try {
-    const users = await User.find({}, 'fname lname username orders');
+    const users = await User.find({}, 'fname lname username orders phno addresses');
     res.status(200).json({ users });
   } catch (error) {
     console.error('Error fetching users and their orders:', error);
     res.status(500).json({ message: 'Error fetching users and their orders' });
   }
-})
+});
+
+
 // Change Password Route
 app.post('/api/change-password', authenticateUser, async (req, res) => {
   const { oldPassword, newPassword, confirmPassword } = req.body;
@@ -734,6 +896,8 @@ app.post('/api/change-password', authenticateUser, async (req, res) => {
     res.status(500).json({ error: 'Error changing password' });
   }
 });
+
+
 
 // Start the server
 app.listen(port, () => {

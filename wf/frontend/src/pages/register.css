@@ -229,3 +229,11 @@ figure {
   padding-left: 2rem; /* Adjust this value based on the width of the country code */
 }
 
+.error-input {
+  border: 2px solid red;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}

@@ -5,11 +5,12 @@ const UpdateOrder = () => {
   const [orderId, setOrderId] = useState('');
   const [orderDetails, setOrderDetails] = useState({
     orderStatus: '',
-    orderDate: '', // Add orderDate to state
+    orderDate: '',
     estimatedDelivery: '',
     items: [],
     orderHistory: [],
-    user: { fname: '', lname: '', username: '' } // Initialize user details
+    user: { fname: '', lname: '', username: '' },
+    orderAddress: { addressline1: '', addressline2: '', city: '', state: '', postalCode: '', country: '' }
   });
   const [newHistoryEntry, setNewHistoryEntry] = useState({
     status: '',
@@ -28,14 +29,15 @@ const UpdateOrder = () => {
           });
 
           if (response.data.order) {
-            const { orderStatus, orderDate, estimatedDelivery, orderHistory, items, user } = response.data.order;
+            const { orderStatus, orderDate, estimatedDelivery, orderHistory, items, user, orderAddress } = response.data.order;
             setOrderDetails({
               orderStatus,
               orderDate: orderDate ? new Date(orderDate).toISOString().split('T')[0] : '',
               estimatedDelivery: estimatedDelivery ? new Date(estimatedDelivery).toISOString().split('T')[0] : '',
               items: items || [],
               orderHistory: orderHistory || [],
-              user: user || { fname: '', lname: '', username: '' } // Default user details
+              user: user || { fname: '', lname: '', username: '' },
+              orderAddress: orderAddress || { addressline1: '', addressline2: '', city: '', state: '', postalCode: '', country: '' }
             });
           } else {
             alert('Order not found.');
@@ -53,6 +55,10 @@ const UpdateOrder = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setOrderDetails({ ...orderDetails, [name]: value });
+  };
+
+  const handleStatusChange = (e) => {
+    setOrderDetails({ ...orderDetails, orderStatus: e.target.value });
   };
 
   const handleHistoryChange = (e) => {
@@ -77,7 +83,10 @@ const UpdateOrder = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(`/api/admin/orders/${orderId}`, {
-        ...orderDetails,
+        orderStatus: orderDetails.orderStatus,
+        estimatedDelivery: orderDetails.estimatedDelivery,
+        orderHistory: orderDetails.orderHistory,
+        items: orderDetails.items,
       }, {
         headers: {
           'Content-Type': 'application/json',
@@ -110,12 +119,16 @@ const UpdateOrder = () => {
           <h3>Order Details</h3>
           <p><strong>Order ID:</strong> {orderId}</p>
           <p><strong>Status:</strong>
-            <input
-              type="text"
+            <select
               name="orderStatus"
               value={orderDetails.orderStatus}
-              onChange={handleInputChange}
-            />
+              onChange={handleStatusChange}
+            >
+              <option value="">Select Status</option>
+              <option value="pending">Pending</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+            </select>
           </p>
           <p><strong>Order Date:</strong> {orderDetails.orderDate ? new Date(orderDetails.orderDate).toLocaleDateString() : ''}</p>
           <p><strong>Estimated Delivery Date:</strong>
@@ -128,6 +141,13 @@ const UpdateOrder = () => {
           </p>
           <p><strong>User Name:</strong> {orderDetails.user.fname} {orderDetails.user.lname}</p>
           <p><strong>Username:</strong> {orderDetails.user.username}</p>
+          <h4>Order Address</h4>
+          <p><strong>Address Line 1:</strong> {orderDetails.orderAddress.addressline1}</p>
+          <p><strong>Address Line 2:</strong> {orderDetails.orderAddress.addressline2}</p>
+          <p><strong>City:</strong> {orderDetails.orderAddress.city}</p>
+          <p><strong>State:</strong> {orderDetails.orderAddress.state}</p>
+          <p><strong>Postal Code:</strong> {orderDetails.orderAddress.postalCode}</p>
+          <p><strong>Country:</strong> {orderDetails.orderAddress.country}</p>
           <h4>Order Items</h4>
           <ul>
             {orderDetails.items && orderDetails.items.map(item => (

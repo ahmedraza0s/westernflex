@@ -8,8 +8,9 @@ const MyOrders = () => {
   const [showTracking, setShowTracking] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Filter state
+  const [reviews, setReviews] = useState({});
+  const [productImages, setProductImages] = useState({});
+  const [showReviewForm, setShowReviewForm] = useState({});
   const [statusFilter, setStatusFilter] = useState('All');
 
   useEffect(() => {
@@ -22,6 +23,14 @@ const MyOrders = () => {
           },
         });
         setOrders(response.data.orders);
+        const newProductImages = {};
+        for (const order of response.data.orders) {
+          for (const item of order.items) {
+            const images = await fetchProductImages(item.productId, item.color);
+            newProductImages[`${item.productId}-${item.color}`] = images.length > 0 ? `http://localhost:5000/${images[0]}` : '';
+          }
+        }
+        setProductImages(newProductImages);
       } catch (err) {
         setError(err.response ? err.response.data.error : 'Error fetching orders');
       } finally {
@@ -31,6 +40,16 @@ const MyOrders = () => {
 
     fetchOrders();
   }, []);
+
+  const fetchProductImages = async (productId, color) => {
+    try {
+      const response = await axios.get(`/api/product/${productId}/${color}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching product images:', error);
+      return [];
+    }
+  };
 
   const handleOrderClick = (orderId) => {
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
@@ -43,12 +62,78 @@ const MyOrders = () => {
     }));
   };
 
-  // Handle filter changes
   const handleFilterChange = (e) => {
     setStatusFilter(e.target.value);
   };
 
-  // Apply status filter to orders
+  const handleReviewChange = (e, orderId, productId) => {
+    const { name, value, files } = e.target;
+    setReviews((prevReviews) => ({
+      ...prevReviews,
+      [orderId]: {
+        ...prevReviews[orderId],
+        [productId]: {
+          ...prevReviews[orderId]?.[productId],
+          [name]: name === 'image' ? files[0] : value,
+        },
+      },
+    }));
+  };
+
+  const handleReviewSubmit = async (orderId, productId, color) => {
+    const review = reviews[orderId]?.[productId] || {};
+    const formData = new FormData();
+    formData.append('rating', review.rating);
+    formData.append('comment', review.comment);
+    formData.append('image', review.image);
+    formData.append('orderId', orderId);
+    formData.append('productId', productId);
+    formData.append('color', color);
+
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post('/api/review', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      alert('Review submitted successfully');
+      setReviews((prevReviews) => ({
+        ...prevReviews,
+        [orderId]: {
+          ...prevReviews[orderId],
+          [productId]: { rating: '', comment: '', image: null },
+        },
+      }));
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert('Error submitting review');
+    }
+  };
+
+  const handleCancelOrder = async (orderId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(`/api/order/cancel/${orderId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.orderId === orderId
+            ? { ...order, orderStatus: 'canceled' }
+            : order
+        )
+      );
+      alert('Order canceled successfully');
+    } catch (error) {
+      console.error('Error canceling order:', error);
+      alert('Error canceling order');
+    }
+  };
+
   const filteredOrders = orders.filter(order => {
     return statusFilter === 'All' || order.orderStatus.toLowerCase() === statusFilter.toLowerCase();
   });
@@ -60,7 +145,6 @@ const MyOrders = () => {
     <div className='order-container'>
       <h4>My Orders</h4>
 
-      {/* Filter options */}
       <div className='filter-options'>
         <label>Filter by Status: </label>
         <select name="status" value={statusFilter} onChange={handleFilterChange}>
@@ -90,6 +174,15 @@ const MyOrders = () => {
                   <button onClick={() => toggleTracking(order.orderId)} className='trackButton'>
                     {showTracking[order.orderId] ? 'Hide Tracking Details' : 'Track Order'}
                   </button>
+
+                  {order.orderStatus.toLowerCase() === 'pending' && (
+                    <button
+                      onClick={() => handleCancelOrder(order.orderId)}
+                      className='cancelButton'
+                    >
+                      Cancel Order
+                    </button>
+                  )}
 
                   {showTracking[order.orderId] && (
                     <div className='tracking-container'>
@@ -126,11 +219,73 @@ const MyOrders = () => {
 
                   <h4>Items</h4>
                   <ul>
-                    {order.items.map(item => (
-                      <li key={item.productId}>
-                        {item.productName} - {item.quantity} x ${item.price}
-                      </li>
-                    ))}
+                    {order.items.map(item => {
+                      const imageKey = `${item.productId}-${item.color}`;
+                      const productImage = productImages[imageKey] || '';
+
+                      return (
+                        <li key={item.productId}>
+                          {item.productName} - {item.quantity} x ${item.price}
+                          <div>
+                            {productImage && (
+                              <div>
+                                <img src={productImage} alt={`Product ${item.productId} color ${item.color}`} className='product-image' />
+                              </div>
+                            )}
+                          </div>
+                          {isDelivered && (
+                            <div>
+                              <button onClick={() => setShowReviewForm((prev) => ({
+                                ...prev,
+                                [`${order.orderId}_${item.productId}`]: !prev[`${order.orderId}_${item.productId}`]
+                              }))}>
+                                {showReviewForm[`${order.orderId}_${item.productId}`] ? 'Hide Review Form' : 'Write a Review'}
+                              </button>
+                              {showReviewForm[`${order.orderId}_${item.productId}`] && (
+                                <form onSubmit={(e) => {
+                                  e.preventDefault();
+                                  handleReviewSubmit(order.orderId, item.productId, item.color);
+                                }}>
+                                  <div>
+                                    <label htmlFor={`rating_${order.orderId}_${item.productId}`}>Rating:</label>
+                                    <input
+                                      type='number'
+                                      id={`rating_${order.orderId}_${item.productId}`}
+                                      name='rating'
+                                      min='1'
+                                      max='5'
+                                      value={reviews[order.orderId]?.[item.productId]?.rating || ''}
+                                      onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
+                                      required
+                                    />
+                                  </div>
+                                  <div>
+                                    <label htmlFor={`comment_${order.orderId}_${item.productId}`}>Comment:</label>
+                                    <textarea
+                                      id={`comment_${order.orderId}_${item.productId}`}
+                                      name='comment'
+                                      value={reviews[order.orderId]?.[item.productId]?.comment || ''}
+                                      onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
+                                      required
+                                    ></textarea>
+                                  </div>
+                                  <div>
+                                    <label htmlFor={`image_${order.orderId}_${item.productId}`}>Image:</label>
+                                    <input
+                                      type='file'
+                                      id={`image_${order.orderId}_${item.productId}`}
+                                      name='image'
+                                      onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
+                                    />
+                                  </div>
+                                  <button type='submit'>Submit Review</button>
+                                </form>
+                              )}
+                            </div>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               )}
