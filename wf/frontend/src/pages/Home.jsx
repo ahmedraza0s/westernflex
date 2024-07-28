@@ -9,7 +9,6 @@ import offerTag from '../components/assets/offer.png'; // Import the sales tag i
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0); // State to track current slide index
-  const [slideInterval, setSlideInterval] = useState(null); // State to hold interval ID
   const [selectedPriceRange, setSelectedPriceRange] = useState(null); // State for selected price range
   const [currentPage, setCurrentPage] = useState(0); // State for current page
   const productsPerPage = 16; // Number of products per page
@@ -38,11 +37,7 @@ const Shop = () => {
   // Effect to start and stop interval
   useEffect(() => {
     const interval = setInterval(nextSlide, 3000); // Change slide every 3 seconds (3000ms)
-    setSlideInterval(interval); // Save interval ID to state
-
-    return () => {
-      clearInterval(interval); // Cleanup: Clear interval on component unmount
-    };
+    return () => clearInterval(interval); // Cleanup: Clear interval on component unmount
   }, [currentSlide]);
 
   // Effect to fetch products
@@ -155,7 +150,6 @@ const Shop = () => {
                 src={slide}
                 alt={`Slide ${index}`}
                 className={index === currentSlide ? 'img active' : 'img'}
-                style={{ transform: `translateX(-${currentSlide * 100}%)` }} // Adjust to full width of slider
               />
             ))}
           </div>
@@ -172,7 +166,7 @@ const Shop = () => {
       </section>
       
       <div>
-        <h1>BEST SELLER PRODUCTS</h1>
+        <h1>BEST SELLING PRODUCTS</h1>
         {renderProducts()}
         <div className="pagination">
           <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>&lt;</button>
