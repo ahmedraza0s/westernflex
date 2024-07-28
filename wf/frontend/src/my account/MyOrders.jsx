@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './myOrders.css';
+import UserReview from './UserReview';
+
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -152,19 +154,18 @@ const MyOrders = () => {
           <option value="pending">Pending</option>
           <option value="delivered">Delivered</option>
           <option value="shipped">Shipped</option>
+          <option value="cancelled">Cancelled</option>
         </select>
       </div>
 
       {filteredOrders.length > 0 ? (
-        filteredOrders.map((order, index) => {
-          const isDelivered = order.orderHistory.some(
-            (history) => history.status.toLowerCase() === 'delivered'
-          );
+        filteredOrders.map((order) => {
+          const isDelivered = order.orderStatus.toLowerCase() === 'delivered';
 
           return (
             <div key={order.orderId}>
               <h3 onClick={() => handleOrderClick(order.orderId)}>
-                Order {index + 1}
+                Order ID: {order.orderId}
               </h3>
               {expandedOrderId === order.orderId && (
                 <div>
@@ -248,37 +249,41 @@ const MyOrders = () => {
                                 }}>
                                   <div>
                                     <label htmlFor={`rating_${order.orderId}_${item.productId}`}>Rating:</label>
-                                    <input
-                                      type='number'
+                                    <select
                                       id={`rating_${order.orderId}_${item.productId}`}
-                                      name='rating'
-                                      min='1'
-                                      max='5'
+                                      name="rating"
                                       value={reviews[order.orderId]?.[item.productId]?.rating || ''}
                                       onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
                                       required
-                                    />
+                                    >
+                                      <option value="">Select Rating</option>
+                                      <option value="1">1</option>
+                                      <option value="2">2</option>
+                                      <option value="3">3</option>
+                                      <option value="4">4</option>
+                                      <option value="5">5</option>
+                                    </select>
                                   </div>
                                   <div>
                                     <label htmlFor={`comment_${order.orderId}_${item.productId}`}>Comment:</label>
                                     <textarea
                                       id={`comment_${order.orderId}_${item.productId}`}
-                                      name='comment'
+                                      name="comment"
                                       value={reviews[order.orderId]?.[item.productId]?.comment || ''}
                                       onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
                                       required
                                     ></textarea>
                                   </div>
                                   <div>
-                                    <label htmlFor={`image_${order.orderId}_${item.productId}`}>Image:</label>
+                                    <label htmlFor={`image_${order.orderId}_${item.productId}`}>Upload Image:</label>
                                     <input
-                                      type='file'
+                                      type="file"
                                       id={`image_${order.orderId}_${item.productId}`}
-                                      name='image'
+                                      name="image"
                                       onChange={(e) => handleReviewChange(e, order.orderId, item.productId)}
                                     />
                                   </div>
-                                  <button type='submit'>Submit Review</button>
+                                  <button type="submit">Submit Review</button>
                                 </form>
                               )}
                             </div>
@@ -295,6 +300,8 @@ const MyOrders = () => {
       ) : (
         <p>No orders found.</p>
       )}
+
+<UserReview />
     </div>
   );
 };
