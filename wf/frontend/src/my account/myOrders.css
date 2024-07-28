@@ -1,4 +1,4 @@
-.order-container {
+.order-container.myOrders{
   max-width: 60%;
   margin: auto;
   background-color: #fff;
@@ -8,58 +8,58 @@
 }
 
 @media (max-width: 768px) {
-  .order-container {
+  .order-container.myOrders {
     max-width: 80%;
     padding: 15px;
   }
 }
 
 @media (max-width: 480px) {
-  .order-container {
+  .order-container.myOrders {
     max-width: 95%;
     padding: 10px;
   }
 }
 
-.order-container h4 {
+.order-container h4.myOrders {
   text-align: center;
   font-size: 2.5rem;
   margin-left: -10px;
 }
 
 @media (max-width: 768px) {
-  .order-container h4 {
+  .order-container h4 .myOrders{
     font-size: 2rem;
     margin-left: 0;
   }
 }
 
 @media (max-width: 480px) {
-  .order-container h4 {
+  .order-container h4.myOrders {
     font-size: 1.5rem;
     margin-left: 0;
   }
 }
 
-.filter-options {
+.filter-options.myOrders {
   margin-bottom: 20px;
 }
 
-.filter-options select {
+.filter-options select.myOrders {
   margin-left: 10px;
 }
 
-.order-container h3 {
+.order-container.myOrders h3 {
   cursor: pointer;
 }
 
-.product-image {
+.product-image.myOrders {
   width: 100px;
   height: 100px;
   object-fit: cover;
 }
 
-.trackButton {
+.trackButton.myOrders {
   background-color: #3f1c44; /* Consistent color */
   color: white;
   padding: 10px 20px; /* Consistent padding */
@@ -70,29 +70,29 @@
   margin: 10px 5px; /* Consistent margin */
 }
 
-.trackButton:hover {
+.trackButton:hover.myOrders {
   background-color: #45a049;
 }
 
 @media (max-width: 768px) {
-  .trackButton {
+  .trackButton.myOrders {
     padding: 5px 8px;
     font-size: 0.8rem;
   }
 }
 
 @media (max-width: 480px) {
-  .trackButton {
+  .trackButton.myOrders {
     padding: 4px 6px;
     font-size: 0.7rem;
   }
 }
 
-.tracking-container {
+.tracking-container.myOrders {
   margin-top: 20px;
 }
 
-.timeline {
+.timeline.myOrders {
   position: relative;
   margin-top: 20px;
   padding-left: 20px;
@@ -101,7 +101,7 @@
   gap: 10px;
 }
 
-.timeline:before {
+.timeline:before.myOrders {
   content: '';
   position: absolute;
   top: 0;
@@ -111,7 +111,7 @@
   background: #ddd;
 }
 
-.timeline-item {
+.timeline-item.myOrders {
   display: flex;
   align-items: center;
   position: relative;
@@ -119,11 +119,11 @@
   margin-bottom: 20px;
 }
 
-.timeline-item:last-child {
+.timeline-item:last-child.myOrders {
   margin-bottom: 0;
 }
 
-.timeline-icon {
+.timeline-icon.myOrders {
   width: 20px;
   height: 20px;
   background-color: #4CAF50;
@@ -131,7 +131,7 @@
   margin-right: 10px;
 }
 
-.timeline-content {
+.timeline-content.myOrders {
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -140,28 +140,28 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.timeline-status {
+.timeline-status.myOrders {
   font-weight: bold;
   margin-bottom: 5px;
 }
 
-.timeline-location {
+.timeline-location.myOrders {
   color: #666;
 }
 
-.timeline-content p {
+.timeline-content.myOrders p {
   margin: 0;
 }
 
-.timeline-date {
+.timeline-date.myOrders {
   color: gray;
 }
 
-.delivered .timeline-icon {
+.delivered .timeline-icon.myOrders {
   background-color: #2196F3;
 }
 
-.button-group {
+.button-group.myOrders {
   display: flex;
   gap: 10px; /* Add some space between the buttons */
 }
