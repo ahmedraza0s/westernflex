@@ -9,10 +9,14 @@ const UpdateRank = () => {
     metaDescription: '',
     isActive: true,
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchProductDetails = async () => {
       if (productId) {
+        setLoading(true);
+        setError('');
         try {
           const response = await axios.get(`http://localhost:5000/api/product/${productId}`);
           const { tags, metaTitle, metaDescription, isActive } = response.data;
@@ -24,6 +28,9 @@ const UpdateRank = () => {
           });
         } catch (error) {
           console.error('Error fetching product details:', error);
+          setError('Error fetching product details');
+        } finally {
+          setLoading(false);
         }
       }
     };
@@ -31,17 +38,18 @@ const UpdateRank = () => {
     fetchProductDetails();
   }, [productId]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProductDetails({ ...productDetails, [name]: value });
+  const handleInputChange = ({ target: { name, value } }) => {
+    setProductDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
   };
 
-  const handleTagsChange = (e) => {
-    setProductDetails({ ...productDetails, tags: e.target.value });
+  const handleTagsChange = ({ target: { value } }) => {
+    setProductDetails((prevDetails) => ({ ...prevDetails, tags: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
 
     try {
       await axios.put(`http://localhost:5000/api/product/${productId}`, {
@@ -55,7 +63,9 @@ const UpdateRank = () => {
       alert('Product updated successfully');
     } catch (error) {
       console.error('Error updating product:', error);
-      alert('Error updating product');
+      setError('Error updating product');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -70,6 +80,8 @@ const UpdateRank = () => {
         className="inputProduct"
         required
       />
+      {loading && <p>Loading...</p>}
+      {error && <p className="error">{error}</p>}
       <textarea
         name="tags"
         value={productDetails.tags}
@@ -100,11 +112,11 @@ const UpdateRank = () => {
           type="checkbox"
           name="isActive"
           checked={productDetails.isActive}
-          onChange={() => setProductDetails({ ...productDetails, isActive: !productDetails.isActive })}
+          onChange={() => setProductDetails((prevDetails) => ({ ...prevDetails, isActive: !prevDetails.isActive }))}
         />
         Is Active
       </label>
-      <button type="submit" className="updateButton">
+      <button type="submit" className="updateButton" disabled={loading}>
         Update Product
       </button>
     </form>
