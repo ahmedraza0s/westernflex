@@ -5,14 +5,21 @@
 }
 
 .product {
-  position: relative;
-  flex: 1 1 calc(25% - 20px);
-  box-sizing: border-box;
-  border: 1px solid #ddd;
-  padding: 16px;
-  margin: 10px;
-  text-align: center;
+  position: relative; /* Ensures positioning for children elements if needed */
+  flex: 1 1 calc(25% - 20px); /* Responsive flex properties */
+  box-sizing: border-box; /* Ensures padding and border are included in total width/height */
+  border: 1px solid #f7f3f3; /* Border styling */
+  padding: 16px; /* Padding inside the product element */
+  margin: 10px; /* Margin around the product element */
+  text-align: center; /* Centers the text content */
+  background-color: #ffffff; /* Optional: background color for contrast */
+  clip-path: polygon(48px 0%, 100% 0, 100% calc(100% - 78px), calc(100% - 78px) 100%, 0 100%, 0% 78px);
+  -webkit-clip-path: polygon(78px 0%, 100% 0, 100% calc(100% - 78px), calc(100% - 78px) 100%, 0 100%, 0% 78px);
 }
+
+/* Optional: If you need an inner styling similar to `.prpr-inner` */
+
+
 
 .sales-tag {
   position: absolute;
