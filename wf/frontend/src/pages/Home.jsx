@@ -12,7 +12,7 @@ const Shop = () => {
   const [selectedPriceRange, setSelectedPriceRange] = useState(null); // State for selected price range
   const [currentPage, setCurrentPage] = useState(0); // State for current page
   const productsPerPage = 16; // Number of products per page
-  const dropdownRef = useRef(null);
+  //const dropdownRef = useRef(null);
   const { addToCart } = useCart();
 
   // Array of slide image URLs
@@ -54,9 +54,9 @@ const Shop = () => {
     fetchProducts();
   }, []);
 
-  const handlePageChange = (newPage) => {
+  {/*const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
-  };
+  };*/}
 
   const renderProducts = () => {
     const filteredProducts = products.filter(product =>
@@ -168,11 +168,7 @@ const Shop = () => {
       <div>
         <h1>BEST SELLING PRODUCTS</h1>
         {renderProducts()}
-        <div className="pagination">
-          <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>&lt;</button>
-          <div className="page-indicator">{currentPage + 1}</div>
-          <button onClick={() => handlePageChange(currentPage + 1)} disabled={(currentPage + 1) * productsPerPage >= products.length}>&gt;</button>
-        </div>
+        
       </div>
     </div>
   );
