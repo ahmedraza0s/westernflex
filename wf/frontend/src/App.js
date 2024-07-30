@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/navbar/Navbar';
+import Footer from './footer/Footer';
 import './components/navbar/navbar.css';
 import Shop from './pages/Shop';
 import Home from './pages/Home';
@@ -40,7 +41,9 @@ const App = () => {
       <CartProvider>
         <AuthProvider>
           <Router>
+          
             <Navbar />
+            
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
@@ -57,7 +60,8 @@ const App = () => {
               <Route path="/My-orders" element={<MyOrders />} />
               <Route path='/forget-password' element={<ForgetPassword/>}/>
               <Route path='/loaduser' element={<Loaduser/>}/>
-              
+            
+
               {/* Admin Routes */}
               <Route path="/admin" element={<ProtectedRoute element={<AdminPage />} />}>
                 <Route path="dashboard" element={<Dashboard />} />
@@ -74,6 +78,7 @@ const App = () => {
                 <Route path="user-order" element={<UserOrders />} />
               </Route>
             </Routes>
+            <Footer />
           </Router>
         </AuthProvider>
       </CartProvider>

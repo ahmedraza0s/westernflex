@@ -1,0 +1,140 @@
+/* footer.css */
+
+.footer {
+    background-color: #e3d2de;
+    padding: 20px 0;
+    border-top: 1px solid #e5e5e5;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    gap: 20px; /* Add gap between the footer items */
+
+
+
+    justify-content: space-between;
+    }
+
+.footer-item {
+    text-align: center;
+    flex: 1;
+}
+
+.footer-item img {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 10px;
+    margin: 0 10px; /* Add margin to both sides of the image */
+}
+
+.footer-item p {
+    font-size: 1.2rem;
+    color: #333;
+    font-family: 'Poppins';
+}
+
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+        padding: 0 10px; /* Adjust padding for smaller screens */
+    }
+
+    .footer-item {
+        margin-bottom: 20px;
+    }
+
+    .footer-item img {
+        margin-right: 0; /* Remove right margin on smaller screens */
+    }
+}
+
+
+
+.footer-section {
+    flex: 1;
+    margin: 0 20px;
+}
+
+.logoWfFooter {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+.social-icons-footer {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.social-icons-footer img {
+    width: 50px;
+    height: 50px;
+}
+
+address, .contacts {
+    font-size: 0.9rem;
+    color: #333;
+    line-height: 1.6;
+}
+.contact-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-form label {
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: #1f1e1e;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.contact-form .sendBtn {
+    background-color: #6f42c1;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 90px;
+    align-items: center;
+    margin-left: 230px;
+}
+
+.contact-form .sendBtn:hover {
+    background-color: #563d7c;
+}
+
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-section {
+        margin: 20px 0;
+    }
+
+    .social-icons-footer {
+        justify-content: center;
+    }
+    .contact-form .sendBtn {
+        margin-left: 0; /* Reset left margin on smaller screens */
+        align-self: center; /* Ensure the button is centered */
+    }
+}
