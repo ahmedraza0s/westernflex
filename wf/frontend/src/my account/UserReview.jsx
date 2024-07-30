@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const Loaduser = () => {
+const UserReview = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -52,11 +52,6 @@ const Loaduser = () => {
 
   return (
     <div>
-      <h1>Welcome, {user.fname} {user.lname}</h1>
-      <p>Username: {user.username}</p>
-      <p>Email: {user.email}</p>
-      <p>Phone Number: {user.phno}</p>
-
       <h2>Reviews</h2>
       {user.reviews.length > 0 ? (
         user.reviews.map(review => (
@@ -85,4 +80,4 @@ const Loaduser = () => {
   );
 };
 
-export default Loaduser;
+export default UserReview;

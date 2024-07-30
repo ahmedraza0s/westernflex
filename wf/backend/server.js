@@ -370,16 +370,16 @@ app.delete('/products/:productId', async (req, res) => {
 
 
 //for shop by loading using priority
-// Endpoint to fetch products with priority 1, 2, and 3
+// Endpoint to fetch products with priority 1, 2, and 3 0
 app.get('/products', async (req, res) => {
   try {
     const products = await Product.find({
-      'colors.priority': { $in: [1, 2, 3] }
+      'colors.priority': { $in: [1, 2, 3, 0] }
     });
 
-    // Filter colors to include only those with priority 1, 2, or 3
+    // Filter colors to include only those with priority 1, 2, or 3 0
     const filteredProducts = products.map(product => {
-      const filteredColors = product.colors.filter(color => [1, 2, 3].includes(color.priority));
+      const filteredColors = product.colors.filter(color => [1, 2, 3, 0].includes(color.priority));
       return { ...product._doc, colors: filteredColors };
     });
 

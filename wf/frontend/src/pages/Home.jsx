@@ -61,7 +61,7 @@ const Shop = () => {
   const renderProducts = () => {
     const filteredProducts = products.filter(product =>
       product.colors.some(color =>
-        [1, 2, 3].includes(color.priority) &&
+        [0].includes(color.priority) &&
         color.images.length > 0 &&
         (!selectedPriceRange || product.sellingPrice < selectedPriceRange)
       )
@@ -73,7 +73,7 @@ const Shop = () => {
       <div className="product-container">
         {paginatedProducts.map((product) =>
           product.colors.map((color) => {
-            if ([1, 2, 3].includes(color.priority) && color.images.length > 0) {
+            if ([0].includes(color.priority) && color.images.length > 0) {
               const percentageDifference = Math.round(((product.listingPrice - product.sellingPrice) / product.listingPrice) * 100);
 
               return (

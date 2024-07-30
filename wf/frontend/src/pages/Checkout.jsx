@@ -260,7 +260,6 @@ const Checkout = () => {
       {showPopup && (
         <div className="popup">
           <div className="popup-content">
-            <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmh3M2NuOHp1OHJzYzA5Y2hmMjAxYWU5N2U4a2phYjF2emIwamk4NyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3kuSo744UIPJjcJUEn/giphy.gif" alt="Order placed successfully" />
             <p>Your order has been placed successfully!</p>
           </div>
         </div>
@@ -269,7 +268,6 @@ const Checkout = () => {
       {showEmptyCartPopup && (
         <div className="popup">
           <div className="popup-content">
-          <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMW50NXhlNjZhNGQyN3RyYTJ3MDE0dDZpdnhoeHdrYWw3djVmemsxbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/JT7Td5xRqkvHQvTdEu/giphy.gif" alt="Success" />
             <p>Please select the product first.</p>
           </div>
         </div>
