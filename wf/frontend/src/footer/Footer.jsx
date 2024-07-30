@@ -5,6 +5,7 @@ import freeDelivery from '../components/assets/free-delivery.png';
 import cashOn from '../components/assets/cash-on-delivery.png';
 import domesticShipping from '../components/assets/domestic-shipping.png';
 import qualityGuarantee from '../components/assets/quality-guarantee.png';
+import easyReturn from '../components/assets/refund.png';
 import logoWf from '../components/assets/logo.jpg';
 import linkedinImg from '../components/assets/linkedin.png';
 import instaImg from '../components/assets/instagram.png';
@@ -22,10 +23,16 @@ const Footer = () => {
                     <img src={freeDelivery} alt="Free Shipping" />
                     <p>Free Shipping</p>
                 </div>
+
+                <div className="footer-item">
+                    <img src={easyReturn} alt="Quality Guaranteed" />
+                    <p>Easy Return within 4-5 days</p>
+                </div>
                 <div className="footer-item">
                     <img src={cashOn} alt="Cash On Delivery" />
                     <p>Cash On Delivery</p>
                 </div>
+                
                 <div className="footer-item">
                     <img src={domesticShipping} alt="5-7 Days Domestic Shipping" />
                     <p>5-7 Days Domestic Shipping</p>
