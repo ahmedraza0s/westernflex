@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './myOrders.css';
 import UserReview from './UserReview';
-
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -14,6 +14,7 @@ const MyOrders = () => {
   const [productImages, setProductImages] = useState({});
   const [showReviewForm, setShowReviewForm] = useState({});
   const [statusFilter, setStatusFilter] = useState('All');
+  const navigate = useNavigate(); // Add this line
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -136,6 +137,11 @@ const MyOrders = () => {
     }
   };
 
+  const handleReturnOrder = (orderId) => {
+    // Navigate to return order page
+    navigate(`/return-order/${orderId}`);
+  };
+
   const filteredOrders = orders.filter(order => {
     return statusFilter === 'All' || order.orderStatus.toLowerCase() === statusFilter.toLowerCase();
   });
@@ -163,7 +169,7 @@ const MyOrders = () => {
           const isDelivered = order.orderStatus.toLowerCase() === 'delivered';
 
           return (
-            <div key={order.orderId}  className='order-item myOrders'>
+            <div key={order.orderId} className='order-item myOrders'>
               <h3 onClick={() => handleOrderClick(order.orderId)}>
                 Order ID: {order.orderId}
               </h3>
@@ -182,6 +188,15 @@ const MyOrders = () => {
                       className='cancelButton myOrders'
                     >
                       Cancel Order
+                    </button>
+                  )}
+
+                  {isDelivered && (
+                    <button
+                      onClick={() => handleReturnOrder(order.orderId)}
+                      className='returnButton myOrders'
+                    >
+                      Return Order
                     </button>
                   )}
 
@@ -301,7 +316,7 @@ const MyOrders = () => {
         <p>No orders found.</p>
       )}
 
-<UserReview />
+      <UserReview />
     </div>
   );
 };
