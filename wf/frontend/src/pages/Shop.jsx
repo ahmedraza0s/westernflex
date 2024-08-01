@@ -1,3 +1,4 @@
+// shop.jsx
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -87,10 +88,10 @@ const ShopList = () => {
                     />
                   </Link>
                   <h3 className="product-title">{product.name}</h3>
-                  <p className="listing-price"><s>${product.listingPrice}</s></p>
-                  <p className="product-selling-price">${product.sellingPrice}</p>
-                  <p className="percentage-difference">Save {percentageDifference}%</p>
-                  <p className="product-color">Color: {color.color}</p>
+                  <div className="price-container">
+                    <p className="listing-price"><s>₹{product.listingPrice}</s></p>
+                    <p className="product-selling-price">₹{product.sellingPrice}</p>
+                  </div>
                   <button
                     className="add-to-cart-btn"
                     onClick={() =>
@@ -127,9 +128,9 @@ const ShopList = () => {
         <span className="filter-label">Filter By</span>
         <div className="dropdown">
           <div className="dpprice">
-          <button className="dropbtnn" onClick={() => toggleDropdown('price')}>
-            Price <i className="fas fa-caret-down"></i>
-          </button>
+            <button className="dropbtnn" onClick={() => toggleDropdown('price')}>
+              Price <i className="fas fa-caret-down"></i>
+            </button>
           </div>
           {visibleDropdown === 'price' && (
             <div className="dropdown-content fade-in">
@@ -142,7 +143,6 @@ const ShopList = () => {
             </div>
           )}
         </div>
-        {/* Add other dropdowns as needed */}
       </nav>
       {renderProducts()}
       <div className="pagination">
