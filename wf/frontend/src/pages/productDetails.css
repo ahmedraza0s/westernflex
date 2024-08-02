@@ -153,11 +153,23 @@
 .buy-now-btn:active {
   transform: scale(0.75); /* Scale down slightly when clicked */
 }
+.share-btn{
+  background-color: rgb(97 59 96);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-top: 20px;
+}
 
 .add-to-cart-btn {
   margin-right: 10px; /* Add space between the two buttons */
 }
-
+.share-btn:active{
+  transform: scale(0.75);
+}
 .other-colors {
   margin-top: 20px;
 }
