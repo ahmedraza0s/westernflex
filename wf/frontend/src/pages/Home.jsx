@@ -1,19 +1,22 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import './shop.css';
 import './home.css';
 import offerTag from '../components/assets/offer.png'; // Import the sales tag image
+import bannerImage from '../components/assets/sales.png'; // Import the banner image
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0); // State to track current slide index
   const [selectedPriceRange, setSelectedPriceRange] = useState(null); // State for selected price range
   const [currentPage, setCurrentPage] = useState(0); // State for current page
+  const [showBanner, setShowBanner] = useState(false); // State to control banner visibility
   const productsPerPage = 16; // Number of products per page
-  //const dropdownRef = useRef(null);
   const { addToCart } = useCart();
+  const navigate = useNavigate();
+  const bannerRef = useRef(null);
 
   // Array of slide image URLs
   const slides = [
@@ -54,9 +57,37 @@ const Shop = () => {
     fetchProducts();
   }, []);
 
-  {/*const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };*/}
+  // Effect to handle banner display
+  useEffect(() => {
+    const timer = setTimeout(() => setShowBanner(true), 15000); // Show banner after 15 seconds
+
+    return () => clearTimeout(timer); // Cleanup on component unmount
+  }, []);
+
+  // Click handler for the banner
+  const handleBannerClick = () => {
+    navigate('/shop');
+  };
+
+  // Click handler for closing the banner
+  const handleCloseBanner = (e) => {
+    e.stopPropagation(); // Prevent the event from bubbling up
+    setShowBanner(false);
+  };
+
+  // Click handler for outside of the banner
+  const handleOutsideClick = (e) => {
+    if (bannerRef.current && !bannerRef.current.contains(e.target)) {
+      setShowBanner(false);
+    }
+  };
+
+  // Attach event listener to document for outside click
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, []);
 
   const renderProducts = () => {
     const filteredProducts = products.filter(product =>
@@ -164,12 +195,18 @@ const Shop = () => {
           ))}
         </div>
       </section>
-      
+
       <div>
         <h1>BEST SELLING PRODUCTS</h1>
         {renderProducts()}
-        
       </div>
+
+      {showBanner && (
+        <div className="banner-popup" ref={bannerRef} onClick={handleBannerClick}>
+          <img src={bannerImage} alt="Sales Banner" className="banner-image" />
+          <button className="banner-close-btn" onClick={handleCloseBanner}>X</button>
+        </div>
+      )}
     </div>
   );
 };
