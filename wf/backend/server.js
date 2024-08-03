@@ -8,6 +8,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+const queries = require('./routes/queries');
 
 
 const User = require('./models/User'); //importing model of user
@@ -897,6 +898,8 @@ app.post('/api/change-password', authenticateUser, async (req, res) => {
   }
 });
 
+// Routes query 
+app.use('/api', queries);
 
 
 // Start the server
