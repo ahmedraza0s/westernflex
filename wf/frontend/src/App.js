@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import AllReviews from './pages/AllReviews';
 import ChangeUserDetails from './my account/ChangeUserDetails';  // my account folder pages 
 import MyOrders from './my account/MyOrders';
 import UserProfile from './my account/UserProfile';
@@ -33,7 +34,6 @@ import { AuthProvider } from './contexts/AuthContext'; // Import AuthProvider
 import ProtectedRoute from './routes/ProtectedRoute'; // Import ProtectedRoute
 import Account from './my account/Account';
 import ForgetPassword from './my account/ForgetPassword';//Import The Forget Password component
-import ReturnOrder from './my account/ReturnOrder';
 
 const App = () => {
   return (
@@ -50,6 +50,7 @@ const App = () => {
               <Route path="/shop" element={<Shop />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/allreviews" element={<AllReviews />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/change-user-details" element={<ChangeUserDetails />} />
               <Route path="/product/:title" element={<ProductDetails />} />
@@ -59,7 +60,6 @@ const App = () => {
               <Route path="/User-Profile" element={<UserProfile />} />
               <Route path="/My-orders" element={<MyOrders />} />
               <Route path='/forget-password' element={<ForgetPassword/>}/>
-              <Route path='/return-order/:orderId' element={<ReturnOrder/>}/>
     
             
 

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './productDetails.css';
 import { useCart } from '../contexts/CartContext';
 import offerTag from '../components/assets/offer.png';
+import AllReviews from './AllReviews';
 
 const ProductDetails = () => {
   const location = useLocation();
@@ -147,8 +148,11 @@ const ProductDetails = () => {
                   />
                 </div>
               ))}
+
             </div>
           </div>
+          <AllReviews />
+
         </div>
       </div>
     </div>
