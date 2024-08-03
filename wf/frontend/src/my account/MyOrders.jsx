@@ -137,10 +137,40 @@ const MyOrders = () => {
     }
   };
 
-  const handleReturnOrder = (orderId) => {
-    // Navigate to return order page
-    navigate(`/return-order/${orderId}`);
+  const handleReturnOrder = async (orderId, orderStatusDate) => {
+    const deliveredDate = new Date(orderStatusDate);
+    const today = new Date();
+    const timeDiff = today - deliveredDate;
+    const daysDiff = timeDiff / (1000 * 3600 * 24);
+  
+    console.log(`Order ID: ${orderId}, Delivered Date: ${deliveredDate}, Today: ${today}, Days Difference: ${daysDiff}`);
+  
+    if (daysDiff > 5) {
+      alert('Return period has expired. You can only return orders within 5 days of delivery.');
+      return;
+    }
+  
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(`/api/order/return/${orderId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.orderId === orderId
+            ? { ...order, orderStatus: 'returned' }
+            : order
+        )
+      );
+      alert('Order returned successfully');
+    } catch (error) {
+      console.error('Error returning order:', error);
+      alert('Error returning order');
+    }
   };
+  
 
   const filteredOrders = orders.filter(order => {
     return statusFilter === 'All' || order.orderStatus.toLowerCase() === statusFilter.toLowerCase();
