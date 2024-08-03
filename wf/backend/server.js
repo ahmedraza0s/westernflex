@@ -843,10 +843,16 @@ app.put('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
 
     const order = user.orders.find(order => order.orderId === orderId);
     if (order) {
-      order.orderStatus = orderStatus;
+      // Check if the orderStatus has changed
+      if (order.orderStatus !== orderStatus) {
+        order.orderStatus = orderStatus;
+        order.orderstatusdate = new Date(); // Update orderstatusdate to the current date
+      }
+      
       order.estimatedDelivery = estimatedDelivery;
       order.items = items;
       order.orderHistory = orderHistory;
+
       await user.save();
       return res.status(200).json({ message: 'Order updated successfully' });
     }
