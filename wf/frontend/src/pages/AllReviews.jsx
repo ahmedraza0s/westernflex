@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const AllReviews = () => {
+const AllReviews = ({ productId }) => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [productIdFilter, setProductIdFilter] = useState('');
   const [filteredReviews, setFilteredReviews] = useState([]);
 
   useEffect(() => {
@@ -13,7 +12,6 @@ const AllReviews = () => {
       try {
         const response = await axios.get('/api/reviews'); // Fetch all reviews from your API
         setReviews(response.data || []);
-        setFilteredReviews(response.data || []);
       } catch (err) {
         setError(err.response ? err.response.data.error : 'Error fetching data');
       } finally {
@@ -24,20 +22,16 @@ const AllReviews = () => {
     fetchReviews();
   }, []);
 
-  const handleFilterChange = (e) => {
-    setProductIdFilter(e.target.value);
-  };
-
-  const handleFilterSubmit = () => {
-    if (productIdFilter) {
+  useEffect(() => {
+    if (productId) {
       const filtered = reviews.filter(
-        review => review && review.productId && review.productId.toString() === productIdFilter
+        review => review && review.productId && review.productId.toString() === productId
       );
       setFilteredReviews(filtered);
     } else {
       setFilteredReviews(reviews);
     }
-  };
+  }, [productId, reviews]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -45,15 +39,6 @@ const AllReviews = () => {
   return (
     <div>
       <h2>All User Reviews</h2>
-      <div>
-        <input
-          type="text"
-          placeholder="Enter Product ID to filter"
-          value={productIdFilter}
-          onChange={handleFilterChange}
-        />
-        <button onClick={handleFilterSubmit}>Filter Reviews</button>
-      </div>
       {filteredReviews.length > 0 ? (
         filteredReviews.map((review, index) => (
           // Ensure the review is not null and has the expected properties
@@ -81,10 +66,8 @@ const AllReviews = () => {
       ) : (
         <p>No reviews found.</p>
       )}
-    
     </div>
   );
 };
 
 export default AllReviews;
-
