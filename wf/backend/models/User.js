@@ -41,6 +41,7 @@ const orderSchema = new mongoose.Schema({
   orderId: { type: String, required: true },
   orderDate: { type: Date, default: Date.now },
   orderStatus: { type: String, required: true },
+  orderstatusdate: { type: Date, default: Date.now },
   items: [orderItemSchema],
   address: [orderaddress],
   orderHistory: [orderHistorySchema],

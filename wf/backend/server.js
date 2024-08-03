@@ -756,6 +756,53 @@ app.post('/api/order/cancel/:orderId', authenticateUser, async (req, res) => {
 });
 
 
+// Return an order
+app.post('/api/order/return/:orderId', authenticateUser, async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const user = await User.findOne({ username: req.user.username });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Find the order in user's orders
+    const order = user.orders.find(order => order.orderId === orderId);
+
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    // Check if the order is delivered
+    if (order.orderStatus.toLowerCase() !== 'delivered') {
+      return res.status(400).json({ error: 'Only delivered orders can be returned' });
+    }
+
+    // Calculate days since delivery
+    const deliveredDate = new Date(order.orderStatusDate); // Ensure `orderStatusDate` is the correct field
+    const today = new Date();
+    const timeDiff = today - deliveredDate;
+    const daysDiff = timeDiff / (1000 * 3600 * 24);
+
+    if (daysDiff > 5) {
+      return res.status(400).json({ error: 'Return period has expired. You can only return orders within 5 days of delivery.' });
+    }
+
+    // Update order status to 'returned'
+    order.orderStatus = 'returned';
+    await user.save();
+
+    res.status(200).json({ message: 'Order returned successfully', order });
+  } catch (error) {
+    console.error('Error processing return request:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
+
+
 // Middleware for authenticating admins
 const authenticateAdmin = async (req, res, next) => {
   const token = req.headers['authorization'];
@@ -843,10 +890,16 @@ app.put('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
 
     const order = user.orders.find(order => order.orderId === orderId);
     if (order) {
-      order.orderStatus = orderStatus;
+      // Check if the orderStatus has changed
+      if (order.orderStatus !== orderStatus) {
+        order.orderStatus = orderStatus;
+        order.orderstatusdate = new Date(); // Update orderstatusdate to the current date
+      }
+      
       order.estimatedDelivery = estimatedDelivery;
       order.items = items;
       order.orderHistory = orderHistory;
+
       await user.save();
       return res.status(200).json({ message: 'Order updated successfully' });
     }

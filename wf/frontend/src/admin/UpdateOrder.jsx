@@ -84,6 +84,7 @@ const UpdateOrder = () => {
       const token = localStorage.getItem('token');
       await axios.put(`/api/admin/orders/${orderId}`, {
         orderStatus: orderDetails.orderStatus,
+        orderstatusdate: new Date(), // Adding the order status date here
         estimatedDelivery: orderDetails.estimatedDelivery,
         orderHistory: orderDetails.orderHistory,
         items: orderDetails.items,
