@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import moment from 'moment';
+import { parseISO, differenceInDays, isValid } from 'date-fns';
 import './myOrders.css';
 import UserReview from './UserReview';
 
@@ -137,14 +139,38 @@ const MyOrders = () => {
     }
   };
 
-  const handleReturnOrder = async (orderId, orderStatusDate) => {
-    const deliveredDate = new Date(orderStatusDate);
+  const handleReturnOrder = async (orderId, orderstatusdate) => {
+    // Log the raw orderstatusdate for debugging
+    console.log('Raw orderstatusdate:', orderstatusdate);
+  
+    // Check if the orderstatusdate is valid
+    if (!orderstatusdate) {
+      alert('Invalid order status date.');
+      return;
+    }
+  
+    // Parse the orderstatusdate using date-fns
+    const deliveredDate = parseISO(orderstatusdate);
+  
+    // Check if the date is valid
+    if (!isValid(deliveredDate)) {
+      alert('Invalid order status date.');
+      return;
+    }
+  
+    // Get today's date
     const today = new Date();
-    const timeDiff = today - deliveredDate;
-    const daysDiff = timeDiff / (1000 * 3600 * 24);
   
-    console.log(`Order ID: ${orderId}, Delivered Date: ${deliveredDate}, Today: ${today}, Days Difference: ${daysDiff}`);
+    // Calculate the difference in days
+    const daysDiff = differenceInDays(today, deliveredDate);
   
+    // Log for debugging
+    console.log(`Order ID: ${orderId}`);
+    console.log(`Delivered Date: ${deliveredDate.toISOString()}`);
+    console.log(`Today: ${today.toISOString()}`);
+    console.log(`Days Difference: ${daysDiff}`);
+  
+    // Check if the difference is greater than 5 days
     if (daysDiff > 5) {
       alert('Return period has expired. You can only return orders within 5 days of delivery.');
       return;
@@ -170,6 +196,8 @@ const MyOrders = () => {
       alert('Error returning order');
     }
   };
+  
+  
   
 
   const filteredOrders = orders.filter(order => {

@@ -799,7 +799,7 @@ app.post('/api/order/return/:orderId', authenticateUser, async (req, res) => {
   }
 });
 
-
+//return order ends here 
 
 
 
@@ -954,6 +954,39 @@ app.post('/api/change-password', authenticateUser, async (req, res) => {
 // Routes query 
 app.use('/api', queries);
 
+//load query
+app.get('/api/admin/queries', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) {
+    return res.status(401).send('No token provided');
+  }
+
+  try {
+    const decoded = jwt.verify(token, 'your_jwt_secret');
+    if (decoded.role !== 'admin') {
+      return res.status(403).send('Access denied');
+    }
+
+    // Fetch queries from the database
+    const queries = await Query.find(); // Adjust based on your model
+    res.json(queries);
+  } catch (error) {
+    res.status(401).send('Invalid token');
+  }
+});
+//load query ends here 
+
+// Fetch all reviews
+app.get('/api/reviews', async (req, res) => {
+  try {
+    const reviews = await User.find({}, 'reviews').lean();
+    const allReviews = reviews.flatMap(user => user.reviews);
+    res.status(200).json(allReviews);
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    res.status(500).send('Server error');
+  }
+});
 
 // Start the server
 app.listen(port, () => {
