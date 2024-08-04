@@ -151,7 +151,7 @@ const ProductDetails = () => {
 
             </div>
           </div>
-          <AllReviews />
+          <AllReviews productId={productId} />
 
         </div>
       </div>
