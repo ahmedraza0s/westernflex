@@ -76,7 +76,7 @@ const Navbar = () => {
           <ul>
             <li><Link to="/">Home</Link></li>
             <li><Link to="/shop">Shop</Link></li>
-            <li><Link to="#">About Us</Link></li>
+            <li><Link to="/about-us">About Us</Link></li>
             <li><Link to="#">Contact Us</Link></li>
             {username ? (
               <li className="dropdown">
