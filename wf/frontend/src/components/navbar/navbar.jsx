@@ -93,7 +93,7 @@ const Navbar = () => {
           <ul>
             <li onClick={handleMenuItemClick}><Link to="/">Home</Link></li>
             <li onClick={handleMenuItemClick}><Link to="/shop">Shop</Link></li>
-            <li onClick={handleMenuItemClick}><Link to="#">About Us</Link></li>
+            <li onClick={handleMenuItemClick}><Link to="/about-us">About Us</Link></li>
             <li onClick={handleMenuItemClick}><Link to="#">Contact Us</Link></li>
             {username ? (
               <li className="dropdown" onClick={handleMenuItemClick}>

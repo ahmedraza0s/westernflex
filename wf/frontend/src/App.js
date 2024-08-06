@@ -36,6 +36,9 @@ import Account from './my account/Account';
 import ForgetPassword from './my account/ForgetPassword';//Import The Forget Password component
 import ReturnOrder from './my account/ReturnOrder';
 import Invoice from './admin/Invoice';
+import AboutUs from './pages/AboutUs';
+import ReturnPolicy from './pages/ReturnPolicy';
+
 
 const App = () => {
   return (
@@ -63,7 +66,10 @@ const App = () => {
               <Route path="/My-orders" element={<MyOrders />} />
               <Route path='/forget-password' element={<ForgetPassword/>}/>
               <Route path='/return-order' element={<ReturnOrder/>}/>
-    
+              <Route path='/about-us' element={<AboutUs/>}/>
+              <Route path='/return-policy' element={<ReturnPolicy/>}/>
+
+
             
 
               {/* Admin Routes */}
