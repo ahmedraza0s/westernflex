@@ -19,6 +19,9 @@ const AdminNavbar = () => {
         <li><Link to="/admin/Update-Metadata">Update Meta Data</Link></li>
         <li><Link to="/admin/user-order">All orders</Link></li>
         <li><Link to="/admin/admin-register">Register</Link></li>
+        <li><Link to="/admin/Invoice">Invoice</Link></li>
+        
+        
         
       
         {isAdmin && <button onClick={logout}>Logout</button>}

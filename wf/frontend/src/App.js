@@ -35,6 +35,7 @@ import ProtectedRoute from './routes/ProtectedRoute'; // Import ProtectedRoute
 import Account from './my account/Account';
 import ForgetPassword from './my account/ForgetPassword';//Import The Forget Password component
 import ReturnOrder from './my account/ReturnOrder';
+import Invoice from './admin/Invoice';
 
 const App = () => {
   return (
@@ -79,6 +80,7 @@ const App = () => {
                 <Route path="update-Metadata" element={<UpdateRank />} />
                 <Route path="update-order" element={<UpdateOrder />} />
                 <Route path="user-order" element={<UserOrders />} />
+                <Route path="invoice" element={<Invoice />} />
               </Route>
             </Routes>
             <Footer />

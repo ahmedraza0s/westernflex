@@ -1,0 +1,186 @@
+/* invoice.css */
+
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.invoice-container {
+    width: 80%;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    border-bottom: 2px solid #007BFF;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.logo img {
+    max-width: 180px;
+    height: auto;
+}
+
+.company-details {
+    text-align: right;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #007BFF;
+}
+
+header p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.invoice-details, .client-details, .invoice-items, .invoice-total {
+    margin-bottom: 20px;
+}
+
+.invoice-details h2, .client-details h3, .invoice-items h3, .invoice-total h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    font-size: 18px;
+    color: #f9f6f6;
+}
+
+.client-details p, .invoice-details p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.invoice-items table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #f0f0f0;
+    color: #0c0c0c;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.invoice-total p {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+footer {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    text-align: center;
+    font-size: 14px;
+    color: #777;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Signature area and print button */
+.signature-area {
+    margin-top: 40px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.signature-area div {
+    width: 48%;
+}
+
+.signature-area div p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.print-button {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.print-button button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.print-button button:hover {
+    background-color: #0056b3;
+}
+
+/* Styles for system-generated note */
+.system-generated-note {
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    font-size: 12px;
+    text-align: center;
+    color: #999;
+}
+
+/* Print styles */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .invoice-container, .invoice-container * {
+        visibility: visible;
+    }
+    .invoice-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    .print-button {
+        display: none; /* Hide the print button during printing */
+    }
+    header, footer {
+        display: none;
+    }
+}
