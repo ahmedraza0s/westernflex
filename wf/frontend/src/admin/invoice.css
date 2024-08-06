@@ -18,6 +18,7 @@ body {
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding-left: 30px; /* Added left padding */
 }
 
 header {
@@ -27,12 +28,14 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-left: 30px; /* Added left padding */
 }
 
 .header-content {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    padding-left: 30px; /* Added left padding */
 }
 
 .logo img {
@@ -42,6 +45,7 @@ header {
 
 .company-details {
     text-align: right;
+    padding-left: 30px; /* Added left padding */
 }
 
 header h1 {
@@ -57,6 +61,7 @@ header p {
 
 .invoice-details, .client-details, .invoice-items, .invoice-total {
     margin-bottom: 20px;
+    padding-left: 30px; /* Added left padding */
 }
 
 .invoice-details h2, .client-details h3, .invoice-items h3, .invoice-total h3 {
@@ -107,6 +112,7 @@ footer {
     text-align: center;
     font-size: 14px;
     color: #777;
+    padding-left: 30px; /* Added left padding */
 }
 
 footer p {
@@ -120,6 +126,7 @@ footer p {
     padding-top: 20px;
     display: flex;
     justify-content: space-between;
+    padding-left: 30px; /* Added left padding */
 }
 
 .signature-area div {
@@ -135,6 +142,7 @@ footer p {
 .print-button {
     margin-top: 20px;
     text-align: center;
+    padding-left: 30px; /* Added left padding */
 }
 
 .print-button button {
@@ -159,6 +167,7 @@ footer p {
     font-size: 12px;
     text-align: center;
     color: #999;
+    padding-left: 30px; /* Added left padding */
 }
 
 /* Print styles */
