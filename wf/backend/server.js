@@ -759,20 +759,8 @@ app.post('/api/order/cancel/:orderId', authenticateUser, async (req, res) => {
 
 // Return an order
 
-// Middleware to change the storage path dynamically for the return-order route
-const uploadReturnOrder = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'return_order'); // Specific storage path for return orders
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + path.extname(file.originalname));
-    }
-  })
-});
-
-// Route to handle return order submission with images
-app.post('/api/return-order', uploadReturnOrder.fields([{ name: 'image1', maxCount: 1 }, { name: 'image2', maxCount: 1 }, { name: 'image3', maxCount: 1 }]), async (req, res) => {
+// Route to handle return order submission
+app.post('/api/return-order', async (req, res) => {
   try {
     const { orderId, phoneNumber, reason } = req.body;
 
@@ -780,17 +768,10 @@ app.post('/api/return-order', uploadReturnOrder.fields([{ name: 'image1', maxCou
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const images = {
-      image1: req.files['image1'] ? req.files['image1'][0].path : '',
-      image2: req.files['image2'] ? req.files['image2'][0].path : '',
-      image3: req.files['image3'] ? req.files['image3'][0].path : ''
-    };
-
     const returnOrder = {
       orderId,
       phoneNumber,
-      reason,
-      ...images
+      reason
     };
 
     const user = await User.findOne({ 'orders.orderId': orderId });

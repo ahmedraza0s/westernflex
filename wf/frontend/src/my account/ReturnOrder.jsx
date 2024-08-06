@@ -5,17 +5,8 @@ const ReturnOrder = () => {
   const [orderId, setOrderId] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [reason, setReason] = useState('');
-  const [images, setImages] = useState({ image1: null, image2: null, image3: null });
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-
-  const handleImageChange = (e) => {
-    const { name, files } = e.target;
-    setImages(prevImages => ({
-      ...prevImages,
-      [name]: files[0]
-    }));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,21 +16,12 @@ const ReturnOrder = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('orderId', orderId);
-    formData.append('phoneNumber', phoneNumber);
-    formData.append('reason', reason);
-
-    if (images.image1) formData.append('image1', images.image1);
-    if (images.image2) formData.append('image2', images.image2);
-    if (images.image3) formData.append('image3', images.image3);
-
     try {
       setError('');
-      const response = await axios.post('/api/return-order', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      const response = await axios.post('/api/return-order', {
+        orderId,
+        phoneNumber,
+        reason
       });
 
       setMessage(response.data.message);
@@ -81,36 +63,6 @@ const ReturnOrder = () => {
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             required
-          />
-        </div>
-        <div>
-          <label htmlFor="image1">Upload Image 1:</label>
-          <input
-            type="file"
-            id="image1"
-            name="image1"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="image2">Upload Image 2:</label>
-          <input
-            type="file"
-            id="image2"
-            name="image2"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="image3">Upload Image 3:</label>
-          <input
-            type="file"
-            id="image3"
-            name="image3"
-            accept="image/*"
-            onChange={handleImageChange}
           />
         </div>
         <button type="submit">Submit Return Request</button>
