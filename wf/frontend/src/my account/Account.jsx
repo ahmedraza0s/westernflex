@@ -6,6 +6,7 @@ import ChangeUserDetails from './ChangeUserDetails';
 import MyOrders from '../my account/MyOrders'; // Import MyOrders component
 import ForgetPassword from '../my account/ForgetPassword'; // Import ForgetPassword component
 import UserReview from './UserReview';
+import ReturnOrder from './ReturnOrder';
 
 const Account = () => {
   const menuItems = [
@@ -14,6 +15,7 @@ const Account = () => {
     { name: 'userreview', path: '/account/userreview' },
     { name: 'ForgetPassword', path: '/account/forget-password' }, // Corrected path for ForgetPassword
     { name: 'Changeuser', path: '/account/changeuser' },
+    { name: 'Return Order', path: '/account/return-order' },
   ];
 
   return (
@@ -34,7 +36,7 @@ const Account = () => {
           <Route path="/myorder" element={<MyOrders />} /> {/* Add MyOrders route */}
           <Route path="/forget-password" element={<ForgetPassword />} /> {/* Route for ForgetPassword */}
           <Route path="/userreview" element={<UserReview />} /> {/* Add MyOrders route */}
-          
+          <Route path="/return-order" element={<ReturnOrder />} />
 
           {/* Add other routes here as needed */}
         </Routes>

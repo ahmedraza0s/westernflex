@@ -8,6 +8,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+const queries = require('./routes/queries');
 
 
 const User = require('./models/User'); //importing model of user
@@ -20,6 +21,7 @@ const secretKey = 'your_secret_key'; // Use a secure key in production
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.urlencoded({ extended: true }));
 
 // MongoDB connection
 mongoose.connect('mongodb://localhost:27017/westernflexdatabase', {
@@ -755,6 +757,44 @@ app.post('/api/order/cancel/:orderId', authenticateUser, async (req, res) => {
 });
 
 
+// Return an order
+
+// Route to handle return order submission
+app.post('/api/return-order', async (req, res) => {
+  try {
+    const { orderId, phoneNumber, reason } = req.body;
+
+    if (!orderId || !phoneNumber || !reason) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const returnOrder = {
+      orderId,
+      phoneNumber,
+      reason
+    };
+
+    const user = await User.findOne({ 'orders.orderId': orderId });
+    
+    if (!user) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    await User.findOneAndUpdate(
+      { 'orders.orderId': orderId },
+      { $push: { returnOrders: returnOrder } }
+    );
+
+    res.status(200).json({ message: 'Return request submitted successfully' });
+  } catch (error) {
+    console.error('Error handling return order:', error);
+    res.status(500).json({ message: 'An error occurred while processing your return request' });
+  }
+});
+//return order ends here 
+
+
+
 // Middleware for authenticating admins
 const authenticateAdmin = async (req, res, next) => {
   const token = req.headers['authorization'];
@@ -842,10 +882,16 @@ app.put('/api/admin/orders/:orderId', authenticateAdmin, async (req, res) => {
 
     const order = user.orders.find(order => order.orderId === orderId);
     if (order) {
-      order.orderStatus = orderStatus;
+      // Check if the orderStatus has changed
+      if (order.orderStatus !== orderStatus) {
+        order.orderStatus = orderStatus;
+        order.orderstatusdate = new Date(); // Update orderstatusdate to the current date
+      }
+      
       order.estimatedDelivery = estimatedDelivery;
       order.items = items;
       order.orderHistory = orderHistory;
+
       await user.save();
       return res.status(200).json({ message: 'Order updated successfully' });
     }
@@ -897,7 +943,42 @@ app.post('/api/change-password', authenticateUser, async (req, res) => {
   }
 });
 
+// Routes query 
+app.use('/api', queries);
 
+//load query
+app.get('/api/admin/queries', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) {
+    return res.status(401).send('No token provided');
+  }
+
+  try {
+    const decoded = jwt.verify(token, 'your_jwt_secret');
+    if (decoded.role !== 'admin') {
+      return res.status(403).send('Access denied');
+    }
+
+    // Fetch queries from the database
+    const queries = await Query.find(); // Adjust based on your model
+    res.json(queries);
+  } catch (error) {
+    res.status(401).send('Invalid token');
+  }
+});
+//load query ends here 
+
+// Fetch all reviews
+app.get('/api/reviews', async (req, res) => {
+  try {
+    const reviews = await User.find({}, 'reviews').lean();
+    const allReviews = reviews.flatMap(user => user.reviews);
+    res.status(200).json(allReviews);
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    res.status(500).send('Server error');
+  }
+});
 
 // Start the server
 app.listen(port, () => {

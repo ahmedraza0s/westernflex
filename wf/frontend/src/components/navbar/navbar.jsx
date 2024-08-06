@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './navbar.css';
 import cartIcon from '../assets/cart.png';
-import logo from '../assets/logo.jpg';
+import logo from '../assets/logo.png';
 import { useCart } from '../../contexts/CartContext';
 import Modal from '../Modal';
 import Cart from '../../pages/Cart';
@@ -12,6 +12,7 @@ const Navbar = () => {
   const [username, setUsername] = useState('');
   const [showCartModal, setShowCartModal] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const mobileMenuRef = useRef(null);
   const navigate = useNavigate();
   const { cartCount } = useCart();
 
@@ -57,29 +58,52 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const handleClickOutside = (event) => {
+    if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+      setIsMobileMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+
+  const handleMenuItemClick = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <div className="social-icons">
-          <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
-          <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer"><FaLinkedin /></a>
-          <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer"><FaTwitter /></a>
-          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
-        </div>
         <button className="mobile-menu-icon" onClick={toggleMobileMenu}>
           <FaBars />
         </button>
         <div className="navbar-brand">
           <Link to="/"><img src={logo} alt="Logo" /></Link>
         </div>
-        <div className={`navbar-nav ${isMobileMenuOpen ? 'active' : ''}`}>
+        <div className={`navbar-nav ${isMobileMenuOpen ? 'active' : ''}`} ref={mobileMenuRef}>
           <ul>
+<<<<<<< HEAD
             <li><Link to="/">Home</Link></li>
             <li><Link to="/shop">Shop</Link></li>
             <li><Link to="/about-us">About Us</Link></li>
             <li><Link to="#">Contact Us</Link></li>
+=======
+            <li onClick={handleMenuItemClick}><Link to="/">Home</Link></li>
+            <li onClick={handleMenuItemClick}><Link to="/shop">Shop</Link></li>
+            <li onClick={handleMenuItemClick}><Link to="#">About Us</Link></li>
+            <li onClick={handleMenuItemClick}><Link to="#">Contact Us</Link></li>
+>>>>>>> 1594888f731d10f17b09acc71f384304ede1537d
             {username ? (
-              <li className="dropdown">
+              <li className="dropdown" onClick={handleMenuItemClick}>
                 <Link to="#" className="dropbtn">Hello, {username} <i className="fas fa-caret-down"></i></Link>
                 <div className="dropdown-content">
                   <Link to="/account">Your Account</Link>
@@ -88,8 +112,14 @@ const Navbar = () => {
                 </div>
               </li>
             ) : (
-              <li><Link to="/login">Hello, Sign in</Link></li>
+              <li onClick={handleMenuItemClick}><Link to="/login">Hello, Sign in</Link></li>
             )}
+            <div className="social-icons">
+              <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+              <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer"><FaLinkedin /></a>
+              <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer"><FaTwitter /></a>
+              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
+            </div>
           </ul>
         </div>
         <div className="cart-icon">

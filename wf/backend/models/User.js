@@ -41,12 +41,22 @@ const orderSchema = new mongoose.Schema({
   orderId: { type: String, required: true },
   orderDate: { type: Date, default: Date.now },
   orderStatus: { type: String, required: true },
+  orderstatusdate: { type: Date, default: Date.now },
   items: [orderItemSchema],
   address: [orderaddress],
   orderHistory: [orderHistorySchema],
   estimatedDelivery: { type: Date } // Add estimated delivery date
 });
 
+const returnOrderSchema = new mongoose.Schema({
+  orderId: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
+  reason: { type: String, required: true },
+  image1: { type: String },
+  image2: { type: String },
+  image3: { type: String },
+  returnDate: { type: Date, default: Date.now },
+});
 
 const paymentMethodSchema = new mongoose.Schema({
   paymentMethodId: { type: String, required: true },
@@ -88,6 +98,7 @@ const userSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
   addresses: [addressSchema],
   orders: [orderSchema],
+  returnOrders: [returnOrderSchema],
   wishlist: { type: [String], default: [] },
   paymentMethods: [paymentMethodSchema],
   reviews: [reviewSchema],
