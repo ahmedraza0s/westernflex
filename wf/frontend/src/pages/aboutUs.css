@@ -1,0 +1,331 @@
+.aboutContainer {
+    margin: auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+}
+
+.aboutContainer p {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 10px;
+    color: black;
+    font-family: 'Dancing Script', cursive;
+}
+
+#aboutPage, #aboutUsPage {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+    flex: 1;
+}
+
+.text h1 {
+    color: rgb(61, 57, 57);
+    font-size: 3rem;
+    font-family: 'Playfair Display', serif;
+    font-variant: small-caps;
+}
+
+.text .p1 {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 10px;
+    color: black;
+    font-family: 'Dancing Script', cursive;
+}
+
+.imageabout img {
+    margin: 20px;
+    width: 100%;
+    max-width: 30vw;
+    height: auto;
+    border-radius: 5px;
+}
+
+.aboutContainer h1 {
+    font-size: 2.9rem;
+    font-variant: small-caps;
+    color: black;
+    font-family: 'Playfair Display', serif;
+}
+
+.AboutUs1 {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.Aboutimage img {
+    margin: 20px;
+    width: 100%;
+    max-width: 30vw;
+    height: auto;
+    border-radius: 5px;
+}
+
+.Aboutcontent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+    flex: 1;
+}
+
+.Aboutcontent .aboutContainer .p1 {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 10px;
+    color: black;
+    font-family: 'Dancing Script', cursive;
+}
+
+.Aboutcontent ul {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-top: -10px;
+    text-align: start;
+    list-style-type: disc;
+    padding-left: 20px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.retunPolicy {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    margin-top: -10px;
+    padding: 0;
+}
+
+.retunPolicy p {
+    font-size: 1.5rem;
+    text-align: start;
+    margin-top: 10px;
+    color: black;
+    font-family: 'Dancing Script', cursive;
+}
+
+@media (max-width: 1024px) {
+    .text h1 {
+        font-size: 2.5rem;
+    }
+
+    .text .p1,
+    .aboutContainer p {
+        font-size: 1.2rem;
+    }
+
+    .aboutContainer h1 {
+        font-size: 2.5rem;
+    }
+
+    .imageabout img,
+    .Aboutimage img {
+        max-width: 40vw;
+        margin: 10px;
+    }
+
+    .Aboutcontent,
+    .text {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .aboutContainer {
+        max-width: 90%;
+        padding: 10px;
+    }
+
+    .text {
+        padding: 10px;
+    }
+
+    .text h1 {
+        font-size: 2rem;
+    }
+
+    .text .p1,
+    .aboutContainer p {
+        font-size: 1rem;
+    }
+
+    .aboutContainer h1 {
+        font-size: 2rem;
+    }
+
+    .imageabout img,
+    .Aboutimage img {
+        margin: 0;
+        max-width: 80%;
+    }
+
+    .AboutUs1,
+    .Aboutcontent {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .Aboutimage img {
+        margin: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .text h1 {
+        font-size: 1.5rem;
+    }
+
+    .text .p1,
+    .aboutContainer p {
+        font-size: 0.9rem;
+    }
+
+    .aboutContainer h1 {
+        font-size: 1.5rem;
+    }
+
+    .imageabout img,
+    .Aboutimage img {
+        max-width: 90%;
+        margin: 0;
+    }
+
+    .text,
+    .Aboutcontent {
+        padding: 5px;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.imageabout img,
+.Aboutimage img {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+}
+
+.imageabout img.slide-in,
+.Aboutimage img.slide-in {
+    animation: slideIn 1s forwards;
+}
+
+.customerContainer {
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+}
+
+.customerContainer h1 {
+    font-size: 2.9rem;
+    color: black;
+    font-family: 'Playfair Display', serif;
+}
+
+.customerContainer p {
+    font-size: 1.5rem;
+    color: black;
+    font-family: 'Dancing Script', cursive;
+}
+
+.customerCount {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.countItem {
+    flex: 1;
+    text-align: center;
+    margin: 20px;
+}
+
+.countItem h2 {
+    font-size: 4rem;
+    color: #eb111f;
+    font-family: 'Playfair Display', serif;
+    margin-left: -10px;
+    font-weight: 40px;
+}
+
+.countItem p {
+    font-size: 1.5rem;
+    color: black;
+    font-family: 'Dancing Script', cursive;
+    margin: 0;
+}
+
+@media (max-width: 1024px) {
+    .countItem h2 {
+        font-size: 2rem;
+    }
+
+    .countItem p {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .customerContainer {
+        max-width: 90%;
+        padding: 10px;
+    }
+
+    .customerCount {
+        flex-direction: column;
+    }
+
+    .countItem {
+        margin: 10px 0;
+    }
+
+    .countItem h2 {
+        font-size: 1.8rem;
+    }
+
+    .countItem p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .customerContainer h1 {
+        font-size: 2rem;
+    }
+
+    .customerContainer p {
+        font-size: 1rem;
+    }
+
+    .countItem h2 {
+        font-size: 1.5rem;
+    }
+
+    .countItem p {
+        font-size: 0.9rem;
+    }
+}
