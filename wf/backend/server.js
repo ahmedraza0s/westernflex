@@ -21,6 +21,7 @@ const secretKey = 'your_secret_key'; // Use a secure key in production
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.urlencoded({ extended: true }));
 
 // MongoDB connection
 mongoose.connect('mongodb://localhost:27017/westernflexdatabase', {
@@ -757,48 +758,39 @@ app.post('/api/order/cancel/:orderId', authenticateUser, async (req, res) => {
 
 
 // Return an order
-app.post('/api/order/return/:orderId', authenticateUser, async (req, res) => {
+
+// Route to handle return order submission
+app.post('/api/return-order', async (req, res) => {
   try {
-    const { orderId } = req.params;
-    const user = await User.findOne({ username: req.user.username });
+    const { orderId, phoneNumber, reason } = req.body;
 
+    if (!orderId || !phoneNumber || !reason) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const returnOrder = {
+      orderId,
+      phoneNumber,
+      reason
+    };
+
+    const user = await User.findOne({ 'orders.orderId': orderId });
+    
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ message: 'Order not found' });
     }
 
-    // Find the order in user's orders
-    const order = user.orders.find(order => order.orderId === orderId);
+    await User.findOneAndUpdate(
+      { 'orders.orderId': orderId },
+      { $push: { returnOrders: returnOrder } }
+    );
 
-    if (!order) {
-      return res.status(404).json({ error: 'Order not found' });
-    }
-
-    // Check if the order is delivered
-    if (order.orderStatus.toLowerCase() !== 'delivered') {
-      return res.status(400).json({ error: 'Only delivered orders can be returned' });
-    }
-
-    // Calculate days since delivery
-    const deliveredDate = new Date(order.orderStatusDate); // Ensure `orderStatusDate` is the correct field
-    const today = new Date();
-    const timeDiff = today - deliveredDate;
-    const daysDiff = timeDiff / (1000 * 3600 * 24);
-
-    if (daysDiff > 5) {
-      return res.status(400).json({ error: 'Return period has expired. You can only return orders within 5 days of delivery.' });
-    }
-
-    // Update order status to 'returned'
-    order.orderStatus = 'returned';
-    await user.save();
-
-    res.status(200).json({ message: 'Order returned successfully', order });
+    res.status(200).json({ message: 'Return request submitted successfully' });
   } catch (error) {
-    console.error('Error processing return request:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error handling return order:', error);
+    res.status(500).json({ message: 'An error occurred while processing your return request' });
   }
 });
-
 //return order ends here 
 
 
