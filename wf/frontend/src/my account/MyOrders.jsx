@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import moment from 'moment';
-import { parseISO, differenceInDays, isValid } from 'date-fns';
 import './myOrders.css';
 import UserReview from './UserReview';
 
@@ -139,62 +137,8 @@ const MyOrders = () => {
     }
   };
 
-  const handleReturnOrder = async (orderId, orderstatusdate) => {
-    // Log the raw orderstatusdate for debugging
-    console.log('Raw orderstatusdate:', orderstatusdate);
-  
-    // Check if the orderstatusdate is valid
-    if (!orderstatusdate) {
-      alert('Invalid order status date.');
-      return;
-    }
-  
-    // Parse the orderstatusdate using date-fns
-    const deliveredDate = parseISO(orderstatusdate);
-  
-    // Check if the date is valid
-    if (!isValid(deliveredDate)) {
-      alert('Invalid order status date.');
-      return;
-    }
-  
-    // Get today's date
-    const today = new Date();
-  
-    // Calculate the difference in days
-    const daysDiff = differenceInDays(today, deliveredDate);
-  
-    // Log for debugging
-    console.log(`Order ID: ${orderId}`);
-    console.log(`Delivered Date: ${deliveredDate.toISOString()}`);
-    console.log(`Today: ${today.toISOString()}`);
-    console.log(`Days Difference: ${daysDiff}`);
-  
-    // Check if the difference is greater than 5 days
-    if (daysDiff > 5) {
-      alert('Return period has expired. You can only return orders within 5 days of delivery.');
-      return;
-    }
-  
-    try {
-      const token = localStorage.getItem('token');
-      await axios.post(`/api/order/return/${orderId}`, {}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order.orderId === orderId
-            ? { ...order, orderStatus: 'returned' }
-            : order
-        )
-      );
-      alert('Order returned successfully');
-    } catch (error) {
-      console.error('Error returning order:', error);
-      alert('Error returning order');
-    }
+  const handleReturnOrder = (orderId) => {
+    navigate('/account/return-order', { state: { orderId } });
   };
   
   
