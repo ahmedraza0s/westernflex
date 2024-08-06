@@ -91,10 +91,17 @@ const Navbar = () => {
         </div>
         <div className={`navbar-nav ${isMobileMenuOpen ? 'active' : ''}`} ref={mobileMenuRef}>
           <ul>
+<<<<<<< HEAD
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/shop">Shop</Link></li>
+            <li><Link to="/about-us">About Us</Link></li>
+            <li><Link to="#">Contact Us</Link></li>
+=======
             <li onClick={handleMenuItemClick}><Link to="/">Home</Link></li>
             <li onClick={handleMenuItemClick}><Link to="/shop">Shop</Link></li>
             <li onClick={handleMenuItemClick}><Link to="#">About Us</Link></li>
             <li onClick={handleMenuItemClick}><Link to="#">Contact Us</Link></li>
+>>>>>>> 1594888f731d10f17b09acc71f384304ede1537d
             {username ? (
               <li className="dropdown" onClick={handleMenuItemClick}>
                 <Link to="#" className="dropbtn">Hello, {username} <i className="fas fa-caret-down"></i></Link>
