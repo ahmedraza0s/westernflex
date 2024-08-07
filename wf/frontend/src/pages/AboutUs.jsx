@@ -66,15 +66,19 @@ const AboutUs = () => {
                         setIsCounting(true);
                         startCountAnimation();
                     }
+                } else {
+                    setIsCounting(false);
                 }
             }
         };
 
-        window.addEventListener('scroll', handleScroll);
+        const debouncedHandleScroll = debounce(handleScroll, 100);
+
+        window.addEventListener('scroll', debouncedHandleScroll);
         handleScroll(); // Check visibility on mount
 
         return () => {
-            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('scroll', debouncedHandleScroll);
         };
     }, [isCounting]);
 
@@ -131,3 +135,16 @@ const AboutUs = () => {
 };
 
 export default AboutUs;
+
+// Debounce function
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
