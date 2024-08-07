@@ -208,7 +208,7 @@
         padding: 5px;
     }
 }
-
+/* 
 @keyframes slideIn {
     from {
         transform: translateX(100%);
@@ -229,7 +229,34 @@
 .imageabout img.slide-in,
 .Aboutimage img.slide-in {
     animation: slideIn 1s forwards;
+} */
+
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
+
+.imageabout img,
+.Aboutimage img {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+}
+
+.imageabout img.slide-in,
+.Aboutimage img.slide-in {
+    animation: slideUp 1s forwards;
+}
+
+
+
+
 
 .customerContainer {
     margin: auto;
