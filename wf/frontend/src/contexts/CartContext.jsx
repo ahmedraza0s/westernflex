@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { debounce } from 'lodash';
 
 const CartContext = createContext();
 
@@ -12,7 +13,7 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
-  const addToCart = (product) => {
+  const addToCart = useCallback(debounce((product) => {
     setCart((prevCart) => {
       const existingProductIndex = prevCart.findIndex(
         (item) => item.title === product.title && item.color === product.color
@@ -30,7 +31,7 @@ export const CartProvider = ({ children }) => {
         { ...product, quantity: 1, totalPrice: parseFloat(product.sellingPrice) },
       ];
     });
-  };
+  }, 200), []);
 
   const updateQuantity = (title, color, amount) => {
     setCart((prevCart) =>
