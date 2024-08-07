@@ -11,6 +11,7 @@ const ShopList = () => {
   const [visibleDropdown, setVisibleDropdown] = useState(null);
   const [selectedPriceRange, setSelectedPriceRange] = useState(null); // State for selected price range
   const [currentPage, setCurrentPage] = useState(0); // State for current page
+  const [lock, setLock] = useState(false); // Add state for lock
   const productsPerPage = 16; // Number of products per page
   const dropdownRef = useRef(null);
   const { addToCart } = useCart();
@@ -39,6 +40,16 @@ const ShopList = () => {
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
+  };
+
+  const handleAddToCart = (product) => {
+    if (!lock) {
+      setLock(true);
+      addToCart(product);
+      setTimeout(() => {
+        setLock(false);
+      }, 500); // Adjust the duration as needed
+    }
   };
 
   const renderProducts = () => {
@@ -95,7 +106,7 @@ const ShopList = () => {
                   <button
                     className="add-to-cart-btn"
                     onClick={() =>
-                      addToCart({
+                      handleAddToCart({
                         image: `http://localhost:5000/${color.images[0]}`,
                         title: product.name,
                         description: product.shortDescription,
@@ -108,6 +119,7 @@ const ShopList = () => {
                         productId: product.productId,
                       })
                     }
+                    disabled={lock} // Disable button when lock is true
                   >
                     Add to Cart
                   </button>
