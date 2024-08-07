@@ -13,6 +13,7 @@ const Shop = () => {
   const [selectedPriceRange, setSelectedPriceRange] = useState(null); // State for selected price range
   const [currentPage, setCurrentPage] = useState(0); // State for current page
   const [showBanner, setShowBanner] = useState(false); // State to control banner visibility
+  const [lock, setLock] = useState(false); // Add state for lock
   const productsPerPage = 16; // Number of products per page
   const { addToCart } = useCart();
   const navigate = useNavigate();
@@ -89,6 +90,16 @@ const Shop = () => {
     return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
 
+  const handleAddToCart = (product) => {
+    if (!lock) {
+      setLock(true);
+      addToCart(product);
+      setTimeout(() => {
+        setLock(false);
+      }, 500); // Adjust the duration as needed
+    }
+  };
+
   const renderProducts = () => {
     const filteredProducts = products.filter(product =>
       product.colors.some(color =>
@@ -143,7 +154,7 @@ const Shop = () => {
                   <button
                     className="add-to-cart-btn"
                     onClick={() =>
-                      addToCart({
+                      handleAddToCart({
                         image: `http://localhost:5000/${color.images[0]}`,
                         title: product.name,
                         description: product.shortDescription,
@@ -156,6 +167,7 @@ const Shop = () => {
                         productId: product.productId,
                       })
                     }
+                    disabled={lock} // Disable button when lock is true
                   >
                     Add to Cart
                   </button>
