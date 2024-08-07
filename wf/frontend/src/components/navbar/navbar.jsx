@@ -12,6 +12,7 @@ const Navbar = () => {
   const [username, setUsername] = useState('');
   const [showCartModal, setShowCartModal] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [lock, setLock] = useState(false); // Add state for lock
   const mobileMenuRef = useRef(null);
   const navigate = useNavigate();
   const { cartCount } = useCart();
@@ -55,7 +56,13 @@ const Navbar = () => {
   };
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    if (!lock) {
+      setLock(true);
+      setIsMobileMenuOpen(!isMobileMenuOpen);
+      setTimeout(() => {
+        setLock(false);
+      }, 500); // Adjust the duration as needed
+    }
   };
 
   const handleClickOutside = (event) => {
