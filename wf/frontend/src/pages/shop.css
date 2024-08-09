@@ -1,12 +1,10 @@
-
-
+/* shop.css */
 .product-container {
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  background: rgb(190, 184, 184);
+  justify-content: space-between; */
+  /* background: rgb(190, 184, 184); */
 }
-
 .product {
   position: relative; /* Ensures positioning for children elements if needed */
   flex: 1 1 calc(25% - 20px); /* Responsive flex properties */
@@ -16,21 +14,27 @@
   margin: 10px; /* Margin around the product element */
   text-align: center; /* Centers the text content */
   background-color: #ffffff; /* Optional: background color for contrast */
-  /* clip-path: polygon(48px 0%, 100% 0, 100% calc(100% - 78px), calc(100% - 78px) 100%, 0 100%, 0% 78px);
-  -webkit-clip-path: polygon(78px 0%, 100% 0, 100% calc(100% - 78px), calc(100% - 78px) 100%, 0 100%, 0% 78px);
-  transition-duration: 0.3s; */
-
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Smooth transitions for opacity and transform */
+  opacity: 0; /* Start hidden */
+  will-change: opacity, transform; /* Optimizes rendering for animations */
 }
 
-/* .product:hover {
-  overflow: hidden;
-  transform:scale(1.02);
-  transition-duration:0.3s;
+/* Animation Keyframes */
+@keyframes slideIn {
+  from {
+    transform: translateY(30%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 
-  margin: 0;
-}  */
-
-
+/* Animation Class */
+.product.animate-on-scroll {
+  animation: slideIn 0.6s forwards; /* Adjust duration as needed */
+}
 
 .sales-tag {
   position: absolute;
@@ -59,14 +63,13 @@
   max-width: 100%;
   height: auto;
 }
- 
-.product-image:hover{
-  overflow: hidden;
-  transform:scale(1.2);
-  transition-duration:0.4s;
 
-  margin: 0;
-} 
+.product-image:hover {
+  overflow: hidden;
+  transform: scale(1.2);
+  transition-duration: 0.4s;
+}
+
 .product-title {
   font-size: 1.5em;
   margin: 0.5em 0;
@@ -100,7 +103,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease; /* Adding transition for smooth color change and transform */
+  transition: background-color 0.3s ease, transform 0.1s ease; /* Smooth transition for button */
 }
 
 .add-to-cart-btn:hover,
@@ -109,7 +112,7 @@
 }
 
 .add-to-cart-btn:active {
-  transform: scale(0.86); /* Adding slight downward movement and scaling inward on click */
+  transform: scale(0.86); /* Slight scaling inward on click */
 }
 
 .filter-navbar {
@@ -222,6 +225,7 @@
   margin: 0 10px;
 }
 
+/* Responsive Styles */
 @media (max-width: 1024px) {
   .product {
     flex: 1 1 calc(33.33% - 20px);
