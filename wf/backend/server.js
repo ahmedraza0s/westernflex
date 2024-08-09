@@ -8,7 +8,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
-const queries = require('./routes/queries');
+const Query = require('./models/Query'); // Import the Query model
 
 
 const User = require('./models/User'); //importing model of user
@@ -962,29 +962,48 @@ app.post('/api/change-password', authenticateUser, async (req, res) => {
   }
 });
 
+
 // Routes query 
-app.use('/api', queries);
-
-//load query
-app.get('/api/admin/queries', async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) {
-    return res.status(401).send('No token provided');
-  }
-
+// Route to create a query (No Admin Authentication required)
+app.post('/api/submit-query', async (req, res) => {
   try {
-    const decoded = jwt.verify(token, 'your_jwt_secret');
-    if (decoded.role !== 'admin') {
-      return res.status(403).send('Access denied');
-    }
+    const { name, email, phone, message } = req.body;
 
-    // Fetch queries from the database
-    const queries = await Query.find(); // Adjust based on your model
-    res.json(queries);
+    // Create a new query
+    const newQuery = new Query({
+      name,
+      email,
+      phone,
+      message,
+    });
+
+    // Save the query to the database
+    await newQuery.save();
+
+    res.status(201).json({ message: 'Query submitted successfully' });
   } catch (error) {
-    res.status(401).send('Invalid token');
+    console.error('Error creating query:', error);
+    res.status(500).json({ message: 'Error creating query' });
   }
 });
+
+// Route to fetch queries for admin (Admin Authentication required)
+app.get('/api/admin/queries', authenticateAdmin, async (req, res) => {
+  try {
+    const queries = await Query.find().sort({ createdAt: -1 });
+    if (!queries.length) {
+      return res.status(404).json({ message: 'No queries found' });
+    }
+    res.status(200).json(queries);
+  } catch (error) {
+    console.error('Error fetching queries:', error);
+    res.status(500).json({ message: 'Error fetching queries' });
+  }
+});
+
+
+
+
 //load query ends here 
 
 // Fetch all reviews

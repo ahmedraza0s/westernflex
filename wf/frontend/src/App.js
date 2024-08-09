@@ -15,6 +15,7 @@ import UserProfile from './my account/UserProfile';
 import ProductDetails from './pages/ProductDetails';
 import AdminLogin from './admin/AdminLogin';
 import AdminPage from './admin/AdminPage'; // import the AdminPage component
+import AdminQueries from './admin/AdminQueries';
 import UserOrders from './admin/UserOrders';
 import UpdateOrder from './admin/UpdateOrder';
 import UpdateRank from './admin/UpdateRank';
@@ -87,6 +88,7 @@ const App = () => {
                 <Route path="update-order" element={<UpdateOrder />} />
                 <Route path="user-order" element={<UserOrders />} />
                 <Route path="invoice" element={<Invoice />} />
+                <Route path="queries" element={<AdminQueries />} />
               </Route>
             </Routes>
             <Footer />
