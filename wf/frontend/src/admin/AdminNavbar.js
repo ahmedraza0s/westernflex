@@ -20,6 +20,7 @@ const AdminNavbar = () => {
         <li><Link to="/admin/user-order">All orders</Link></li>
         <li><Link to="/admin/admin-register">Register</Link></li>
         <li><Link to="/admin/Invoice">Invoice</Link></li>
+        <li><Link to="/admin/queries">queries</Link></li>
         
         
         
